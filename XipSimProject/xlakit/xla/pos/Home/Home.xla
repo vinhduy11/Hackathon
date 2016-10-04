@@ -7,11 +7,11 @@ Buff=<properties><XLAmeta><package name="XLAKIT" XLA="Home" ver="1.0.0" desc="PO
 size=68
 Buff=<strings><str OK="OK"/><str WELCOME="Welcome back"/></strings>
 [LUAScript]
-size=108
-Buff=function H_OnLoad()xipdbg("In Lua: changexla to DPIN")SetSessionValue("SyncUp","0")ChangeXla("DPIN")end[MerchantHomeScreen1]
+size=91
+Buff=function H_OnLoad()xipdbg("In Lua: changexla to DPIN")SetSessionValue("SyncUp","0")end[MerchantHomeScreen1]
 screenType=0
 size=167
 Buff=<screen><screenName name="MerchantHomeScreen1"/><screenType id="0"/><widget name="hometl" imageid="icon.gif"/><widget name="hometr" imageid="note.gif"/></screen>
 [CRC]
 size=10
-Buff=Vg==
+Buff=Bg==
