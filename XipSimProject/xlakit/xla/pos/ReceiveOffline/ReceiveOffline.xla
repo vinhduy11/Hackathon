@@ -1,0 +1,123 @@
+[properties]
+size=710
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="ReceiveOffline" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="RCV_OnInstall" onload="RCV_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="sysnfc"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="sysdisp"/><reqlualib LuaLibName="record"/><reqlualib LuaLibName="uuid"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=1487
+Buff=<strings><language><EN><str NFCPRGS="Tap for amount - "/><str PAYRCVD="Payment received"/><str RCVD="Received"/><str TAPTO="Tap timeout"/><str UNREAD="Unable to read card"/><str TRYAGN="please try again"/><str INVLDCARD="Card does not support"/><str INVLDCARD1="SV transaction"/><str CARDEXPR="Card is expired"/><str INSBAL="Insufficient Balance"/><str NOSV="Not support SV and"/><str ONLNRCV="Online Receive."/><str TAPORIGTAG="Please tap original card"/><str PMMAX="Receive value exceeds"/><str LTEXD="allowed limit"/><str NFCFAIL="NFC Couldnot be start"/><str SYNC="SyncNow"/><str AMT="Enter amount to get"/><str SYNCFUL="SV wallet Full"/><str SYNC1="SV cards won't be"/><str SYNC2="accepted till wallet"/><str SYNC3="is synced"/></EN>
+<SP><str NFCPRGS="Tap for amount - "/><str PAYRCVD="Payment received"/><str RCVD="Received"/><str TAPTO="Tap timeout"/><str UNREAD="Unable to read card"/><str TRYAGN="please try again"/><str INVLDCARD="Card does not support"/><str INVLDCARD1="SV transaction"/><str CARDEXPR="Card is expired"/><str INSBAL="Insufficient Balance"/><str NOSV="Not support SV and"/><str ONLNRCV="Online Receive."/><str TAPORIGTAG="Please tap original card"/><str PMMAX="Receive value exceeds"/><str LTEXD="allowed limit"/><str NFCFAIL="NFC Couldnot be start"/><str SYNC="SyncNow"/><str SYNCFUL="SV wallet Full"/><str SYNC1="SV cards won't be"/><str SYNC2="accepted till wallet"/><str SYNC3="is synced"/><str AMT="Enter amount to get"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=6200
+Buff=RCV_Amount=0
+RCV_nfcSess=0
+RCV_PurseAction="A"RCV_TagBal=0
+RCV_TagExpDate=0
+ePurseId=0
+RCV_Xid=0
+RCV_SVXid=0
+array={}RCV_MenuFlag=0
+function RCV_OnLoad()SVStatus=GetSVStatus()RecStoreAvl=xal_isStoreAvailable()xipdbg("RCV_OnLoad: RecStoreAvl----"..RecStoreAvl)if(RecStoreAvl==0)then
+RCV_goHome()else
+MaxRecCount=GetConfigValue("xat")xipdbg("RCV_OnLoad: MaxRecCount is ----"..MaxRecCount)txnCount=xal_getRecordCount()xipdbg("RCV_OnLoad: txnCount is ----"..txnCount)if(txnCount>=tonumber(MaxRecCount))then
+DisplayScreenFromRes("receiveSyncScreen"," "," ")else
+RCV_amount()end
+end
+end
+function RCV_SyncNow()ChangeXla("SyncSV")end
+function RCV_amount()ret=GetSessionValue("rcvamount")DisplayScreenFromRes("receiveAmountEntryScreen")maxAmt=GetDeviceMaxAmount()DisplaySetMaxInputDataLen(maxAmt)end
+function RCV_OnAmountNext(e)DisplaySetMaxInputDataLen("0")if(e~=nil and tonumber(e)>0)then
+RCV_Amount=e
+DisplayScreenFromRes("NFCProgress",GetCurrencySymbol(),RCV_Amount)RCV_nfcSess=sysnfc_init("RCV_OnNFCGetCardData")if(RCV_nfcSess==-1)then
+DisplayScreenFromRes("receiveFailureScreen"," "," ","#NFCFAIL","#TRYAGN")end
+else
+RCV_goHome()end
+end
+function RCV_OnNFCGetCardData(n,e,t)RCV_Xid=e
+ePurseId=GetEpurseID()sysnfc_svEpurseSetId(RCV_nfcSess,ePurseId)if(n=="true")then
+intamt=sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)SVPMMax=GetSVPMMaxAmount()if(intamt>sysnfc_svEpurseConvAmtDec2Int(SVPMMax))then
+DisplayScreenFromRes("receiveFailureScreen"," "," ","#PMMAX","#LTEXD")else
+RCV_OfflineFlowHandling()end
+else
+DisplayScreenFromRes("receiveFailureScreen"," "," ","#TAPTO")end
+end
+function RCV_OfflineFlowHandling()intamt=sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)SVPMMax=GetSVPMMaxAmount()if(intamt>sysnfc_svEpurseConvAmtDec2Int(SVPMMax))then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#PMMAX","#LTEXD"," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")else
+ePurseId=GetEpurseID()sysnfc_svEpurseSetId(RCV_nfcSess,ePurseId)sysnfc_svEpurseDebitAmount(RCV_nfcSess,intamt,"StoreValueRecord")end
+end
+function RCV_offlineReadDetectCard(e,n,t)RCV_SVXid=n
+RCV_Xid=GetSessionValue("RCVSVXID")if(e=="true")then
+if(RCV_SVXid==RCV_Xid)then
+intamt=sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)SVPMMax=GetSVPMMaxAmount()if(intamt>sysnfc_svEpurseConvAmtDec2Int(SVPMMax))then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#PMMAX","#LTEXD"," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")else
+ePurseId=GetEpurseID()sysnfc_svEpurseSetId(RCV_nfcSess,ePurseId)sysnfc_svEpurseDebitAmount(RCV_nfcSess,intamt,"StoreValueRecord")end
+else
+DisplayScreenFromRes("receiveSVMultiTagFailureScreen")end
+else
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," "," ","#TAPTO"," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")end
+end
+function RCV_OnSVTagFailOK()if(RCV_nfcSess~=0)then
+sysnfc_nfc_cancel(RCV_nfcSess)end
+DisplayScreenFromRes("NFCProgress",GetCurrencySymbol(),RCV_Amount)RCV_nfcSess=sysnfc_init("RCV_offlineReadDetectCard")end
+function RCV_goHome()ChangeXla("HomeScreen")end
+function RCV_OnCancel()DisplaySetMaxInputDataLen("0")if(RCV_nfcSess~=0)then
+sysnfc_nfc_cancel(RCV_nfcSess)end
+RCV_goHome()end
+function StoreValueRecord(e,n,t)xipdbg("In Lua: StoreValueRecord amount "..n)xipdbg("In Lua: StoreValueRecord status "..e)xipdbg("expiryDate "..t)if(e=="0")then
+TS=xal_xms_timeStamp()Type="PM"TxnId=generateUUID()TXN_STATUS="S"RCV_TagBal=sysnfc_svEpurseConvAmtInt2Dec(n)RCV_TagExpDate=t
+amtVal=sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)RCV_EntAmt=sysnfc_svEpurseConvAmtInt2Dec(tostring(amtVal))RCV_SVversion="V1"RCV_UpTime=GetUpTime()RCV_Location=GetLocationDetails()RCV_SignalStr=GetSignalStrength()RCV_Msisdn=GetDeviceMSISDN()RecordData=RCV_SVversion.."~"..TS.."~"..Type.."~"..TxnId.."~"..GetEpurseID().."~"..RCV_PurseAction.."~"..RCV_EntAmt.."~"..RCV_Xid.."~"..TXN_STATUS.."~"..RCV_TagBal.."~"..RCV_TagExpDate.."~"..RCV_UpTime.."~"..RCV_Location.."~"..RCV_SignalStr.."~"..RCV_Msisdn
+iRet,rec_id=xal_addRecord(RecordData,string.len(RecordData),1)SVCurAmt=GetConfigValue("sta")if(SVCurAmt==-1)then
+SetConfigValue("sta",RCV_Amount)else
+SVTotalAmt=sysnfc_svEpurseConvAmtDec2Int(SVCurAmt)+sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)totalamt=sysnfc_svEpurseConvAmtInt2Dec(SVTotalAmt)SetConfigValue("sta",totalamt)end
+SVCurTxns=GetConfigValue("stt")if(SVCurTxns==-1)then
+SetConfigValue("stt","1")else
+SVTotalTxns=tonumber(SVCurTxns)+1
+SetConfigValue("stt",tostring(SVTotalTxns))end
+xip_led_viberator_enable()tagXid=string.sub(RCV_Xid,1,1).."-"..string.sub(RCV_Xid,2,5).."-".."xxxx".."-"..string.sub(RCV_Xid,14,17)DisplayScreenFromRes("receiveSuccessScreen",GetCurrencySymbol().." "..RCV_Amount,tagXid)elseif(e=="1")then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#UNREAD","#TRYAGN"," "," ","#Global:CNCL","#Global:RETRY","RCV_OnCancel","RCV_retry","RCV_retry")elseif(e=="2"or e=="6"or e=="7")then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," ","#INVLDCARD","#INVLDCARD1"," "," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")elseif(e=="3")then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#CARDEXPR"," "," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")elseif(e=="5")then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#INSBAL"," "," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")else
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#NOSV","#ONLNRCV"," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")end
+end
+function syncTxnCheck()PrevTxnTime=GetConfigValue("SVST")currentTxnTime=sysnfc_svEpurseGetEpochNow()if(PrevTxnTime==-1)then
+timeInvl=0
+else
+timeInvl=currentTxnTime-tonumber(PrevTxnTime)end
+SyncInterval=GetConfigValue("sti")SyncMaxTxnNo=GetConfigValue("stc")txnCount=xal_getRecordCount()if((timeInvl>=tonumber(SyncInterval)and txnCount>=1)or txnCount>=tonumber(SyncMaxTxnNo))then
+SetConfigValue("SVST",tostring(currentTxnTime))RCV_SyncNow()else
+RCV_goHome()end
+end
+function RCV_SyncNow()ChangeXla("SyncSV")end
+function RCV_retry()if(RCV_nfcSess~=0)then
+sysnfc_nfc_cancel(RCV_nfcSess)end
+DisplayScreenFromRes("NFCProgress",GetCurrencySymbol(),RCV_Amount)RCV_nfcSess=sysnfc_init("RCV_offlineReadDetectCard")end[receiveAmountEntryScreen]
+screenType=1
+size=408
+Buff=<screen><screenName name="receiveAmountEntryScreen"/><screenType id="1"/><widget name="title" text="AMT"/><widget name="input" inputtype="1" maxinputlen="16" alphatype="0"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="RCV_OnCancel" key_brsk="RCV_OnAmountNext" key_ok="RCV_OnAmountNext" key_xip="RCV_OnAmountNext"/><ticker tickerenable="0"/></screen>
+[NFCProgress]
+screenType=0
+size=388
+Buff=<screen><screenName name="NFCProgress"/><screenType id="0"/><widget name="title" text="NFCPRGS"/><string x="12" y="46" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="25" y="35" text="@2" font="4" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="nfcanim"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="RCV_OnCancel"/></screen>
+[receiveSuccessScreen]
+screenType=0
+size=665
+Buff=<screen><screenName name="receiveSuccessScreen"/><screenType id="0"/><widget name="title" text="PAYRCVD"/><string x="8" y="50" text="RCVD" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="65" y="48" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="64" text="Global:FRM" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="78" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="blsk" text="SYNC"/><widget name="brsk" text="Global:OK"/><actions key_blsk="RCV_SyncNow" key_brsk="syncTxnCheck" key_ok="syncTxnCheck" key_xip="syncTxnCheck"/></screen>
+[receiveFailureScreen]
+screenType=0
+size=760
+Buff=<screen><screenName name="receiveFailureScreen"/><screenType id="0"/><widget name="title" text="@1"/><string x="65" y="19" text="@2" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@7" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="blsk" text="@8"/><widget name="brsk" text="@9"/><actions key_blsk="@10" key_brsk="@11" key_ok="@12"/></screen>
+[receiveSVMultiTagFailureScreen]
+screenType=0
+size=341
+Buff=<screen><screenName name="receiveSVMultiTagFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="8" y="70" text="TAPORIGTAG" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="RCV_OnSVTagFailOK" key_ok="RCV_OnSVTagFailOK"/></screen>
+[receiveSyncScreen]
+screenType=0
+size=523
+Buff=<screen><screenName name="receiveSyncScreen"/><screenType id="0"/><widget name="title" text="SYNCFUL"/><string x="8" y="50" text="SYNC1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="SYNC2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="SYNC3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="SYNC"/><widget name="blsk" text="@1"/><actions key_blsk="@2" key_brsk="RCV_SyncNow" key_ok="RCV_SyncNow"/></screen>
+[CRC]
+size=10
+Buff=Pg==

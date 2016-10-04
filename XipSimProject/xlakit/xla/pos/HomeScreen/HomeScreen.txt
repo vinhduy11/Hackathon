@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str RCV="RECV ONL" />
+<str RCVOFF="RECV OFFL" />
+<str PERSO="REGISTER" />
+<str BAL="BALANCE" />
+<str MENU="MENU" />
+<str LFT=" LFT" />
+<str SOD=" TSOD" />
+<str CBAL="CUST BAL" />
+<str TOP="TOPUP" />
+</EN>
+<SP>
+<str RCV="RECV ONL" />
+<str RCVOFF="RECV OFFL" />
+<str PERSO="REGISTER" />
+<str BAL="BALANCE" />
+<str MENU="MENU" />
+<str LFT=" LFT" />
+<str SOD=" TSOD" />
+<str CBAL="CUST BAL" />
+<str TOP="TOPUP" />
+</SP>
+</language>
+</strings>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str DEVNAME="Set device name" />
+<str DEVNAME_1="Enter device name to set" />
+<str SDNSUC="Device name" />
+<str SDNSUC_1="The device name set" />
+<str SDNSUC_2="successful." />
+<str IMPRDATA="Improper data entered" />
+</EN>
+<SP>
+<str DEVNAME="Set device name" />
+<str DEVNAME_1="Enter device name to set" />
+<str SDNSUC="Device name" />
+<str SDNSUC_1="The device name set" />
+<str SDNSUC_2="successful." />
+<str IMPRDATA="Improper data entered" />
+</SP>
+</language>
+</strings>

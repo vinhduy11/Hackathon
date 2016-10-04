@@ -1,0 +1,53 @@
+SS_xmsConn=0
+array={}function SS_OnLoad()xipdbg("In Lua: SS_OnLoad")DispScreen("ServerSyncProgressScreen")xal_CheckUpdates("OnXlaGAPP")end
+function SERVERSYNC_CB()xipdbg("In Lua: SERVERSYNC_CB, Res = "..res)XMSSCData=xal_xms_get_params(SS_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)xal_xms_deInit(SS_xmsConn)SS_xmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+xipdbg("In Lua: Displaying ServerSyncSuccessScreen: SC = "..xmsSC)DisplayScreenFromRes("ServerSyncSuccessScreen")elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("ServerSyncTimeout")else
+if SCDetails[2]~=nil or SCDetails[2]~=''then
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("ServerSyncFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("ServerSyncFailureScreen",xmsSC,SCDetails[2])end
+else
+err1,err2=GetTxnErrorStr(xmsSC)DisplayScreenFromRes("ServerSyncFailureScreen",xmsSC,err1,err2)end
+end
+end
+function SS_goHome()xipdbg("DispScreen: Canceling the updates ")xal_CancelUpdates()ChangeXla("HomeScreen")end
+function DispScreen(e)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..e)DisplayScreenFromRes(e)end
+function SS_OnCancel()if(SS_xmsConn~=0)then
+xal_xms_deInit(SS_xmsConn)end
+SS_goHome()end
+function mysplit(S,n)if n==nil then
+n="%s"end
+local e={};i=1
+xipdbg("LFT: Split: Input String val = "..S)for n in string.gmatch(S,"([^"..n.."]+)")do
+e[i]=n
+xipdbg("LFT: Individual Split String val = "..e[i])i=i+1
+end
+return e
+end
+function GetMultipleLines(e)xipdbg("DisplayMultipleLines:Line Received : "..e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<4)do
+array[count]=" "count=count+1
+end
+end
+function OnXlaGAPP(n,e,S)xipdbg("OnXlaGAPP: Download Status =  "..n.." XmsStatus = "..e.." XmsStatus Len "..string.len(e))if(tonumber(n)==200)then
+nXlas=tonumber(e)xipdbg("OnXlaGAPP: nXlas  = "..nXlas)if nXlas>0 then
+DisplayScreenFromRes("GAPPStatusScr","#Global:STATUS","#SYNCSUCC","#SYNCSUCC2"," ","#NEWAPPS","#NEWAPPS1"," "," "," "," ")else
+DisplayScreenFromRes("GAPPStatusScr","#Global:STATUS","#SYNCSUCC1","#SYNCSUCC3"," ","#CONT"," "," ","#Global:OK","SS_goHome","SS_goHome")end
+else
+DisplayScreenFromRes("GAPPStatusScrErr","#Global:STATUS","","#SYNCERR","","#CONT"," "," ")end
+end

@@ -1,0 +1,14 @@
+<screen>
+	<screenName name="networkErrorScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="SERVALERT" />
+	<widget name="brsk" text="CONTINUE" />
+	<strings>
+		<string x="45" y="40" text="NWERR" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+		<string x="8" y="60" text="NWERR1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+		<string x="8" y="70" text="NWERR2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+		<string x="8" y="80" text="NWERR3" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	</strings>
+	<actions  key_blsk="OnCancel" key_brsk="NWErrNext" key_ok="NWErrNext"/>	
+</screen>
+

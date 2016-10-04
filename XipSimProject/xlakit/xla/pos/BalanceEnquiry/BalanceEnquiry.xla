@@ -1,0 +1,95 @@
+[properties]
+size=613
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="BalanceEnquiry" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="BE_OnInstall" onload="BE_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="sysnfc"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=711
+Buff=<strings><language><EN><str GetPIN="To check balance"/><str BEPROG="Fetching balance.."/><str BAL0="Balance"/><str BAL1="The balance in your"/><str BAL2="account is"/><str BETAPTO="Tap timeout"/><str BEMPIN="Enter merchant mPIN"/><str BECPIN="Enter customer mPIN"/><str BEIMPRDATA="Improper data received"/><str BEINCRCT="Incorrect mPIN"/><str/></EN>
+<SP><str GetPIN="To check balance"/><str BEPROG="Fetching balance.."/><str BAL0="Balance"/><str BAL1="The balance in your"/><str BAL2="account is"/><str BETAPTO="Tap timeout"/><str BEMPIN="Enter merchant mPIN"/><str BECPIN="Enter customer mPIN"/><str BEIMPRDATA="Improper data received"/><str BEINCRCT="Incorrect mPIN"/><str/></SP>
+</language>
+</strings>
+[LUAScript]
+size=2682
+Buff=BE_xmsConn=0
+BE_MPIN=0
+BE_nfcSess=0
+BE_Xid=0
+BE_Exid=0
+BE_Type=0
+array={}BE_IsuId=0
+BE_MSISDN=0
+BE_Name=0
+function BE_OnLoad()DisplayScreenFromRes("balanceMPinEntryScreen","#BEMPIN"," ")end
+function BE_OnMPINOk(e)if(e~=nil and e:len()==4)then
+BE_MPIN=e
+XmsRequest_BE()else
+DisplayScreenFromRes("balanceMPinEntryScreen","#BEMPIN","#BEINCRCT")end
+end
+function XmsRequest_BE()xipdbg("In Lua: XmsRequest_BE")DisplayScreenFromRes("balanceProgress")cntType=xal_xms_getcontentType()xipdbg("In Lua: XmsRequest_BE content Type:"..cntType)if(cntType==-1)then txnType="BE".."|".."7/f"else txnType="BE".."|"..cntType end
+BE_xmsConn=xal_xms_init("NULL",txnType,0,"BE_CB")mccMnc=GetMncMcc()xal_xms_add_params(BE_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(BE_xmsConn,"mnc",string.sub(mccMnc,4,-1))xid=GetDeviceXID()xal_xms_add_params(BE_xmsConn,"xid",xid)exid=GetDeviceExid()xal_xms_add_params(BE_xmsConn,"exid",exid)xal_xms_add_params(BE_xmsConn,"mp",BE_MPIN)ret=xal_xms_request(BE_xmsConn,1)end
+function BE_CB()XMSSCData=xal_xms_get_params(BE_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)uBalVal=xal_xms_get_params(BE_xmsConn,"cbal")xal_xms_deInit(BE_xmsConn)xipdbg("In Lua: Displaying balanceSuccessScreen: SC = "..xmsSC.."Balance = "..uBalVal)if tonumber(xmsSC)==0 then
+DisplayScreenFromRes("balanceSuccessScreen",GetSessionValue("CURR").." "..uBalVal)elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("balanceTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("balanceFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("balanceFailureScreen",xmsSC,SCDetails[2])end
+end
+end
+function BE_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)DisplayScreenFromRes(e)end
+function BE_OnCancel()if(BE_nfcSess~=0)then
+sysnfc_nfc_cancel(BE_nfcSess)end
+if(BE_xmsConn~=0)then
+xal_xms_deInit(BE_xmsConn)end
+BE_goHome()end
+function mysplit(s,n)if n==nil then
+n="%s"end
+local e={};i=1
+xipdbg("LFT: Split: Input String val = "..s)for n in string.gmatch(s,"([^"..n.."]+)")do
+e[i]=n
+xipdbg("LFT: Individual Split String val = "..e[i])i=i+1
+end
+return e
+end
+function GetMultipleLines(e)xipdbg("DisplayMultipleLines:Line Received : "..e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<4)do
+array[count]=" "count=count+1
+end
+end[balanceMPinEntryScreen]
+screenType=1
+size=538
+Buff=<screen><screenName name="balanceMPinEntryScreen"/><screenType id="1"/><widget name="title" text="@1"/><string x="35" y="40" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="30" y="50" text="GetPIN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="BE_OnCancel" key_brsk="BE_OnMPINOk" key_ok="BE_OnMPINOk"/><ticker tickerenable="0"/></screen>
+[balanceProgress]
+screenType=0
+size=213
+Buff=<screen><screenName name="balanceProgress"/><screenType id="0"/><widget name="title" text="BEPROG"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="BE_OnCancel"/></screen>
+[balanceSuccessScreen]
+screenType=0
+size=483
+Buff=<screen><screenName name="balanceSuccessScreen"/><screenType id="0"/><widget name="title" text="BAL0"/><string x="8" y="50" text="BAL1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="BAL2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="20" y="80" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="BE_goHome" key_ok="BE_goHome"/></screen>
+[balanceFailureScreen]
+screenType=0
+size=744
+Buff=<screen><screenName name="balanceFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="BE_goHome" key_ok="BE_goHome"/></screen>
+[balanceTimeout]
+screenType=0
+size=308
+Buff=<screen><screenName name="balanceTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="60" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="BE_goHome" key_ok="BE_goHome"/></screen>
+[CRC]
+size=10
+Buff=Lw==

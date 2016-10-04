@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str NFCPRGS="Reading from NFC.." />
+<str BEPROG="Fetching balance.." />
+<str BAL0="Balance" />
+<str BAL1="The balance in your" />
+<str SVBAL5="SV Wallet is Empty" />
+<str SVBACK="Back" />
+<str SVCUSTBAL0="SV wallet is" />
+<str URCRD="unable to read card" />
+<str TRYAGAIN="please try again" />
+<str INVALID="not a valid card" />
+<str INVALID1="Card does not support" />
+<str INVALID2="SV transaction" />
+<str EXPIRED="Card is expired" />
+<str TAPTO="Tap timeout" />
+<str INCRCT="Incorrect mPIN" />
+<str GLSTATUS="Status" />
+<str EXPIRYDATE="Exp:" />
+<str NFCFAIL="NFC Couldnot be start" />
+</EN>
+<SP>
+<str NFCPRGS="Reading from NFC.." />
+<str BEPROG="Fetching balance.." />
+<str BAL0="Balance" />
+<str BAL1="The balance in your" />
+<str SVBAL5="SV Wallet is Empty" />
+<str SVBACK="Back" />
+<str SVCUSTBAL0="SV wallet is" />
+<str URCRD="unable to read card" />
+<str TRYAGAIN="please try again" />
+<str INVALID="not a valid card" />
+<str INVALID1="Card does not support" />
+<str INVALID2="SV transaction" />
+<str EXPIRED="Card is expired" />
+<str TAPTO="Tap timeout" />
+<str INCRCT="Incorrect mPIN" />
+<str GLSTATUS="Status" />
+<str EXPIRYDATE="Exp:" />
+<str NFCFAIL="NFC Couldnot be start" />
+</SP>
+</language>
+</strings>

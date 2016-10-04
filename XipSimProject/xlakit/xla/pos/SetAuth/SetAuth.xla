@@ -1,0 +1,76 @@
+[properties]
+size=574
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="SetAuth" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="SA_OnInstall" onload="SA_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=267
+Buff=<strings><language><EN><str SAPROG="Fetching key .."/><str SASUC_1="Dynamic key downloaded"/><str SASUC_2="successfully."/></EN>
+<SP><str SAPROG="Fetching key .."/><str SASUC_1="Dynamic key downloaded"/><str SASUC_2="successfully."/></SP>
+</language>
+</strings>
+[LUAScript]
+size=1952
+Buff=SA_xmsConn=0
+array={}function SA_OnLoad()xipdbg("In Lua: SA_OnLoad")DispScreen("setAuthProgressScreen")cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="SETAUTH".."|".."7/f"else txnType="SETAUTH".."|"..cntType end
+SA_xmsConn=xal_xms_init("NULL",txnType,0,"SETAUTH_CB")ret=xal_xms_request(SA_xmsConn,1)end
+function SETAUTH_CB()XMSSCData=xal_xms_get_params(SA_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)xal_xms_deInit(SA_xmsConn)SA_xmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+xipdbg("In Lua: Displaying setAuthSuccessScreen: SC = "..xmsSC)DisplayScreenFromRes("setAuthSuccessScreen")elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("setAuthTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("setAuthFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("setAuthFailureScreen",xmsSC,SCDetails[2])end
+end
+end
+function SA_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..e)DisplayScreenFromRes(e)end
+function SA_OnCancel()if(SA_xmsConn~=0)then
+xal_xms_deInit(SA_xmsConn)end
+SA_goHome()end
+function mysplit(t,e)if e==nil then
+e="%s"end
+local n={};i=1
+xipdbg("LFT: Split: Input String val = "..t)for e in string.gmatch(t,"([^"..e.."]+)")do
+n[i]=e
+xipdbg("LFT: Individual Split String val = "..n[i])i=i+1
+end
+return n
+end
+function GetMultipleLines(e)xipdbg("DisplayMultipleLines:Line Received : "..e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end[setAuthProgressScreen]
+screenType=0
+size=245
+Buff=<screen><screenName name="setAuthProgressScreen"/><screenType id="0"/><widget name="title" text="SAPROG"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SA_OnCancel"/><ticker tickerenable="0"/></screen>
+[setAuthSuccessScreen]
+screenType=0
+size=409
+Buff=<screen><screenName name="setAuthSuccessScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="8" y="50" text="SASUC_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="SASUC_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SA_goHome" key_ok="SA_goHome"/></screen>
+[setAuthFailureScreen]
+screenType=0
+size=744
+Buff=<screen><screenName name="setAuthFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SA_goHome" key_ok="SA_goHome"/></screen>
+[setAuthTimeout]
+screenType=0
+size=308
+Buff=<screen><screenName name="setAuthTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SA_goHome" key_ok="SA_goHome"/></screen>
+[CRC]
+size=10
+Buff=cw==

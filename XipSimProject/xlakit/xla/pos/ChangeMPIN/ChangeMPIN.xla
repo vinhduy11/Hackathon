@@ -1,0 +1,126 @@
+[properties]
+size=621
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="ChangeMPIN" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="CHNGMPIN_OnInstall" onload="CHNGMPIN_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="sysnfc"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=1387
+Buff=<strings><language><EN><str NFCPRGS="Reading from NFC.."/><str GETOLMPIN="Enter current mPIN"/><str GETOLMPIN_1="Enter your current mPIN"/><str GETOLMPIN_2="to change to a new mPIN"/><str GETNEWPIN="Enter new mPIN"/><str GETNEWPIN_1="Enter new mPIN to set"/><str GETRENEWPIN="Confirm new mPIN"/><str GETRENEWPIN_1="Enter new mPIN again"/><str GETRENEWPIN_2="to confirm"/><str CHNGMPIN="Change mPIN"/><str NOTMATCHPIN="mPIN not changed"/><str CHNGSUC="Request accepted"/><str EOTP="Enter OTP"/><str TAPTO="Tap timeout"/><str IMPRDATA="Improper data received"/><str INCRCT="Incorrect mPIN"/><str INCROTP="Incorrect OTP"/><str CHNGPROG="Changing mPIN"/><str CKNGPROG="Processing mPIN"/></EN>
+<SP><str NFCPRGS="Reading from NFC.."/><str GETOLMPIN="Enter current mPIN"/><str GETOLMPIN_1="Enter your current mPIN"/><str GETOLMPIN_2="to change to a new mPIN"/><str GETNEWPIN="Enter new mPIN"/><str GETNEWPIN_1="Enter new mPIN to set"/><str GETRENEWPIN="Confirm new mPIN"/><str GETRENEWPIN_1="Enter new mPIN again"/><str GETRENEWPIN_2="to confirm"/><str CHNGMPIN="Change mPIN"/><str NOTMATCHPIN="mPIN not changed"/><str CHNGSUC="Request accepted"/><str EOTP="Enter OTP"/><str TAPTO="Tap timeout"/><str IMPRDATA="Improper data received"/><str INCRCT="Incorrect mPIN"/><str INCROTP="Incorrect OTP"/><str CHNGPROG="Changing mPIN"/><str CKNGPROG="Processing mPIN"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=3110
+Buff=CHNGMPIN_xmsConn=0
+CHNGMPIN_OldMPIN=nil
+CHNGMPIN_NewMPIN=nil
+CHNGMPIN_Xid=0
+CHNGMPIN_Exid=0
+CHNGMPIN_nfcSess=0
+array={}CHNGMPIN_respOtp=0
+function CHNGMPIN_OnLoad()DisplayScreenFromRes("changeMPinOldMPinEntryScreen"," ")end
+function CHNGMPIN_OnOldMPINNext(e)if(e~=nil and e:len()==4)then
+CHNGMPIN_OldMPIN=e
+DisplayScreenFromRes("changeMPinNewMPinEntryScreen"," ")else
+DisplayScreenFromRes("changeMPinOldMPinEntryScreen","#INCRCT")end
+end
+function CHNGMPIN_OnNewMPINNext(e)if(e~=nil and e:len()==4)then
+CHNGMPIN_NewMPIN=e
+DisplayScreenFromRes("changeMPinReEnterNewMPinEntryScreen"," ")else
+DisplayScreenFromRes("changeMPinNewMPinEntryScreen","#INCRCT")end
+end
+function CHNGMPIN_OnReNewMPINNext(e)if(e~=nil and e:len()==4)then
+if(CHNGMPIN_NewMPIN==e)then
+XmsRequest_CHNGPIN()else
+DispScreen("changeMPinMPinsNotMatchedScreen")end
+else
+DisplayScreenFromRes("changeMPinReEnterNewMPinEntryScreen","#INCRCT")end
+end
+function XmsRequest_CHNGPIN()xipdbg("In Lua: XmsRequest_CHNGPIN")DisplayScreenFromRes("changeMPinProgressScreen","#CHNGPROG")cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="TCP".."|".."7/f"else txnType="TCP_HND".."|"..cntType end
+CHNGMPIN_xmsConn=xal_xms_init("NULL",txnType,0,"CHNGPIN_CB")xal_xms_add_params(CHNGMPIN_xmsConn,"mp",CHNGMPIN_OldMPIN)if(CHNGMPIN_NewMPIN~=nil)then
+xal_xms_add_params(CHNGMPIN_xmsConn,"nmp",CHNGMPIN_NewMPIN)end
+mccMnc=GetMncMcc()xal_xms_add_params(CHNGMPIN_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(CHNGMPIN_xmsConn,"mnc",string.sub(mccMnc,4,-1))xid=GetDeviceXID()xal_xms_add_params(CHNGMPIN_xmsConn,"xid",xid)exid=GetDeviceExid()xal_xms_add_params(CHNGMPIN_xmsConn,"exid",exid)ret=xal_xms_request(CHNGMPIN_xmsConn,1)end
+function CHNGPIN_CB()XMSSCData=xal_xms_get_params(CHNGMPIN_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)CHNGMPIN_respOtp=xal_xms_get_params(CHNGMPIN_xmsConn,"otp")xipdbg("In Lua:  respOtp = "..CHNGMPIN_respOtp)xal_xms_deInit(CHNGMPIN_xmsConn)CHNGMPIN_xmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+DisplayScreenFromRes("changeMPinSuccessScreen")elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("changeMPinTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("changeMPinFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("changeMPinFailureScreen",xmsSC,SCDetails[2])end
+end
+end
+function CHNGMPIN_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)DisplayScreenFromRes(e)end
+function CHNGMPIN_OnCancel()if(CHNGMPIN_xmsConn~=0)then
+xal_xms_deInit(CHNGMPIN_xmsConn)end
+CHNGMPIN_goHome()end
+function mysplit(s,e)if e==nil then
+e="%s"end
+local n={};i=1
+for e in string.gmatch(s,"([^"..e.."]+)")do
+n[i]=e
+i=i+1
+end
+return n
+end
+function GetMultipleLines(e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end[NFCProgress]
+screenType=0
+size=215
+Buff=<screen><screenName name="NFCProgress"/><screenType id="0"/><widget name="title" text="NFCPRGS"/><widget name="nfcanim"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="CHNGMPIN_OnCancel"/></screen>
+[changeMPinOldMPinEntryScreen]
+screenType=1
+size=658
+Buff=<screen><screenName name="changeMPinOldMPinEntryScreen"/><screenType id="1"/><widget name="title" text="GETOLMPIN"/><string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="55" text="GETOLMPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="65" text="GETOLMPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="CHNGMPIN_OnCancel" key_brsk="CHNGMPIN_OnOldMPINNext" key_ok="CHNGMPIN_OnOldMPINNext"/></screen>
+[changeMPinNewMPinEntryScreen]
+screenType=1
+size=557
+Buff=<screen><screenName name="changeMPinNewMPinEntryScreen"/><screenType id="1"/><widget name="title" text="GETNEWPIN"/><string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="55" text="GETNEWPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="CHNGMPIN_OnCancel" key_brsk="CHNGMPIN_OnNewMPINNext" key_ok="CHNGMPIN_OnNewMPINNext"/></screen>
+[changeMPinReEnterNewMPinEntryScreen]
+screenType=1
+size=675
+Buff=<screen><screenName name="changeMPinReEnterNewMPinEntryScreen"/><screenType id="1"/><widget name="title" text="GETRENEWPIN"/><string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="55" text="GETRENEWPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="65" text="GETRENEWPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="CHNGMPIN_OnCancel" key_brsk="CHNGMPIN_OnReNewMPINNext" key_ok="CHNGMPIN_OnReNewMPINNext"/></screen>
+[changeMPinMPinsNotMatchedScreen]
+screenType=0
+size=334
+Buff=<screen><screenName name="changeMPinMPinsNotMatchedScreen"/><screenType id="0"/><widget name="title" text="CHNGMPIN"/><string x="8" y="50" text="NOTMATCHPIN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="CHNGMPIN_goHome" key_ok="CHNGMPIN_goHome"/></screen>
+[changeMPinProgressScreen]
+screenType=0
+size=250
+Buff=<screen><screenName name="changeMPinProgressScreen"/><screenType id="0"/><widget name="title" text="@1"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="CHNGMPIN_OnCancel"/><ticker tickerenable="0"/></screen>
+[changeMPinSuccessScreen]
+screenType=0
+size=322
+Buff=<screen><screenName name="changeMPinSuccessScreen"/><screenType id="0"/><widget name="title" text="CHNGMPIN"/><string x="8" y="50" text="CHNGSUC" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="CHNGMPIN_goHome" key_ok="CHNGMPIN_goHome"/></screen>
+[changeMPinFailureScreen]
+screenType=0
+size=759
+Buff=<screen><screenName name="changeMPinFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="CHNGMPIN_goHome" key_ok="CHNGMPIN_goHome"/></screen>
+[changeMPinTimeout]
+screenType=0
+size=323
+Buff=<screen><screenName name="changeMPinTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="CHNGMPIN_goHome" key_ok="CHNGMPIN_goHome"/></screen>
+[changeMPinOTPEntryScreen]
+screenType=1
+size=539
+Buff=<screen><screenName name="changeMPinOTPEntryScreen"/><screenType id="1"/><widget name="title" text="EOTP"/><string x="8" y="40" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="GETOLMPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="blsk" text="Global:CNCL"/><widget name="brsk" text="Global:NXT"/><actions key_blsk="CHNGMPIN_OnCancel" key_brsk="CHNGMPIN_OnOTPNext" key_ok="CHNGMPIN_OnOTPNext"/></screen>
+[CRC]
+size=10
+Buff=BA==

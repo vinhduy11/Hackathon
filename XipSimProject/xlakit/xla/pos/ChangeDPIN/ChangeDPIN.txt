@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str GETOLDPIN="Enter current dPIN" />
+<str GETOLDPIN_1="Enter your current dPIN" />
+<str GETOLDPIN_2="to change to a new dPIN" />
+<str GETNEWPIN="Enter new dPIN" />
+<str GETNEWPIN_1="Enter new dPIN to set" />
+<str GETRENEWPIN="Confirm new dPIN" />
+<str GETRENEWPIN_1="Enter new dPIN again" />
+<str GETRENEWPIN_2="to confirm" />
+<str CHNGDPIN="Change dPIN" />
+<str NOTMATCHPIN="dPIN not changed" />
+<str NOTMATCHPIN_1="Your old dPIN is wrong" />
+<str NOTMATCHPIN_2="dPIN has not been" />
+<str NOTMATCHPIN_3="changed." />
+<str CHNGSUC_1="Your dPIN has been" />
+<str CHNGSUC_2="changed. Please use new" />
+<str CHNGSUC_3="dPIN from now onwards" />
+<str INCRCTPIN="Incorrect dPIN" />
+</EN>
+<SP>
+<str GETOLDPIN_1="Ingresa dPIN actual" />
+<str GETOLDPIN_2="para cambiar de dPIN" />
+<str GETRENEWPIN_1="Reingresa nuevo dPIN" />
+<str NOTMATCHPIN_2="dPIN no ha sido" />
+<str CHNGSUC_1="Tu dPIN ha sido" />
+<str CHNGSUC_2="cambiado. Usa nuevo" />
+<str GETOLDPIN="Ingresa dPIN actual" />
+<str GETNEWPIN="Ingresa nuevo dPIN" />
+<str GETRENEWPIN="Confirma nuevo dPIN" />
+<str NOTMATCHPIN="dPIN nuevo no coincide" />
+<str NOTMATCHPIN_3="cambiado." />
+<str INCRCTPIN="dPIN incorrecto" />
+<str GETNEWPIN_1="Ingresa nuevo dPIN" />
+<str GETRENEWPIN_2="para confirmar cambio" />
+<str CHNGDPIN="Cambio de dPIN" />
+<str NOTMATCHPIN_1="Su dPIN es incorrecto," />
+<str CHNGSUC_3="dPIN a partir de ahora." />
+</SP>
+</language>
+</strings>

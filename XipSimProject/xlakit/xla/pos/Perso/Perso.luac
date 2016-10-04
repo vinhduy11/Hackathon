@@ -1,0 +1,160 @@
+Perso_XmsConn=0
+Perso_NickName=nil
+Perso_Msisdn=nil
+Perso_MPIN=0
+Perso_XID=0
+Perso_Ispin=nil
+Perso_OTP=0
+Perso_nfcSess=0
+array={}Perso_MccMnc=0
+Perso_Isuid=0
+Perso_msm=0
+Perso_Exid=0
+Perso_Write=0
+Perso_data=0
+Pesro_respOtp=0
+function Perso_OnLoad()Perso_NickName="Cliente"DisplayScreenFromRes("NFCProgress"," "," ")Perso_nfcSess=sysnfc_init("Perso_OnNFCReadDetectData")if(Perso_nfcSess==-1)then
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS"," ","#NFCFAIL","#TRYAGAIN")end
+end
+function Perso_OnNFCReadDetectData(s,e,n)Perso_XID=e
+Perso_nfcSess=0
+if(s=="true")then
+DisplayScreenFromRes("nickNameMSEntryScreen","#GETNICK","2","15","1","Perso_NickNext")else
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS"," "," ","#TAPTO")end
+end
+function Perso_NickNext(e)Perso_NickName=e
+if(Perso_NickName~=nil)then
+DisplayScreenFromRes("nickNameMSEntryScreen","#GETMSISDN","3","10","0","Perso_MsisdnNext")else
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS"," "," ","#IMPRDATAENR")end
+end
+function Perso_MsisdnNext(e)Perso_Msisdn=e
+if(Perso_Msisdn~=nil)then
+Perso_Ispin=GetCustomerPinFlag()if(Perso_Ispin==-1)then
+Perso_Ispin="N"end
+if(Perso_Ispin=="B")or(Perso_Ispin=="M")then
+DisplayScreenFromRes("persoMPinOTPEntryScreen","#GETPIN"," ","Perso_OnMPINNext")else
+XmsRequest_PersoTag()end
+else
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS"," "," ","#IMPRDATAENR")end
+end
+function Perso_OnMPINNext(e)if(e~=nil and e:len()==4)then
+Perso_MPIN=e
+XmsRequest_PersoTag()else
+DisplayScreenFromRes("persoMPinOTPEntryScreen","#GETPIN","#INCRCT","Perso_OnMPINNext")end
+end
+function XmsRequest_PersoTag()DisplayScreenFromRes("persoProgressScreen","#PERSOPROG")cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="PROV".."|".."7/f"else txnType="PROV".."|"..cntType end
+xipdbg("In Lua: XmsRequest_PersoTag txnType:"..txnType)Perso_XmsConn=xal_xms_init("NULL",txnType,0,"PersoTag_CB")mccMnc=GetMncMcc()xal_xms_add_params(Perso_XmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(Perso_XmsConn,"mnc",string.sub(mccMnc,4,-1))xal_xms_add_params(Perso_XmsConn,"xid",Perso_XID)xal_xms_add_params(Perso_XmsConn,"name",Perso_NickName)xal_xms_add_params(Perso_XmsConn,"ms",Perso_Msisdn)xal_xms_add_params(Perso_XmsConn,"ams",Perso_Msisdn)if(Perso_Ispin=="B")or(Perso_Ispin=="M")then
+xal_xms_add_params(Perso_XmsConn,"mpin",Perso_MPIN)end
+xal_xms_add_params(Perso_XmsConn,"ispin",Perso_Ispin)ret=xal_xms_request(Perso_XmsConn,1)end
+function PersoTag_CB()XMSSCData=xal_xms_get_params(Perso_XmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]mcc=xal_xms_get_params(Perso_XmsConn,"mcc")mnc=xal_xms_get_params(Perso_XmsConn,"mnc")name=xal_xms_get_params(Perso_XmsConn,"name")msm=xal_xms_get_params(Perso_XmsConn,"msm")isuid=xal_xms_get_params(Perso_XmsConn,"isuid")exid=xal_xms_get_params(Perso_XmsConn,"exid")Pesro_respOtp=xal_xms_get_params(Perso_XmsConn,"otp")Perso_data=mcc..mnc.."|"..name.."|"..msm.."|"..isuid.."|"..exid.."\r\n"xal_xms_deInit(Perso_XmsConn)Perso_XmsConn=0
+if(tonumber(xmsSC)==0 or tonumber(xmsSC)==100)then
+if(Perso_Ispin=="B")or(Perso_Ispin=="O")then
+DisplayScreenFromRes("persoMPinOTPEntryScreen","#GETOTP"," ","Perso_OnOTPNext")else
+DisplayScreenFromRes("NFCProgress","#NFCPRGS_1","#NFCPRGS_2")Perso_nfcSess=sysnfc_init("Perso_OnNFCWriteDetectData")end
+elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("persoFailureScreen","#Global:TXNTO","","","#Global:TXNFAIL")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("persoFailureScreen","#Global:STATUS",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS",xmsSC,SCDetails[2])end
+end
+end
+function Perso_OnNFCWriteDetectData(s,e,n)xid=e
+if(s=="true")then
+if(Perso_XID==xid)then
+sysnfc_writeTagData(Perso_nfcSess,1,2,Perso_data,"Perso_OnNFCWriteData")else
+DispScreen("persoMultiTagFailureScreen")end
+else
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS"," "," ","#TAPTO")end
+end
+function Perso_OnTagFailOK()if(Perso_Write==0)then
+DisplayScreenFromRes("NFCProgress","#NFCPRGS_1","#NFCPRGS_2")Perso_nfcSess=sysnfc_init("Perso_OnNFCWriteDetectData")else
+DisplayScreenFromRes("NFCProgress","#NFCPRGS_1","#NFCRPGRS")Perso_nfcSess=sysnfc_init("Perso_OnNFCReadDetectValData")end
+end
+function Perso_OnOTPNext(e)if(e~=nil and e:len()==4 and Pesro_respOtp==e)then
+Perso_OTP=e
+DisplayScreenFromRes("NFCProgress","#NFCPRGS_1","#NFCPRGS_2")Perso_nfcSess=sysnfc_init("Perso_OnNFCWriteDetectData")else
+DisplayScreenFromRes("oTPEntryScreen","#INCROTP")DisplayScreenFromRes("persoMPinOTPEntryScreen","#GETOTP","#INCROTP","Perso_OnOTPNext")end
+end
+function Perso_OnNFCWriteData(e)Perso_nfcSess=0
+if(e=="true")then
+DisplayScreenFromRes("NFCProgress","#NFCPRGS_1","#NFCRPGRS")Perso_Write=1
+Perso_nfcSess=sysnfc_init("Perso_OnNFCReadDetectValData")else
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS"," "," ","#TAPTO")end
+end
+function Perso_OnNFCReadDetectValData(s,e,n)xid=e
+if(s=="true")then
+if(Perso_XID==xid)then
+sysnfc_readTagData(Perso_nfcSess,1,2,"Perso_OnNFCReadValData")else
+DispScreen("persoMultiTagFailureScreen")end
+else
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS"," "," ","#TAPTO")end
+end
+function Perso_OnNFCReadValData(n,s,e)local e=1
+Perso_nfcSess=0
+if(n=="true")then
+for s in string.gmatch(s,"([^|]*)")do
+xipdbg("Parsed as ["..s.."]")if(e==1)then Perso_MccMnc=s
+elseif(e==3)then Perso_NickName=s
+elseif(e==5)then Perso_msm=s
+elseif(e==7)then Perso_Isuid=s
+elseif(e==9)then Perso_Exid=s
+elseif(e==11)then xid=s
+else
+end
+e=e+1
+end
+if(Perso_XID==xid and Perso_Exid~=0 and Perso_Isuid~=0 and Perso_NickName~=0 and Perso_MccMnc~=0 and Perso_msm~=0)then
+XmsRequest_ValTag()else
+DispScreen("persoMultiTagFailureScreen")end
+else
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS"," "," ","#TAPTO")end
+end
+function XmsRequest_ValTag()DisplayScreenFromRes("persoProgressScreen","#VALPROG")cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="VAL".."|".."7/f"else txnType="VAL".."|"..cntType end
+Perso_XmsConn=xal_xms_init("NULL",txnType,0,"ValTag_CB")xal_xms_add_params(Perso_XmsConn,"mcc",string.sub(Perso_MccMnc,1,3))xal_xms_add_params(Perso_XmsConn,"mnc",string.sub(Perso_MccMnc,4,-1))xal_xms_add_params(Perso_XmsConn,"name",Perso_NickName)xal_xms_add_params(Perso_XmsConn,"m4",string.sub(Perso_msm,string.len(Perso_msm)-3,-1))xal_xms_add_params(Perso_XmsConn,"pv","0")xal_xms_add_params(Perso_XmsConn,"isuid",Perso_Isuid)xal_xms_add_params(Perso_XmsConn,"exid",Perso_Exid)xal_xms_add_params(Perso_XmsConn,"xid",Perso_XID)xal_xms_add_params(Perso_XmsConn,"ams",Perso_Msisdn)xal_xms_add_params(Perso_XmsConn,"ispin",Perso_Ispin)if(Perso_Ispin=="B")or(Perso_Ispin=="M")then
+xal_xms_add_params(Perso_XmsConn,"mpin",Perso_MPIN)end
+if(Perso_Ispin=="B")or(Perso_Ispin=="O")then
+xal_xms_add_params(Perso_XmsConn,"otp",Perso_OTP)end
+ret=xal_xms_request(Perso_XmsConn,1)end
+function ValTag_CB()XMSSCData=xal_xms_get_params(Perso_XmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xal_xms_deInit(Perso_XmsConn)Perso_XmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+DisplayScreenFromRes("persoSuccessScreen")elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("persoFailureScreen","#Global:TXNTO","","","#Global:TXNFAIL")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("persoFailureScreen","#Global:STATUS",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("persoFailureScreen","#Global:STATUS",xmsSC,SCDetails[2])end
+end
+end
+function Perso_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)DisplayScreenFromRes(e)end
+function Perso_OnCancel()if(Perso_nfcSess~=0)then
+sysnfc_nfc_cancel(Perso_nfcSess)end
+if(Perso_XmsConn~=0)then
+xal_xms_deInit(Perso_XmsConn)end
+Perso_goHome()end
+function mysplit(n,e)if e==nil then
+e="%s"end
+local s={};i=1
+for e in string.gmatch(n,"([^"..e.."]+)")do
+s[i]=e
+i=i+1
+end
+return s
+end
+function GetMultipleLines(e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end

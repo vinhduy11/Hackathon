@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str SSPROG="Update XipPOS .." />
+<str SSSUC_1="XipPOS updated " />
+<str SSSUC_2="successfully." />
+<str RBOOT="Restart" />
+<str SYNCSUCC="A newer version is" />
+<str SYNCSUCC2="available" />
+<str SYNCSUCC1="Your device is up to" />
+<str SYNCSUCC3="date" />
+<str NEWAPPS="Please restart the device" />
+<str NOAPPS="No updates available" />
+<str RESTARTSTR="Restart to update XipPOS" />
+<str SYNCERR="XipPOS Update failed" />
+<str CONT="Press Ok to continue" />
+<str NEWAPPS1="to update." />
+</EN>
+<SP>
+<str SSPROG="Update XipPOS .." />
+<str SSSUC_1="XipPOS updated " />
+<str SSSUC_2="successfully." />
+<str RBOOT="Restart" />
+<str SYNCSUCC="A newer version is" />
+<str SYNCSUCC2="available" />
+<str SYNCSUCC1="Your device is up to" />
+<str SYNCSUCC3="date" />
+<str NEWAPPS="Please restart the device" />
+<str NOAPPS="No updates available" />
+<str RESTARTSTR="Restart to update XipPOS" />
+<str SYNCERR="XipPOS Update failed" />
+<str CONT="Press Ok to continue" />
+<str NEWAPPS1="to update." />
+</SP>
+</language>
+</strings>

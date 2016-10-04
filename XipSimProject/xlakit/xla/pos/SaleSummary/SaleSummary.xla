@@ -1,0 +1,88 @@
+[properties]
+size=578
+Buff=<properties><XLAmeta><package name="XLARef" XLA="SaleSummary" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="SS_OnInstall" onload="SS_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="KR"/></params>
+</properties>
+[strings]
+size=442
+Buff=<strings><language><EN><str SOD="Total sale of the day"/><str SS1="Today"/><str SS2="Yesterday"/><str SSPROG="Fetching totals .."/><str FRM="from:"/><str TIL="till:"/><str TXNS="total txns:"/><str TAMT="total amount:"/></EN>
+<SP><str SOD="Mauzo ya siku"/><str SS1="Leo"/><str SS2="Jana"/><str SSPROG="Pata taarifa.."/><str FRM="kutoka:"/><str TIL="Mpaka:"/><str TXNS="Jumla ya Muamala:"/><str TAMT="Jumla:"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=2844
+Buff=SS_xmsConn=0
+SS_SodType=0
+array={}function SS_OnLoad()xipdbg("Calling DisplayScreenFromRes")DispScreen("saleSummaryMenuScreen")end
+function SS_OnMenuBtn1()xipdbg("In Lua: SS_OnMenuBtn1")SS_SodType=0
+XmsRequest_SS()end
+function SS_OnMenuBtn2()xipdbg("In Lua: SS_OnMenuBtn2")SS_SodType=1
+XmsRequest_SS()end
+function XmsRequest_SS()xipdbg("In Lua: XmsRequest_SS")xipdbg("In Lua: Displaying saleSummaryProgressScreen")DisplayScreenFromRes("saleSummaryProgressScreen")cntType=xal_xms_getcontentType()xipdbg("In Lua: XmsRequest_SS content Type:"..cntType)if(cntType==-1)then txnType="SOD".."|".."23/2f"else txnType="SOD".."|"..cntType end
+xipdbg("In Lua: XmsRequest_SS txnType:"..txnType)SS_xmsConn=xal_xms_init("NULL",txnType,0,"SS_CB")xid=GetDeviceXID()xal_xms_add_params(SS_xmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(SS_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(SS_xmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(SS_xmsConn,"exid",exid)xipdbg("Adding Param bd = "..SS_SodType)xal_xms_add_params(SS_xmsConn,"bd",tostring(SS_SodType))ret=xal_xms_request(SS_xmsConn,1)end
+function SS_CB()local e=0
+XMSSCData=xal_xms_get_params(SS_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")e=SCDetails[1]xipdbg("In Lua: perso Status"..e)sod=xal_xms_get_params(SS_xmsConn,"sod")eod=xal_xms_get_params(SS_xmsConn,"eod")ttc=xal_xms_get_params(SS_xmsConn,"ttc")tta=xal_xms_get_params(SS_xmsConn,"tta")xal_xms_deInit(SS_xmsConn)if tonumber(e)==0 or tonumber(e)==100 then
+xipdbg("In Lua: Displaying saleSummarySuccessScreen: SC = "..e.."sod  "..sod.."eod  "..eod.."ttc  "..ttc.."tta  "..tta)DisplayScreenFromRes("saleSummarySuccessScreen",sod,eod,ttc,GetSessionValue("CURR").." "..tta)elseif tonumber(e)==8888 then
+DisplayScreenFromRes("saleSummaryTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("saleSummaryFailureScreen",e,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("saleSummaryFailureScreen",e,SCDetails[2])end
+end
+end
+function SS_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..e)DisplayScreenFromRes(e)end
+function SS_OnCancel()if(SS_xmsConn~=0)then
+xal_xms_deInit(SS_xmsConn)end
+SS_goHome()end
+function mysplit(s,e)if e==nil then
+e="%s"end
+local n={};i=1
+xipdbg("LFT: Split: Input String val = "..s)for e in string.gmatch(s,"([^"..e.."]+)")do
+n[i]=e
+xipdbg("LFT: Individual Split String val = "..n[i])i=i+1
+end
+return n
+end
+function GetMultipleLines(e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+array[count]=result
+count=count+1
+while(count<4)do
+array[count]=" "count=count+1
+end
+end[saleSummaryMenuScreen]
+screenType=2
+Menus=2
+size=525
+Buff=<screen><screenName name="saleSummaryMenuScreen"/><screenType id="2"/><widget name="title" text="SOD"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1"/><menustr text="SS1" handler="SS_OnMenuBtn1"/><menustr text="SS2" handler="SS_OnMenuBtn2"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="brsk" text="Global:OK"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SS_goHome"/></screen>
+[saleSummaryProgressScreen]
+screenType=0
+size=249
+Buff=<screen><screenName name="saleSummaryProgressScreen"/><screenType id="0"/><widget name="title" text="SSPROG"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SS_OnCancel"/><ticker tickerenable="0"/></screen>
+[saleSummarySuccessScreen]
+screenType=0
+size=939
+Buff=<screen><screenName name="saleSummarySuccessScreen"/><screenType id="0"/><widget name="title" text="SOD"/><string x="8" y="50" text="FRM" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="55" y="50" text="@1" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="60" text="TIL" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="55" y="60" text="@2" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="70" text="TXNS" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="80" y="70" text="@3" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="80" text="TAMT" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="95" y="80" text="@4" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SS_goHome" key_ok="SS_goHome"/></screen>
+[saleSummaryFailureScreen]
+screenType=0
+size=748
+Buff=<screen><screenName name="saleSummaryFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SS_goHome" key_ok="SS_goHome"/></screen>
+[saleSummaryTimeout]
+screenType=0
+size=312
+Buff=<screen><screenName name="saleSummaryTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SS_goHome" key_ok="SS_goHome"/></screen>
+[CRC]
+size=10
+Buff=Lg==

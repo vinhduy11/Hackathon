@@ -1,0 +1,64 @@
+[properties]
+size=525
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="ChangeDPIN" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="CHNGDPIN_OnInstall" onload="CHNGDPIN_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=1374
+Buff=<strings><language><EN><str GETOLDPIN="Enter current dPIN"/><str GETOLDPIN_1="Enter your current dPIN"/><str GETOLDPIN_2="to change to a new dPIN"/><str GETNEWPIN="Enter new dPIN"/><str GETNEWPIN_1="Enter new dPIN to set"/><str GETRENEWPIN="Confirm new dPIN"/><str GETRENEWPIN_1="Enter new dPIN again"/><str GETRENEWPIN_2="to confirm"/><str CHNGDPIN="Change dPIN"/><str NOTMATCHPIN="dPIN not changed"/><str NOTMATCHPIN_1="Your old dPIN is wrong"/><str NOTMATCHPIN_2="dPIN has not been"/><str NOTMATCHPIN_3="changed."/><str CHNGSUC_1="Your dPIN has been"/><str CHNGSUC_2="changed. Please use new"/><str CHNGSUC_3="dPIN from now onwards"/><str INCRCTPIN="Incorrect dPIN"/></EN>
+<SP><str GETOLDPIN_1="Ingresa dPIN actual"/><str GETOLDPIN_2="para cambiar de dPIN"/><str GETRENEWPIN_1="Reingresa nuevo dPIN"/><str NOTMATCHPIN_2="dPIN no ha sido"/><str CHNGSUC_1="Tu dPIN ha sido"/><str CHNGSUC_2="cambiado. Usa nuevo"/><str GETOLDPIN="Ingresa dPIN actual"/><str GETNEWPIN="Ingresa nuevo dPIN"/><str GETRENEWPIN="Confirma nuevo dPIN"/><str NOTMATCHPIN="dPIN nuevo no coincide"/><str NOTMATCHPIN_3="cambiado."/><str INCRCTPIN="dPIN incorrecto"/><str GETNEWPIN_1="Ingresa nuevo dPIN"/><str GETRENEWPIN_2="para confirmar cambio"/><str CHNGDPIN="Cambio de dPIN"/><str NOTMATCHPIN_1="Su dPIN es incorrecto,"/><str CHNGSUC_3="dPIN a partir de ahora."/></SP>
+</language>
+</strings>
+[LUAScript]
+size=1241
+Buff=CHNGDPIN_OldDPIN=0
+CHNGDPIN_NewDPIN=0
+function CHNGDPIN_OnLoad()xipdbg("Calling DisplayScreenFromRes")DisplayScreenFromRes("changeDPinOldDPinEntryScreen"," ")end
+function CHNGDPIN_OnOldDPINNext(e)if(e~=nil and e:len()==4)then
+CHNGDPIN_OldDPIN=e
+DisplayScreenFromRes("changeDPinNewDPinEntryScreen"," ")else
+DisplayScreenFromRes("changeDPinOldDPinEntryScreen","#INCRCTPIN")end
+end
+function CHNGDPIN_OnNewDPINNext(e)if(e~=nil and e:len()==4)then
+CHNGDPIN_NewDPIN=e
+DisplayScreenFromRes("changeDPinReEnterNewDPinEntryScreen"," ")else
+DisplayScreenFromRes("changeDPinNewDPinEntryScreen","#INCRCTPIN")end
+end
+function CHNGDPIN_OnReNewDPINNext(e)if(e~=nil and e:len()==4)then
+oldDPIN=GetConfigValue("dPIN")if((CHNGDPIN_NewDPIN==e)and(CHNGDPIN_OldDPIN==oldDPIN))then
+SetConfigValue("dPIN",CHNGDPIN_NewDPIN)DispScreen("changeDPinSuccessScreen")elseif(CHNGDPIN_NewDPIN~=e)then
+DispScreen("changeDPinDPinsNotMatchedScreen")elseif(CHNGDPIN_OldDPIN~=oldDPIN)then
+DispScreen("changeDPinOldDPinNotMatchedScreen")end
+else
+DisplayScreenFromRes("changeDPinReEnterNewDPinEntryScreen","#INCRCTPIN")end
+end
+function CHNGDPIN_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)DisplayScreenFromRes(e)end
+function CHNGDPIN_OnCancel()CHNGDPIN_goHome()end[changeDPinOldDPinEntryScreen]
+screenType=1
+size=658
+Buff=<screen><screenName name="changeDPinOldDPinEntryScreen"/><screenType id="1"/><widget name="title" text="GETOLDPIN"/><string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="55" text="GETOLDPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="65" text="GETOLDPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="CHNGDPIN_OnCancel" key_brsk="CHNGDPIN_OnOldDPINNext" key_ok="CHNGDPIN_OnOldDPINNext"/></screen>
+[changeDPinNewDPinEntryScreen]
+screenType=1
+size=557
+Buff=<screen><screenName name="changeDPinNewDPinEntryScreen"/><screenType id="1"/><widget name="title" text="GETNEWPIN"/><string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="55" text="GETNEWPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="CHNGDPIN_OnCancel" key_brsk="CHNGDPIN_OnNewDPINNext" key_ok="CHNGDPIN_OnNewDPINNext"/></screen>
+[changeDPinReEnterNewDPinEntryScreen]
+screenType=1
+size=675
+Buff=<screen><screenName name="changeDPinReEnterNewDPinEntryScreen"/><screenType id="1"/><widget name="title" text="GETRENEWPIN"/><string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="55" text="GETRENEWPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="65" text="GETRENEWPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="CHNGDPIN_OnCancel" key_brsk="CHNGDPIN_OnReNewDPINNext" key_ok="CHNGDPIN_OnReNewDPINNext"/></screen>
+[changeDPinDPinsNotMatchedScreen]
+screenType=0
+size=334
+Buff=<screen><screenName name="changeDPinDPinsNotMatchedScreen"/><screenType id="0"/><widget name="title" text="CHNGDPIN"/><string x="8" y="50" text="NOTMATCHPIN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="CHNGDPIN_goHome" key_ok="CHNGDPIN_goHome"/></screen>
+[changeDPinOldDPinNotMatchedScreen]
+screenType=0
+size=544
+Buff=<screen><screenName name="changeDPinOldDPinNotMatchedScreen"/><screenType id="0"/><widget name="title" text="CHNGDPIN"/><string x="8" y="50" text="NOTMATCHPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="NOTMATCHPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="70" text="NOTMATCHPIN_3" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="CHNGDPIN_goHome" key_ok="CHNGDPIN_goHome"/></screen>
+[changeDPinSuccessScreen]
+screenType=0
+size=522
+Buff=<screen><screenName name="changeDPinSuccessScreen"/><screenType id="0"/><widget name="title" text="CHNGDPIN"/><string x="8" y="50" text="CHNGSUC_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="CHNGSUC_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="70" text="CHNGSUC_3" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="CHNGDPIN_goHome" key_ok="CHNGDPIN_goHome"/></screen>
+[CRC]
+size=10
+Buff=bQ==

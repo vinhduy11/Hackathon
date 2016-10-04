@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str NFCPRGS="Reading from NFC.." />
+<str GETOLMPIN="Enter current mPIN" />
+<str GETOLMPIN_1="Enter your current mPIN" />
+<str GETOLMPIN_2="to change to a new mPIN" />
+<str GETNEWPIN="Enter new mPIN" />
+<str GETNEWPIN_1="Enter new mPIN to set" />
+<str GETRENEWPIN="Confirm new mPIN" />
+<str GETRENEWPIN_1="Enter new mPIN again" />
+<str GETRENEWPIN_2="to confirm" />
+<str CHNGMPIN="Change mPIN" />
+<str NOTMATCHPIN="mPIN not changed" />
+<str CHNGSUC="Request accepted" />
+<str EOTP="Enter OTP" />
+<str TAPTO="Tap timeout" />
+<str IMPRDATA="Improper data received" />
+<str INCRCT="Incorrect mPIN" />
+<str INCROTP="Incorrect OTP" />
+<str CHNGPROG="Changing mPIN" />
+<str CKNGPROG="Processing mPIN" />
+</EN>
+<SP>
+<str NFCPRGS="Reading from NFC.." />
+<str GETOLMPIN="Enter current mPIN" />
+<str GETOLMPIN_1="Enter your current mPIN" />
+<str GETOLMPIN_2="to change to a new mPIN" />
+<str GETNEWPIN="Enter new mPIN" />
+<str GETNEWPIN_1="Enter new mPIN to set" />
+<str GETRENEWPIN="Confirm new mPIN" />
+<str GETRENEWPIN_1="Enter new mPIN again" />
+<str GETRENEWPIN_2="to confirm" />
+<str CHNGMPIN="Change mPIN" />
+<str NOTMATCHPIN="mPIN not changed" />
+<str CHNGSUC="Request accepted" />
+<str EOTP="Enter OTP" />
+<str TAPTO="Tap timeout" />
+<str IMPRDATA="Improper data received" />
+<str INCRCT="Incorrect mPIN" />
+<str INCROTP="Incorrect OTP" />
+<str CHNGPROG="Changing mPIN" />
+<str CKNGPROG="Processing mPIN" />
+</SP>
+</language>
+</strings>

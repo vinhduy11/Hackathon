@@ -1,0 +1,54 @@
+PT_XmsConn=0
+prtBuf=nil
+prtFlag=0
+prtLen=0
+PT_XLAName=0
+PT_XLACallback=0
+printerName="DL58"resStr1=""resStr2=""resStr3=""resStr4=""function PT_OnInstall()xipdbg("OnInstall invoked")end
+function PT_OnLoad()xipdbg("Global Lua OnLoad")end
+function PT_BTPrintBuff(r,t,i,n,e)PT_XLAName=r
+PT_XLACallback=t
+prtFlag=i
+prtBuf=n
+prtLen=e
+xipdbg("PT_BTPrintBuff:prtFlag : "..prtFlag)xipdbg("PT_BTPrintBuff:prtLen : "..prtLen)xipdbg("PT_BTPrintBuff:prtBuf : "..prtBuf)xipdbg("PT_BTPrintBuff:prtBufLen : "..prtBuf:len())ret=bt_ispaired(printerName)xipdbg("PT_BTPrintBuff:bt is paried ret : "..ret)if(ret==1)then
+DisplayScreenFromRes("Print:printerProgress")if(prtLen~=0)then
+bt_init("Print:OnBTInit")else
+xipdbg("PT_BTPrintBuff:Call GPB ")XmsRequest_GPB()end
+else
+resStr1=GetXlaString("Print:NOPRINTER")resStr2=GetXlaString("Print:NOPRNMSG1")resStr3=GetXlaString("Print:NOPRNMSG2")resStr4=GetXlaString("Print:NOPRNMSG3")DisplayScreenFromRes("Print:failurePage",resStr1,resStr2,resStr3,resStr4)end
+xipdbg("PT_BTPrintBuff:PT_XLAName : "..PT_XLAName)end
+function OnBTInit(r)xipdbg("Init Result "..r)if(r=="0")then
+bt_connect(printerName,"Print:OnBTConnect")else
+resStr1=GetXlaString("Print:PRNERR")resStr2=GetXlaString("Print:PRNERRMSG1")DisplayScreenFromRes("Print:failurePage",resStr1,resStr2)end
+end
+function OnBTConnect(r)if(r=="0")then
+xipdbg("RCV_btPrint:prtFlag : "..prtFlag)xipdbg("RCV_btPrint:prtLen : "..prtLen)bt_send(prtBuf,prtLen,50,"Print:OnSend")else
+resStr1=GetXlaString("Print:PRNNOTFOUND")resStr2=GetXlaString("Print:PRNMSG1")resStr3=GetXlaString("Print:PRNMSG2")resStr4=GetXlaString("Print:PRNMSG3")DisplayScreenFromRes("Print:failurePage",resStr1,resStr2,resStr3,resStr4)end
+end
+function OnSend(r)if(r=="0")then
+DisplayScreenFromRes("Print:successPage")else
+resStr1=GetXlaString("Print:PRNERR")resStr2=GetXlaString("Print:PRNMSG1")resStr3=GetXlaString("Print:PRNMSG2")resStr4=GetXlaString("Print:PRNMSG3")DisplayScreenFromRes("Print:failurePage",resStr1,resStr2,resStr3,resStr4)end
+end
+function Print_OnReprint()bt_send(prtBuf,prtLen,50,"Print:OnSend")end
+function OnDisconnect(r)end
+function XmsRequest_GPB()xipdbg("In Lua: XmsRequest_RCV")res=xal_xms_init("NULL","GPB|7/f",0,"Print:GPB_CB")xipdbg("res = "..res)PT_XmsConn=res
+xid=GetConfigValue("imei")xal_xms_add_params(PT_XmsConn,"xid",xid)mccMnc=GetSessionValue("MNC")xal_xms_add_params(PT_XmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(PT_XmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetConfigValue("exid")xal_xms_add_params(PT_XmsConn,"exid",exid)ret=xal_xms_request(PT_XmsConn,1)end
+function GPB_CB()XMSSCData=xal_xms_get_params(PT_XmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: GPB_CB Status"..xmsSC)if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+prtBufEncode=xal_xms_get_params(STU_XmsConn,"prt")prtBuf,prtLen=xip_sec_base64_decode(prtBufEncode)xipdbg("In Lua: GPB_CB PrnLen"..prtLen)xipdbg("PT_BTPrintBuff:prtBufLen : "..prtBuf:len())xal_xms_deInit(PT_XmsConn)if(PrnLen~=0)then
+xipdbg("In Lua: GPB_CB PrintBuffer : "..prtBuf)bt_init("Print:OnBTInit")else
+resStr1=GetXlaString("Print:PRNERR")resStr2=GetXlaString("Print:PRNERRMSG1")DisplayScreenFromRes("Print:failurePage",resStr1,resStr2)xip_buzzer_viberator_sound(1e3)end
+else
+xal_xms_deInit(PT_XmsConn)resStr1=GetXlaString("Print:PRNERR")resStr2=GetXlaString("Print:PRNERRMSG1")DisplayScreenFromRes("Print:failurePage",resStr1,resStr2)xipdbg("Printer not ready")xip_buzzer_viberator_sound(1e3)end
+end
+function Print_OnOK()xipdbg("Print Lua Print_OnOK")bt_deinit();ExecuteXlaFunction(PT_XLAName,PT_XLACallback,1,1,1)end
+function Print_OnCancel()bt_cancel()Print_OnOK()end
+function mysplit(t,r)if r==nil then
+r="%s"end
+local n={};i=1
+for r in string.gmatch(t,"([^"..r.."]+)")do
+n[i]=r
+i=i+1
+end
+return n
+end

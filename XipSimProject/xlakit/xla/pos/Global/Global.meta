@@ -1,0 +1,15 @@
+<properties>
+	 <XLAmeta>
+		<package name="XLAKIT" XLA="Global" ver="1.0.0" desc="POS based on XLAs" />
+		<device version="2.2.1" /> <server version="2.0.0" />
+		<entry oninstall="G_OnInstall" onload="G_OnLoad"/>
+		<script lua="yes" />
+		<reqlualib LuaLibName="xla" />
+	 </XLAmeta>
+	 <params>
+		<param refreshGPRS="1" />
+		<param showLastTxn="0" />
+		<param Language="SP" />
+	 </params>
+ </properties>
+ 

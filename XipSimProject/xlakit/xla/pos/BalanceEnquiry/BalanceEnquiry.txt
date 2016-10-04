@@ -1,0 +1,30 @@
+<strings>
+<language>
+<EN>
+<str GetPIN="To check balance"/>
+<str BEPROG="Fetching balance.."/>
+<str BAL0="Balance"/>
+<str BAL1="The balance in your"/>
+<str BAL2="account is"/>
+<str BETAPTO = "Tap timeout"/>
+<str BEMPIN = "Enter merchant mPIN"/>
+<str BECPIN = "Enter customer mPIN"/>
+<str BEIMPRDATA = "Improper data received"/>
+<str BEINCRCT = "Incorrect mPIN"/>
+<str />
+</EN>
+<SP>
+<str GetPIN="To check balance"/>
+<str BEPROG="Fetching balance.."/>
+<str BAL0="Balance"/>
+<str BAL1="The balance in your"/>
+<str BAL2="account is"/>
+<str BETAPTO = "Tap timeout"/>
+<str BEMPIN = "Enter merchant mPIN"/>
+<str BECPIN = "Enter customer mPIN"/>
+<str BEIMPRDATA = "Improper data received"/>
+<str BEINCRCT = "Incorrect mPIN"/>
+<str />
+</SP>
+</language>
+</strings>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str RTMENU="SV Recent transactions" />
+<str DATE="Date:" />
+<str CNSMR="Consumer:" />
+<str TID="Id:" />
+<str TYPE="Type:" />
+<str STAT="Status:" />
+<str NAME="Name:" />
+<str SPC="                      " />
+<str EMTTXN="No transactions" />
+<str DETL="Detail" />
+<str CRDT="Credit" />
+<str SUCC="Success" />
+<str DBT="Debit" />
+<str FAIL="Fail" />
+<str SVAMT="Amount: " />
+</EN>
+<SP>
+<str RTMENU="SV Recent transactions" />
+<str DATE="Date:" />
+<str CNSMR="Consumer:" />
+<str TID="Id:" />
+<str TYPE="Type:" />
+<str STAT="Status:" />
+<str NAME="Name:" />
+<str SPC="                      " />
+<str EMTTXN="No transactions" />
+<str DETL="Detail" />
+<str CRDT="Credit" />
+<str SUCC="Success" />
+<str DBT="Debit" />
+<str FAIL="Fail" />
+<str SVAMT="Amount: " />
+</SP>
+</language>
+</strings>

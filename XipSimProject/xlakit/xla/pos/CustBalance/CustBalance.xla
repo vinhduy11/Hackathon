@@ -1,0 +1,62 @@
+[properties]
+size=610
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="CustBalance" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="BE_OnInstall" onload="BE_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="sysnfc"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=1177
+Buff=<strings><language><EN><str NFCPRGS="Reading from NFC.."/><str BEPROG="Fetching balance.."/><str BAL0="Balance"/><str BAL1="The balance in your"/><str SVBAL5="SV Wallet is Empty"/><str SVBACK="Back"/><str SVCUSTBAL0="SV wallet is"/><str URCRD="unable to read card"/><str TRYAGAIN="please try again"/><str INVALID="not a valid card"/><str INVALID1="Card does not support"/><str INVALID2="SV transaction"/><str EXPIRED="Card is expired"/><str TAPTO="Tap timeout"/><str INCRCT="Incorrect mPIN"/><str GLSTATUS="Status"/><str EXPIRYDATE="Exp:"/><str NFCFAIL="NFC Couldnot be start"/></EN>
+<SP><str NFCPRGS="Reading from NFC.."/><str BEPROG="Fetching balance.."/><str BAL0="Balance"/><str BAL1="The balance in your"/><str SVBAL5="SV Wallet is Empty"/><str SVBACK="Back"/><str SVCUSTBAL0="SV wallet is"/><str URCRD="unable to read card"/><str TRYAGAIN="please try again"/><str INVALID="not a valid card"/><str INVALID1="Card does not support"/><str INVALID2="SV transaction"/><str EXPIRED="Card is expired"/><str TAPTO="Tap timeout"/><str INCRCT="Incorrect mPIN"/><str GLSTATUS="Status"/><str EXPIRYDATE="Exp:"/><str NFCFAIL="NFC Couldnot be start"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=2866
+Buff=BE_xmsConn=0
+BE_MPIN=0
+BE_nfcSess=0
+BE_Xid=0
+BE_Exid=0
+BE_Type=0
+BE_SVAmount=0
+function BE_OnLoad()collectgarbage("collect")xipdbg("In Lua: garbage count= "..collectgarbage("count"))BE_SVAmount=GetConfigValue("sta")totTxn=GetConfigValue("stt")lastSync=GetConfigValue("lss")DisplayScreenFromRes("NFCProgress")BE_nfcSess=sysnfc_init("BE_OnNFCReadDetectData")xipdbg("In Lua: BE_OnLoad "..BE_nfcSess)if(BE_nfcSess==-1)then
+DisplayScreenFromRes("CommonStatusScreen","#Global:STATUS"," "," ","#NFCFAIL","#TRYAGAIN"," "," "," ","#Global:OK"," ","BE_goHome","BE_goHome")end
+end
+function BE_OnNFCReadDetectData(e,n,s)BE_Xid=n
+xipdbg("In Lua: OnNFCReadData "..e)if(e=="true")then
+ePurseId=GetEpurseID()xipdbg("In Lua: RCV_OnNFCGetCardData ePurseId "..ePurseId)sysnfc_svEpurseSetId(BE_nfcSess,ePurseId)sysnfc_svEpurseReadAmount(BE_nfcSess,"BE_OnNFCReadAmountCB")else
+DisplayScreenFromRes("CommonStatusScreen","#Global:STATUS"," "," "," ","#TAPTO"," "," "," ","#Global:OK"," ","BE_goHome","BE_goHome")end
+end
+function BE_OnNFCReadAmountCB(e,s,n)xipdbg("In Lua: BE_OnNFCReadAmountCB amount:"..s.."status "..e)xipdbg("In Lua: BE_OnNFCReadAmountCB expiry:"..n)BE_CBal=sysnfc_svEpurseConvAmtInt2Dec(s)BE_nfcSess=0
+if(e=="1")then
+DisplayScreenFromRes("CommonStatusScreen","#Global:STATUS"," "," ","#URCRD","#TRYAGAIN"," "," ","#Global:CNCL","#Global:RETRY","BE_OnCancel","BE_retry","BE_retry")elseif(e=="2"or e=="6"or e=="7")then
+DisplayScreenFromRes("CommonStatusScreen","#Global:STATUS"," "," ","#INVALID1","#INVALID2"," "," "," ","#Global:OK"," ","BE_goHome","BE_goHome")elseif(sysnfc_svEpurseGetEpochNow()>tonumber(n))then
+DisplayScreenFromRes("CommonStatusScreen","#Global:STATUS"," "," "," ","#EXPIRED"," "," "," ","#Global:OK"," ","BE_goHome","BE_goHome")else
+if(BE_CBal~=0)then
+datetime=sysnfc_svEpurseGetDateTimeFromEpoch(n)Date=string.sub(datetime,1,2).."/"..string.sub(datetime,3,4).."/"..string.sub(datetime,5,8).." "..string.sub(datetime,9,10)..":"..string.sub(datetime,11,12)..":"..string.sub(datetime,13,14)xipdbg("In Lua: BE_OnNFCReadAmountCB datetime:"..datetime.."Date "..Date)DisplayScreenFromRes("balanceCustSuccessScreen","#BAL1","#SVCUSTBAL0",GetCurrencySymbol().." "..BE_CBal,"#EXPIRYDATE",Date)else
+DisplayScreenFromRes("CommonStatusScreen","#Global:STATUS"," "," "," ","#SVBAL5"," "," "," ","#Global:OK"," ","BE_goHome","BE_goHome")end
+end
+end
+function BE_retry()if(BE_nfcSess~=0)then
+sysnfc_nfc_cancel(BE_nfcSess)end
+DisplayScreenFromRes("NFCProgress")BE_nfcSess=sysnfc_init("BE_OnNFCReadDetectData")xipdbg("In Lua: BE_OnLoad "..BE_nfcSess)if(BE_nfcSess==-1)then
+DisplayScreenFromRes("CommonStatusScreen","#Global:STATUS"," "," ","#NFCFAIL","#TRYAGAIN"," "," "," ","#Global:OK"," ","BE_goHome","BE_goHome")end
+end
+function BE_goHome()ChangeXla("HomeScreen")end
+function BE_OnCancel()if(BE_nfcSess~=0)then
+sysnfc_nfc_cancel(BE_nfcSess)end
+BE_goHome()end[NFCProgress]
+screenType=0
+size=209
+Buff=<screen><screenName name="NFCProgress"/><screenType id="0"/><widget name="title" text="NFCPRGS"/><widget name="nfcanim"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="BE_OnCancel"/></screen>
+[balanceCustSuccessScreen]
+screenType=0
+size=663
+Buff=<screen><screenName name="balanceCustSuccessScreen"/><screenType id="0"/><widget name="title" text="BAL0"/><string x="8" y="50" text="@1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="@2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="74" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="90" text="@4" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="40" y="90" text="@5" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="BE_goHome" key_ok="BE_goHome"/></screen>
+[CommonStatusScreen]
+screenType=0
+size=758
+Buff=<screen><screenName name="CommonStatusScreen"/><screenType id="0"/><widget name="title" text="@1"/><string x="65" y="19" text="@2" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@7" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="blsk" text="@8"/><widget name="brsk" text="@9"/><actions key_blsk="@10" key_brsk="@11" key_ok="@12"/></screen>
+[CRC]
+size=10
+Buff=VQ==

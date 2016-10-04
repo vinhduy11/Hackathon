@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str REVERT="Revert" />
+<str LANG="Language" />
+<str LS1="English" />
+<str LS2="Spanish" />
+<str LANGSEL="Language selection" />
+<str LANGCHNG="Language changed to:" />
+<str RSTDEV="Language change will take"/>
+<str CHNGLANG="effect after restart"/>
+</EN>
+<SP>
+<str REVERT="Revert" />
+<str LANG="Language" />
+<str LS1="English" />
+<str LS2="Spanish" />
+<str LANGSEL="Language selection" />
+<str LANGCHNG="Language changed to:" />
+<str RSTDEV="Language change will take"/>
+<str CHNGLANG="effect after restart"/>
+</SP>
+</language>
+</strings>

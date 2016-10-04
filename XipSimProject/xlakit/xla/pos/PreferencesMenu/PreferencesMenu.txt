@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str PRFNCS="Preferences" />
+<str PRM1="Device dPIN" />
+<str PRM2="Set device name" />
+<str PRM3="System info" />
+<str PRM4="Get auth" />
+<str PRM5="Get config" />
+<str PRM6="Language selection" />
+<str PRM7="Update XipPOS" />
+<str PRM8="Printer Setup" />
+</EN>
+<SP>
+<str PRFNCS="Preferences" />
+<str PRM1="Device dPIN" />
+<str PRM2="Set device name" />
+<str PRM3="System info" />
+<str PRM4="Get auth" />
+<str PRM5="Get config" />
+<str PRM6="Language selection" />
+<str PRM7="Update XipPOS" />
+<str PRM8="Printer Setup" />
+</SP>
+</language>
+</strings>

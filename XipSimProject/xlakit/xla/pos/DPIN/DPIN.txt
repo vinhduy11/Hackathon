@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str WELCOME="Welcome back" />
+<str DEVPIN_1="Enter your device pin to" />
+<str DEVPIN_2="unlock xip" />
+<str DPINRST="dPIN reset" />
+<str RSTSUC_1="The dPin reset" />
+<str RSTSUC_2="successful." />
+<str INCRCTPIN="Incorrect PIN" />
+</EN>
+<SP>
+<str WELCOME="Welcome back" />
+<str DEVPIN_1="Enter your device pin to" />
+<str DEVPIN_2="unlock xip" />
+<str DPINRST="dPIN reset" />
+<str RSTSUC_1="The dPin reset" />
+<str RSTSUC_2="successful." />
+<str INCRCTPIN="Incorrect PIN" />
+</SP>
+</language>
+</strings>

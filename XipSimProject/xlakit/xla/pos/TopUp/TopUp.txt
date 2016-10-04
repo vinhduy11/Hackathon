@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str AMT="Enter topup amount" />
+<str CMPIN="Enter agent mPIN" />
+<str CMPIN_1="Enter mPIN for Topup" />
+<str NFCPRGS="Tap to read " />
+<str NFCPRGS1="Tap to topup " />
+<str TAPTO="   Tap timeout" />
+<str INCRCT="Incorrect PIN" />
+<str URCRD="unable to read card" />
+<str TRYAGAIN="please try again" />
+<str INVALID="not a valid card" />
+<str INVALID1="Card does not support" />
+<str INVALID2="SV transaction" />
+<str TAPORGTAG="Please tap original tag" />
+<str WRFAIL="Write timeout" />
+<str TUPRGS="Processing topup ..." />
+<str CLPRGS="Cancelling txn.." />
+<str TUSUCS="Topup success" />
+<str SUCC="SUCCESS" />
+<str TU="Topup" />
+<str CBAL="new card bal" />
+<str TUFAIL="Topup Cancelled" />
+<str CANCL="CANCELLED" />
+<str TOPUPMAX="Cannot topup - Topup" />
+<str LTEXD="value exceeds allowed" />
+<str LTD="limit" />
+<str CARDMAX="Cannot topup - Max card" />
+<str VLRCHD="value reached" />
+<str NFCFAIL="NFC Couldnot be start" />
+</EN>
+<SP>
+<str AMT="Enter topup amount" />
+<str CMPIN="Enter agent mPIN" />
+<str CMPIN_1="Enter mPIN for Topup" />
+<str NFCPRGS="Tap to read " />
+<str NFCPRGS1="Tap to topup " />
+<str TAPTO="   Tap timeout" />
+<str INCRCT="Incorrect PIN" />
+<str URCRD="unable to read card" />
+<str TRYAGAIN="please try again" />
+<str INVALID="not a valid card" />
+<str INVALID1="Card does not support" />
+<str INVALID2="SV transaction" />
+<str TAPORGTAG="Please tap original tag" />
+<str WRFAIL="Write timeout" />
+<str TUPRGS="Processing topup ..." />
+<str CLPRGS="Cancelling txn.." />
+<str TUSUCS="Topup success" />
+<str SUCC="SUCCESS" />
+<str TU="Topup" />
+<str CBAL="new card bal" />
+<str TUFAIL="Topup Cancelled" />
+<str CANCL="CANCELLED" />
+<str TOPUPMAX="Cannot topup - Topup" />
+<str LTEXD="value exceeds allowed" />
+<str LTD="limit" />
+<str CARDMAX="Cannot topup - Max card" />
+<str VLRCHD="value reached" />
+<str NFCFAIL="NFC Couldnot be start" />
+</SP>
+</language>
+</strings>

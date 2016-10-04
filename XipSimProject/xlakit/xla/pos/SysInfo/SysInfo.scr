@@ -1,0 +1,29 @@
+<screen>
+	<screenName name="systemInfoScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="SYSINFO" />
+
+	<string x="8" y="35" text="XID" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="35" y="35" text="@1" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="45" text="MSISDN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="65" y="45" text="@2" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="55" text="NW" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="65" y="55" text="@3" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="65" text="SN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="53" y="65" text="@4" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="65" y="65" text="BAT" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="100" y="65" text="@5" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="110" y="65" text="GPRS" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="145" y="65" text="@6" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="75" text="BUILD" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="53" y="75" text="@7" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="85" text="VER" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="60" y="85" text="@8" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="95" text="HW" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="38" y="95" text="@9" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="105" text="AUTH" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="75" y="105" text="@10" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SI_goHome" key_ok="SI_goHome"/>
+</screen>

@@ -1,0 +1,23 @@
+<properties>
+	 <XLAmeta>
+		<package name="XLAKIT" XLA="HomeScreen" ver="1.0.0" desc="POS based on XLAs" />
+		<device version="2.2.1" /> <server version="2.0.0" />
+		<entry oninstall="HS_OnInstall" onload="HS_OnLoad"/>
+		<require>
+			<XipXla name="Global.xla" />
+			<XipXla name="Image.xla" />
+		</require>
+		<script lua="yes" />
+		<reqlualib LuaLibName="xla" />
+		<reqlualib LuaLibName="screen" />
+		<reqlualib LuaLibName="config" />
+		<reqlualib LuaLibName="trigger" />
+		<reqlualib LuaLibName="appconfig" />
+	 </XLAmeta>
+	 <params>
+		<param refreshGPRS="1" />
+		<param showLastTxn="0" />
+		<param Language="SP" />
+	 </params>
+ </properties>
+ 

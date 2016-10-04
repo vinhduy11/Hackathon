@@ -1,0 +1,24 @@
+<strings>
+<language>
+<EN>
+<str SOD="Total sale of the day"/>
+<str SS1="Today"/>
+<str SS2="Yesterday"/>
+<str SSPROG="Fetching totals .."/>
+<str FRM="from:"/>
+<str TIL="till:"/>
+<str TXNS="total txns:"/>
+<str TAMT="total amount:"/>
+</EN>
+<SP>
+<str SOD="Mauzo ya siku" />
+<str SS1="Leo" />
+<str SS2="Jana" />
+<str SSPROG="Pata taarifa.." />
+<str FRM="kutoka:" />
+<str TIL="Mpaka:" />
+<str TXNS="Jumla ya Muamala:" />
+<str TAMT="Jumla:" />
+</SP>
+</language>
+</strings>

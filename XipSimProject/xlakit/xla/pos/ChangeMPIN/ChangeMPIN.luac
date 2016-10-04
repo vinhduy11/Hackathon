@@ -1,0 +1,70 @@
+CHNGMPIN_xmsConn=0
+CHNGMPIN_OldMPIN=nil
+CHNGMPIN_NewMPIN=nil
+CHNGMPIN_Xid=0
+CHNGMPIN_Exid=0
+CHNGMPIN_nfcSess=0
+array={}CHNGMPIN_respOtp=0
+function CHNGMPIN_OnLoad()DisplayScreenFromRes("changeMPinOldMPinEntryScreen"," ")end
+function CHNGMPIN_OnOldMPINNext(e)if(e~=nil and e:len()==4)then
+CHNGMPIN_OldMPIN=e
+DisplayScreenFromRes("changeMPinNewMPinEntryScreen"," ")else
+DisplayScreenFromRes("changeMPinOldMPinEntryScreen","#INCRCT")end
+end
+function CHNGMPIN_OnNewMPINNext(e)if(e~=nil and e:len()==4)then
+CHNGMPIN_NewMPIN=e
+DisplayScreenFromRes("changeMPinReEnterNewMPinEntryScreen"," ")else
+DisplayScreenFromRes("changeMPinNewMPinEntryScreen","#INCRCT")end
+end
+function CHNGMPIN_OnReNewMPINNext(e)if(e~=nil and e:len()==4)then
+if(CHNGMPIN_NewMPIN==e)then
+XmsRequest_CHNGPIN()else
+DispScreen("changeMPinMPinsNotMatchedScreen")end
+else
+DisplayScreenFromRes("changeMPinReEnterNewMPinEntryScreen","#INCRCT")end
+end
+function XmsRequest_CHNGPIN()xipdbg("In Lua: XmsRequest_CHNGPIN")DisplayScreenFromRes("changeMPinProgressScreen","#CHNGPROG")cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="TCP".."|".."7/f"else txnType="TCP_HND".."|"..cntType end
+CHNGMPIN_xmsConn=xal_xms_init("NULL",txnType,0,"CHNGPIN_CB")xal_xms_add_params(CHNGMPIN_xmsConn,"mp",CHNGMPIN_OldMPIN)if(CHNGMPIN_NewMPIN~=nil)then
+xal_xms_add_params(CHNGMPIN_xmsConn,"nmp",CHNGMPIN_NewMPIN)end
+mccMnc=GetMncMcc()xal_xms_add_params(CHNGMPIN_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(CHNGMPIN_xmsConn,"mnc",string.sub(mccMnc,4,-1))xid=GetDeviceXID()xal_xms_add_params(CHNGMPIN_xmsConn,"xid",xid)exid=GetDeviceExid()xal_xms_add_params(CHNGMPIN_xmsConn,"exid",exid)ret=xal_xms_request(CHNGMPIN_xmsConn,1)end
+function CHNGPIN_CB()XMSSCData=xal_xms_get_params(CHNGMPIN_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)CHNGMPIN_respOtp=xal_xms_get_params(CHNGMPIN_xmsConn,"otp")xipdbg("In Lua:  respOtp = "..CHNGMPIN_respOtp)xal_xms_deInit(CHNGMPIN_xmsConn)CHNGMPIN_xmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+DisplayScreenFromRes("changeMPinSuccessScreen")elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("changeMPinTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("changeMPinFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("changeMPinFailureScreen",xmsSC,SCDetails[2])end
+end
+end
+function CHNGMPIN_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)DisplayScreenFromRes(e)end
+function CHNGMPIN_OnCancel()if(CHNGMPIN_xmsConn~=0)then
+xal_xms_deInit(CHNGMPIN_xmsConn)end
+CHNGMPIN_goHome()end
+function mysplit(s,e)if e==nil then
+e="%s"end
+local n={};i=1
+for e in string.gmatch(s,"([^"..e.."]+)")do
+n[i]=e
+i=i+1
+end
+return n
+end
+function GetMultipleLines(e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end

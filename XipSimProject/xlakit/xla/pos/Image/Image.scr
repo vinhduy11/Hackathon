@@ -1,0 +1,11 @@
+<screen>
+  <screenName name="MerchantHomeScreen1"/> 
+  <screenType id="0" />
+  <widget name="hometl" imageid="icon.gif" />
+  <widget name="hometr" imageid="note.gif" />
+  <widget name="homebl" imageid="handcoin.gif"/>
+  <widget name="homebr" imageid="3bar_ico.gif" />
+  <widget name="homebr" imageid="21S.gif" />
+  <widget name="homebr" imageid="11S.gif" />
+  <widget name="homebr" imageid="33S.gif" />
+</screen>

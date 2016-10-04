@@ -1,0 +1,154 @@
+<screen>
+	<screenName name="printerSetupMenu"/>
+	<screenType id="2" />
+	<widget name="title" text="PRNSETUP" />
+	<menus>
+		<menustart menutype="0" x="8" y="42" hotkeyflag="1"/>
+		<menustr text="PRNWIZ"  handler="PS_OnStartPrintWiz"/>
+		<menustr text="PRNTST"  handler="PS_OnPrintTestPage"/>
+		<menustr text="PRNTSAM" handler="PS_OnPrintSampleReceipt"/>
+		<menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/>
+		<menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/>
+	</menus>
+	<widget name="blsk" text="BCK" />
+	<actions  key_blsk="OnCancel"/>
+</screen>
+
+<screen>
+	<screenName name="printerSetupStep1"/>
+	<screenType id="0" />
+	<widget name="title" text="PRNWIZ" />
+	<widget name="blsk" text="Global:CNCL" />
+	<widget name="brsk" text="Global:NXT" />
+	<string x="8" y="40" text="WIZMSG1" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="56" text="WIZMSG2" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="72" text="WIZMSG3" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<actions key_blsk="OnCancel" key_brsk="OnWizNext" key_ok="OnWizNext" />
+</screen>
+
+<screen>
+	<screenName name="printerSetupSuccess"/>
+	<screenType id="0" />
+	<widget name="title" text="PRNWIZ" />
+	<widget name="brsk" text="Global:NXT" />
+	<string x="8" y="40" text="SUCCMSG1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="56" text="SUCCMSG2" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="72" text="SUCCMSG3" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<actions key_brsk="OnSuccessNext" key_ok="OnSuccessNext" />
+</screen>
+
+<screen>
+	<screenName name="printerSetupTestPrintConfirm"/>
+	<screenType id="0" />
+	<widget name="title" text="PRNWIZ" />
+	<widget name="blsk" text="NO" />
+	<widget name="brsk" text="YES" />
+	<string x="8" y="40" text="TSTPRNMSG1" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="56" text="TSTPRNMSG2" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<actions key_blsk="OnCancel" key_brsk="PS_OnPrintTestPage" key_ok="PS_OnPrintTestPage" />
+</screen>
+
+<screen>
+	<screenName name="printerNotConfigured"/>
+	<screenType id="0" />
+	<widget name="title" text="PRNWIZ" />
+	<widget name="blsk" text="NO" />
+	<widget name="brsk" text="YES" />
+	<string x="8" y="40" text="NOPRINTER1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="56" text="NOPRINTER2" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="72" text="NOPRINTER3" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<actions key_blsk="OnCancel" key_brsk="PS_OnStartPrintWiz" key_ok="PS_OnStartPrintWiz" />
+</screen>
+
+<screen>
+	<screenName name="printerProgress"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+	<widget name="progress" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions key_blsk="OnOpsCancel" />
+</screen>
+
+<screen>
+	<screenName name="successPage"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+	<widget name="blsk" text="NO" />
+	<widget name="brsk" text="YES" />
+	<string x="8" y="40" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="56" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<actions key_blsk="OnSuccessNext" key_brsk="OnOk" key_ok="OnOk" />
+</screen>
+
+<screen>
+	<screenName name="failurePage"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+	<widget name="brsk" text="Global:OK" />
+	<string x="8" y="40" text="@2" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="56" text="@3" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="72" text="@4" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="88" text="@5" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<actions key_brsk="OnOk" key_ok="OnOk" />
+</screen>
+<screen>
+	<screenName name="MenuScan"/>
+   <screenType id="2" />
+	<widget name="title" text="@1" />
+  <menus>
+	<menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/>
+	<menustr text="@2" />
+	<menustr text="@3" />
+	<menustr text="@4" />
+	<menustr text="@5" />
+	<menustr text="@6" />
+	<menustr text="@7" />
+	<menustr text="@8" />
+	<menustr text="@9" />
+	<menustr text="@10" />
+	<menustr text="@11" />
+	<menustr text="@12" />
+	<menustr text="@13" />
+	<menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/>
+	<menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/>
+  </menus>
+	<widget name="blsk" text="@14" />
+	<widget name="brsk" text="@15" />
+   <actions key_blsk="OnOpsCancel"/>
+</screen>
+<screen>
+	<screenName name="MenuPage"/>
+   <screenType id="2" />
+	<widget name="title" text="@1" />
+  <menus>
+	<menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/>
+	<menustr text="@2" />
+	<menustr text="@3" />
+	<menustr text="@4" />
+	<menustr text="@5" />
+	<menustr text="@6" />
+	<menustr text="@7" />
+	<menustr text="@8" />
+	<menustr text="@9" />
+	<menustr text="@10" />
+	<menustr text="@11" />
+	<menustr text="@12" />
+	<menustr text="@13" />
+	<menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/>
+	<menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/>
+  </menus>
+	<widget name="blsk" text="Global:CNCL" />
+	<widget name="brsk" text="PAIR" />
+   <actions key_blsk="OnOpsCancel"/>
+</screen>
+<screen>
+	<screenName name="BTPAIRINPUT"/>
+	<screenType id="1" />
+	<widget name="title" text="@1" />
+	<string x="8" y="60" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<widget name="alphainput" inputtype="4" maxinputlen="4" />
+	<widget name="brsk" text="@3" />
+	<widget name="blsk" text="@4" />
+	<actions  key_blsk="OnOpsCancel" key_brsk="BT_OnInputPair" key_ok="BT_OnInputPair"  key_xip="BT_OnInputPair"/>
+	<ticker tickerenable="0"/>
+</screen>

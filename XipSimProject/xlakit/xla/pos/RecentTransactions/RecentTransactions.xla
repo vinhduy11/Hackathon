@@ -1,0 +1,127 @@
+[properties]
+size=585
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="RecentTransactions" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="RT_OnInstall" onload="RT_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=847
+Buff=<strings><language><EN><str BACK="Back"/><str RTPROG="Fetching records.."/><str RTMENU="Recent transactions"/><str DATE="Date:"/><str CNSMR="Consumer:"/><str TID="Id:"/><str TYPE="Type:"/><str STAT="Status:"/><str CRDT="Credit"/><str SUCC="Success"/><str DBT="Debit"/><str FAIL="Fail"/><str GETPIN_1="To get recent"/><str GETPIN_2="transactions"/><str GETMPIN="Enter merchant mPIN"/><str INCRCT="Incorrect mPIN"/></EN>
+<SP><str BACK="Back"/><str RTPROG="Fetching records.."/><str RTMENU="Recent transactions"/><str DATE="Date:"/><str CNSMR="Consumer:"/><str TID="Id:"/><str TYPE="Type:"/><str STAT="Status:"/><str CRDT="Credit"/><str SUCC="Success"/><str DBT="Debit"/><str FAIL="Fail"/><str GETPIN_1="To get recent"/><str GETPIN_2="transactions"/><str GETMPIN="Enter merchant mPIN"/><str INCRCT="Incorrect mPIN"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=4555
+Buff=RT_xmsConn=0
+RT_gMPIN=0
+txnId={}txnDate={}ConsumerId={}txnType={}txnAmount={}lftTxn={}gTxnDateStr={}txnTypeDetails={}txnStatus={}RT_Type=0
+array={}function RT_OnLoad()DisplayScreenFromRes("RecentTxnsMPinEntryScreen","#GETMPIN"," ")end
+function RT_OnMPINNext(n)if(n~=nil and n:len()==4)then
+RT_MPIN=n
+XmsRequest_RT()else
+DisplayScreenFromRes("RecentTxnsMPinEntryScreen","#GETMPIN","#INCRCT")end
+end
+function XmsRequest_RT()DispScreen("RecentTxnsProgress")cntType=xal_xms_getcontentType()xipdbg("In Lua: XmsRequest_RT content Type:"..cntType)if(cntType==-1)then txnCType="LFT".."|".."7/f"else txnCType="LFT".."|"..cntType end
+RT_xmsConn=xal_xms_init("NULL",txnCType,0,"RT_CB")xid=GetDeviceXID()xal_xms_add_params(RT_xmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(RT_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(RT_xmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(RT_xmsConn,"exid",exid)if(RT_Type=="1"or RT_Type=="2")then
+xal_xms_add_params(RT_xmsConn,"mp",RT_MPIN)end
+ret=xal_xms_request(RT_xmsConn,1)end
+function RT_CB()XMSSCData=xal_xms_get_params(RT_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)if tonumber(xmsSC)==0 then
+txnCount=xal_xms_GetTxnCount(xmsConn)for n=0,txnCount-1 do
+txnId[n],txnDate[n],ConsumerId[n],txnType[n],txnAmount[n]=xal_xms_GetTxnDetails(xmsConn,n)xipdbg("TestXMS: "..txnId[n].."  "..txnDate[n].."  "..ConsumerId[n].."  "..txnType[n].."  "..txnAmount[n])lTxnDateStr=NIL
+lTxnDateStr=xipGetDateStr(txnDate[n])gTxnDateStr[n]=xipGetDateTimeStr(txnDate[n])lftTxn[n]=lTxnDateStr.."   "..GetCurrencySymbol().." "..txnAmount[n]xipdbg("In Lua: Displaying last5TxnsMenuScreen: lftTxn["..n.."] = "..lftTxn[n])end
+xipdbg("In Lua: Displaying last5TxnsMenuScreen: LFT")DisplayScreenFromRes("RecentTxnsMenuScreen",lftTxn[0],lftTxn[1],lftTxn[2],lftTxn[3],lftTxn[4])elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("RecentTxnsTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("RecentTxnsFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("RecentTxnsFailureScreen",xmsSC,SCDetails[2])end
+end
+xal_xms_deInit(RT_xmsConn)RT_xmsConn=0
+end
+function RT_OnMenuBtn1()DisplayLFTDetails(0)end
+function RT_OnMenuBtn2()DisplayLFTDetails(1)end
+function RT_OnMenuBtn3()DisplayLFTDetails(2)end
+function RT_OnMenuBtn4()DisplayLFTDetails(3)end
+function RT_OnMenuBtn5()DisplayLFTDetails(4)end
+function OnLFTMenuOk()xipdbg("OnLFTMenuOk")end
+function RT_OnBack()if(RT_Type=="1")then
+DisplayScreenFromRes("RecentTxnsMenuScreen",lftTxn[0],lftTxn[1],lftTxn[2],lftTxn[3],lftTxn[4])elseif(RT_Type=="3")then
+RT_goHome()end
+end
+function RT_goHome()ChangeXla("HomeScreen")end
+function RT_OnCancel()if(RT_xmsConn~=0)then
+xal_xms_deInit(RT_xmsConn)end
+RT_goHome()end
+function DispScreen(n)DisplayScreenFromRes(n)end
+function mysplit(t,e)if e==nil then
+e="%s"end
+local n={};i=1
+xipdbg("LFT: Split: Input String val = "..t)for e in string.gmatch(t,"([^"..e.."]+)")do
+n[i]=e
+xipdbg("LFT: Individual Split String val = "..n[i])i=i+1
+end
+return n
+end
+function isempty(n)return n==nil or n==''end
+function xipGetDateStr(n)dtDetails=mysplit(n,"|")localTxnDateStr=dtDetails[1]if(dtDetails[1]=="NA")then
+localTxnDateStr=dtDetails[2]end
+return localTxnDateStr
+end
+function xipGetDateTimeStr(n)dtDetails=mysplit(n,"|")if(dtDetails[3]~=nil)or(dtDetails[3]~='')then
+timDetails=mysplit(dtDetails[3],":")end
+localTxnDateStr=dtDetails[2].." "..timDetails[1]..":"..timDetails[2]return localTxnDateStr
+end
+function DisplayLFTDetails(n)xipdbg("In Lua: Displaying Transaction detail for  "..n)if(string.sub(txnType[n],1,1)=="S")then
+txnStatus="#SUCC"elseif(string.sub(txnType[n],1,1)=="F")then
+txnStatus="#FAIL"else
+txnStatus="NA"end
+if(string.sub(txnType[n],3,-1)=="C")then
+typeCrDr="#CRDT"elseif(string.sub(txnType[n],3,-1)=="D")then
+typeCrDr="#DBT"else
+typeCrDr="NA"end
+DisplayScreenFromRes("RecentTxnsScreen",lftTxn[n],gTxnDateStr[n],ConsumerId[n],txnId[n],typeCrDr,txnStatus,"#BACK"," ","RT_OnBack"," ")end
+function GetMultipleLines(n)xipdbg("DisplayMultipleLines:Line Received : "..n)count=1
+result=""for n in n:gmatch("%w+")do
+if(string.len(result)+string.len(n)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=n
+elseif(string.len(result)>0)then
+result=result.." "..n
+else
+result=n
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end[RecentTxnsMPinEntryScreen]
+screenType=1
+size=618
+Buff=<screen><screenName name="RecentTxnsMPinEntryScreen"/><screenType id="1"/><widget name="title" text="@1"/><string x="45" y="40" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="GETPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="GETPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="RT_OnCancel" key_brsk="RT_OnMPINNext" key_ok="RT_OnMPINNext"/></screen>
+[RecentTxnsProgress]
+screenType=0
+size=242
+Buff=<screen><screenName name="RecentTxnsProgress"/><screenType id="0"/><widget name="title" text="RTPROG"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="RT_OnCancel"/><ticker tickerenable="0"/></screen>
+[RecentTxnsMenuScreen]
+screenType=2
+Menus=5
+size=657
+Buff=<screen><screenName name="RecentTxnsMenuScreen"/><screenType id="2"/><widget name="title" text="RTMENU"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1"/><menustr text="@1" handler="RT_OnMenuBtn1"/><menustr text="@2" handler="RT_OnMenuBtn2"/><menustr text="@3" handler="RT_OnMenuBtn3"/><menustr text="@4" handler="RT_OnMenuBtn4"/><menustr text="@5" handler="RT_OnMenuBtn5"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="brsk" text="Global:OK"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="RT_goHome"/></screen>
+[RecentTxnsScreen]
+screenType=0
+size=1130
+Buff=<screen><screenName name="RecentTxnsScreen"/><widget name="title" text="@1"/><screenType id="0"/><string x="8" y="40" text="DATE" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="50" y="40" text="@2" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="55" text="CNSMR" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="70" y="55" text="@3" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="70" text="TID" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="35" y="70" text="@4" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="85" text="TYPE" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="63" y="85" text="@5" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="100" text="STAT" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="63" y="100" text="@6" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="blsk" text="@7"/><widget name="brsk" text="@8"/><actions key_blsk="@9" key_brsk="@10"/></screen>
+[RecentTxnsFailureScreen]
+screenType=0
+size=747
+Buff=<screen><screenName name="RecentTxnsFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="RT_goHome" key_ok="RT_goHome"/></screen>
+[RecentTxnsTimeout]
+screenType=0
+size=311
+Buff=<screen><screenName name="RecentTxnsTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="RT_goHome" key_ok="RT_goHome"/></screen>
+[CRC]
+size=10
+Buff=Sw==

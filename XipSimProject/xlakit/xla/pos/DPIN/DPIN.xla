@@ -1,0 +1,60 @@
+[properties]
+size=579
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="DPIN" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="DPIN_OnInstall" onload="DPIN_OnLoad"/><script lua="yes"/><require><XipXla name="Global.xla"/></require>
+<reqlualib LuaLibName="xla"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="trigger"/><reqlualib LuaLibName="appconfig"/></XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=505
+Buff=<strings><language><EN><str WELCOME="Welcome back"/><str DEVPIN_1="Enter your device pin to"/><str DEVPIN_2="unlock xip"/><str DPINRST="dPIN reset"/><str RSTSUC_1="The dPin reset"/><str RSTSUC_2="successful."/><str INCRCTPIN="Incorrect PIN"/></EN>
+<SP><str WELCOME="Welcome back"/><str DEVPIN_1="Enter your device pin to"/><str DEVPIN_2="unlock xip"/><str DPINRST="dPIN reset"/><str RSTSUC_1="The dPin reset"/><str RSTSUC_2="successful."/><str INCRCTPIN="Incorrect PIN"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=2136
+Buff=array={}DPIN_devName=nil
+dPinReset="DPINRESET"d1PinReset="D1PINRESET"DPIN_ResetSuccess=0
+function DPIN_OnLoad()DPIN_devName=GetConfigValue("devName")ret=GetSessionValue("dPinRstReg")TrigDetails=GetTrigDetails(d1PinReset)if(tonumber(TrigDetails)~=-1)then
+xipdbg("D1PIN RESET Trigger Available: Message =  = "..TrigDetails)SMSTriggerDPINResetCB(0,"0000",TrigDetails)else
+TrigDetails=GetTrigDetails(dPinReset)if(tonumber(TrigDetails)~=-1)then
+xipdbg("DPIN RESET Trigger Available: Message =  = "..TrigDetails)SMSTriggerDPINResetCB(0,"0000",TrigDetails)end
+end
+xipdbg("dPinRstReg = "..ret)if(ret==-1)then
+XIP_SMS_TRIGGER=0
+RegisterSmsUssdTriggerHandler(XIP_SMS_TRIGGER,"919916909072",dPinReset,"SMSTriggerDPINResetCB")RegisterSmsUssdTriggerHandler(XIP_SMS_TRIGGER,"919916909072",d1PinReset,"SMSTriggerDPINResetCB")SetSessionValue("dPinRstReg","1")end
+if(DPIN_ResetSuccess==0)then
+if(DPIN_devName==-1)then
+DisplayScreenFromRes("DPINEntryScreen"," "," ")else
+DisplayScreenFromRes("DPINEntryScreen"," ",DPIN_devName)end
+end
+end
+function DPIN_OnFetchTrigger()ChangeXla("FetchTrigger")end
+function DPIN_OnOk(e)dPIN=GetConfigValue("dPIN")if(dPIN==-1)then
+SetConfigValue("dPIN","0000")dPIN=GetConfigValue("dPIN")end
+if(e==dPIN and e:len()==4)then
+ChangeXla("HomeScreen")else
+DPIN_Error()if(DPIN_devName==-1)then
+DisplayScreenFromRes("DPINEntryScreen","#INCRCTPIN"," ")else
+DisplayScreenFromRes("DPINEntryScreen","#INCRCTPIN",DPIN_devName)end
+end
+end
+function DPIN_Error()xip_buzzer_viberator_sound(1e3)end
+function SMSTriggerDPINResetCB(i,n,e)xipdbg("SMSTrgDPINResetCB source:"..n)xipdbg("SMSTrgDPINResetCB patten:"..e)if(string.match(e,dPinReset)~=nil)then
+dPIN=string.sub(e,(string.len(e)-3),-1)xipdbg("dPIN reset"..dPIN)SetConfigValue("dPIN",dPIN)ResetTrigDetails(dPinReset)DPIN_ResetSuccess=1
+DisplayScreenFromRes("DPINResetSuccessScreen")end
+if(string.match(e,d1PinReset)~=nil)then
+dPIN=string.sub(e,(string.len(e)-3),-1)xipdbg("dPIN reset"..dPIN)SetConfigValue("dPIN",dPIN)ResetTrigDetails(d1PinReset)DPIN_ResetSuccess=1
+DisplayScreenFromRes("DPINResetSuccessScreen")end
+end
+function DPINReset_OnOk()DPIN_ResetSuccess=0
+DPIN_OnLoad()end[DPINEntryScreen]
+screenType=1
+size=659
+Buff=<screen><screenName name="DPINEntryScreen"/><screenType id="1"/><widget name="title" text="WELCOME"/><string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="45" text="@2" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="55" text="DEVPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="65" text="DEVPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:OK"/><actions key_xip="DPIN_OnFetchTrigger" key_brsk="DPIN_OnOk" key_ok="DPIN_OnOk"/></screen>
+[DPINResetSuccessScreen]
+screenType=0
+size=417
+Buff=<screen><screenName name="DPINResetSuccessScreen"/><screenType id="0"/><widget name="title" text="DPINRST"/><string x="8" y="50" text="RSTSUC_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="RSTSUC_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="DPINReset_OnOk" key_ok="DPINReset_OnOk"/></screen>
+[CRC]
+size=10
+Buff=XA==

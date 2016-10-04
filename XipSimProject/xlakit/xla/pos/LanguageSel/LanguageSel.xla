@@ -1,0 +1,33 @@
+[properties]
+size=543
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="LanguageSel" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="LS_OnInstall" onload="LS_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=539
+Buff=<strings><language><EN><str REVERT="Revert"/><str LANG="Language"/><str LS1="English"/><str LS2="Spanish"/><str LANGSEL="Language selection"/><str LANGCHNG="Language changed to:"/><str RSTDEV="Language change will take"/><str CHNGLANG="effect after restart"/></EN>
+<SP><str REVERT="Revert"/><str LANG="Language"/><str LS1="English"/><str LS2="Spanish"/><str LANGSEL="Language selection"/><str LANGCHNG="Language changed to:"/><str RSTDEV="Language change will take"/><str CHNGLANG="effect after restart"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=630
+Buff=LS_LangId=nil
+function LS_OnLoad()xipdbg("Calling DisplayScreenFromRes")DispScreen("preferencesLanguageMenuScreen")end
+function LS_OnMenuBtn1()xipdbg("In Lua: LS_OnMenuBtn1")LS_LangId="EN"DisplayScreenFromRes("languageSelectionScreen","#LS1")end
+function LS_OnMenuBtn2()xipdbg("In Lua: LS_OnMenuBtn2")LS_LangId="SP"DisplayScreenFromRes("languageSelectionScreen","#LS2")end
+function LS_OnOk()xipdbg("In Lua: LS_OnOk")SetConfigValue("LANG",LS_LangId)LS_goHome()end
+function LS_goHome()ChangeXla("HomeScreen")end
+function DispScreen(n)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..n)DisplayScreenFromRes(n)end[preferencesLanguageMenuScreen]
+screenType=2
+Menus=2
+size=553
+Buff=<screen><screenName name="preferencesLanguageMenuScreen"/><screenType id="2"/><widget name="title" text="LANG"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1"/><menustr text="LS1" handler="LS_OnMenuBtn1"/><menustr text="LS2" handler="LS_OnMenuBtn2"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="brsk" text="Global:OK"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="LS_goHome" key_ok="LS_goHome"/></screen>
+[languageSelectionScreen]
+screenType=0
+size=645
+Buff=<screen><screenName name="languageSelectionScreen"/><screenType id="0"/><widget name="title" text="LANGSEL"/><string x="3" y="50" text="LANGCHNG" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="50" y="60" text="@1" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="3" y="80" text="RSTDEV" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="3" y="90" text="CHNGLANG" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><widget name="blsk" text="REVERT"/><actions key_blsk="LS_goHome" key_brsk="LS_OnOk" key_ok="LS_OnOk"/></screen>
+[CRC]
+size=10
+Buff=Yg==

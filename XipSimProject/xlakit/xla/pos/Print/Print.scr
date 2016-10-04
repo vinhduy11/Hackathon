@@ -1,0 +1,31 @@
+<screen>
+	<screenName name="printerProgress"/>
+	<screenType id="0" />
+	<widget name="title" text="Print:PRTNG" />
+	<widget name="progress" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions key_blsk="Print:Print_OnCancel" />
+</screen>
+
+<screen>
+	<screenName name="successPage"/>
+	<screenType id="0" />
+	<widget name="title" text="Print:PRNT" />
+	<widget name="blsk" text="Print:REPRINT" />
+	<widget name="brsk" text="Global:OK" />
+	<string x="8" y="40" text="Print:PRINTSUCCESS" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="56" text="Print:RPRTMSG" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<actions key_blsk="Print:Print_OnReprint" key_brsk="Print:Print_OnOK" key_ok="Print:Print_OnOK" />
+</screen>
+
+<screen>
+	<screenName name="failurePage"/>
+	<screenType id="0" />
+	<widget name="title" text="Print:PRNT" />
+	<widget name="brsk" text="Global:OK" />
+	<string x="8" y="40" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="56" text="@2" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="72" text="@3" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="88" text="@4" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<actions key_brsk="Print:Print_OnOK" key_ok="Print:Print_OnOK" />
+</screen>

@@ -1,0 +1,156 @@
+[properties]
+size=610
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="SyncSV" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="SYNCSV_OnInstall" onload="SYNCSV_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="record"/><reqlualib LuaLibName="sysnfc"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="KR"/></params>
+</properties>
+[strings]
+size=647
+Buff=<strings><language><EN><str PRSNG="Processing SV sync"/><str SYNC="Syncing"/><str TXNOF="txns of"/><str TOTAL="total"/><str TXNAMT="txn amount: "/><str SYSUC="Sync success"/><str SYNCTXN="sync txn: "/><str TID="tid: "/><str EMTTXN="No transactions"/><str SYSUC1="Sync is reflected"/><str SYSUC2="in few minutes"/></EN>
+<SP><str PRSNG="Processing SV sync"/><str SYNC="Syncing"/><str TXNOF="txns of"/><str TOTAL="total"/><str TXNAMT="txn amount: "/><str SYSUC="Sync success"/><str SYNCTXN="sync txn: "/><str TID="tid: "/><str EMTTXN="No transactions"/><str SYSUC1="Sync is reflected"/><str SYSUC2="in few minutes"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=6025
+Buff=SYNCSV_XmsConn=0
+SYNCSV_WakeupType=0
+RecIds={}RetryCount=0
+SYNCSV_CHUNKEnb=false
+SYNCSV_RecCHUNK=5
+SYNCSV_TotlRecCnt=0
+SYNCSV_TotlRecSync=0
+SYNCSV_RecSend=0
+totalAmt=0
+SYNCTotalAmt=0
+array={}function SYNCSV_OnLoad()SYNCSV_WakeupType=GetSessionValue("SyncUp")xipdbg("SYNCSV_OnLoad: SYNCSV_WakeupType On ----"..SYNCSV_WakeupType)SYNCSV_TotlRecCnt=xal_getRecordCount()xipdbg("SYNCSV_OnLoad: Total RecCount is ----"..SYNCSV_TotlRecCnt)SendSyncRespCB()end
+function SendSyncRespCB()if(SYNCSV_TotlRecCnt==0)then
+if(SYNCSV_WakeupType=="1")then
+ChangeXla("Home")else
+DisplayScreenFromRes("syncFailureScreen","","#EMTTXN")end
+elseif(SYNCSV_TotlRecCnt>SYNCSV_TotlRecSync)then
+if(SYNCSV_CHUNKEnb==true)then
+SYNCSV_RecSend=SYNCSV_TotlRecCnt
+elseif((SYNCSV_TotlRecCnt-SYNCSV_TotlRecSync)<SYNCSV_RecCHUNK)then
+SYNCSV_RecSend=SYNCSV_TotlRecCnt-SYNCSV_TotlRecSync
+else
+SYNCSV_RecSend=SYNCSV_RecCHUNK
+end
+xipdbg("SYNCSV_OnLoad: Total RecCount is ----"..SYNCSV_TotlRecCnt)xipdbg("SendSyncRespCB: Total sync Recs ----"..SYNCSV_TotlRecSync)xipdbg("SendSyncRespCB: send Recs ----"..SYNCSV_RecSend)SYNCSV_TotlRecSync=SYNCSV_TotlRecSync+SYNCSV_RecSend
+XmsRequest_SYNCSV()else
+if(SYNCSV_WakeupType=="1")then
+ChangeXla("Home")else
+DisplayScreenFromRes("syncSuccessScreen",SYNCSV_TotlRecSync,GetCurrencySymbol().." "..SYNCTotalAmt)end
+end
+end
+function XmsRequest_SYNCSV()xipdbg("In Lua: XmsRequest_SYNCSV"..SYNCSV_RecSend)recData=nil
+RecLen=0
+for e=0,SYNCSV_RecSend-1 do
+xipdbg("Test: RT_RecentTxnsMenu ="..e)rec_id,GetRecordAT,GetRecordAT_len,GetDate=xal_getRecordAt(e)xipdbg("Test: GetRecordAT record id----"..rec_id)xipdbg("Test: GetRecordAT DATA----"..GetRecordAT)xipdbg("Test: GetRecordAT LEN:----"..GetRecordAT_len)xipdbg("Test: GetRecordAT GetDate:----"..GetDate)if(recData==nil)then
+recData=GetRecordAT..","RecLen=GetRecordAT_len+1
+else
+if(e<SYNCSV_RecSend-1)then
+recData=recData..GetRecordAT..","RecLen=RecLen+GetRecordAT_len+1
+else
+recData=recData..GetRecordAT
+RecLen=RecLen+GetRecordAT_len
+end
+end
+xipdbg("Test: GetRecordAT recData = "..recData)xipdbg("Test: GetRecordAT RecLen = "..RecLen)RecIds[e+1]=rec_id
+txnDetails=mysplit(GetRecordAT,"~")if(txnDetails[3]~=nil)and(txnDetails[7]~=nil)then
+xipdbg("txnDetails2: "..txnDetails[3].."txnDetails6: "..txnDetails[7])if(txnDetails[3]=="PM")then
+if(totalAmt==0)then
+xipdbg("1st time recAmt Parsed as ["..txnDetails[7].."]")Sync_TotalBal=sysnfc_svEpurseConvAmtDec2Int(txnDetails[7])else
+xipdbg("2nd onwards recAmt Parsed as ["..txnDetails[7].."]")Sync_TotalBal=sysnfc_svEpurseConvAmtDec2Int(totalAmt)+sysnfc_svEpurseConvAmtDec2Int(txnDetails[7])end
+totalAmt=sysnfc_svEpurseConvAmtInt2Dec(Sync_TotalBal)end
+end
+end
+xipdbg("Final total Amount to be synched ["..totalAmt.."]".."SYNCSV_RecSend "..SYNCSV_RecSend)xipdbg("XmsRequest_SYNCSV: RecLen ----"..RecLen)xipdbg("XmsRequest_SYNCSV: recData ----"..recData)for e=1,SYNCSV_RecSend do
+xipdbg("XmsRequest_SYNCSV: RecIds  ----"..RecIds[e])end
+DisplayScreenFromRes("syncProgressScreen",SYNCSV_RecSend,GetCurrencySymbol().." "..totalAmt)cntType=xal_xms_getcontentType()xipdbg("In Lua: XmsRequest_SYNCSV content Type:"..cntType)if(cntType==-1)then txnType="SYNCUP".."|".."23/2f"else txnType="SYNCUP".."|"..cntType end
+xipdbg("In Lua: XmsRequest_SYNCSV txnType:"..txnType)res=xal_xms_init("NULL",txnType,0,"SYNCSV_CB")xipdbg("res = "..res)SYNCSV_XmsConn=res
+exid=GetDeviceExid()xal_xms_add_params(SYNCSV_XmsConn,"exid",exid)xal_xms_add_params(SYNCSV_XmsConn,"data",recData)xal_xms_add_params(SYNCSV_XmsConn,"zd","0")ret=xal_xms_request(SYNCSV_XmsConn,1)end
+function SYNCSV_CB()xipdbg("In Lua: SYNCSV_CB, Res = "..res)XMSSCData=xal_xms_get_params(SYNCSV_XmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: SYNCSV_CB, xmsSC = "..xmsSC)xal_xms_deInit(SYNCSV_XmsConn)SYNCSV_XmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+ret=xal_deleteMultipleRecords(RecIds,SYNCSV_RecSend)if(ret==0)then
+xipdbg("After deleting the records ["..totalAmt.."]".."SYNCSV_RecSend "..SYNCSV_RecSend)if(tonumber(totalAmt)>0)then
+SVCurAmt=GetConfigValue("sta")xipdbg("In Lua: StoreValueRecord: SVCurAmt = "..SVCurAmt)if(SVCurAmt~=-1)then
+SVTotalAmt=sysnfc_svEpurseConvAmtDec2Int(SVCurAmt)-sysnfc_svEpurseConvAmtDec2Int(totalAmt)remAmt=sysnfc_svEpurseConvAmtInt2Dec(SVTotalAmt)xipdbg("In Lua: StoreValueRecord: remAmt = "..remAmt)SetConfigValue("sta",remAmt)end
+SYNCTotalAmt=SYNCTotalAmt+totalAmt
+end
+SVCurTxns=GetConfigValue("stt")xipdbg("In Lua: StoreValueRecord: SVCurTxns = "..SVCurTxns)if(SVCurTxns~=-1)then
+SVTotalTxns=tonumber(SVCurTxns)-SYNCSV_RecSend
+xipdbg("In Lua: StoreValueRecord: TotalTxns = "..SVTotalTxns)SetConfigValue("stt",tostring(SVTotalTxns))end
+end
+TS=xal_xms_timeStamp()SetConfigValue("lss",TS)RetryCount=0
+totalAmt=0
+SendSyncRespCB()elseif tonumber(xmsSC)==8888 then
+RetryCount=RetryCount+1
+if(RetryCount>3)then
+if(SYNCSV_WakeupType=="1")then
+ChangeXla("Home")else
+DisplayScreenFromRes("syncTimeout")end
+else
+totalAmt=0
+XmsRequest_SYNCSV()end
+else
+if(SYNCSV_WakeupType=="1")then
+ChangeXla("Home")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("syncFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("syncFailureScreen",xmsSC,SCDetails[2])end
+end
+end
+end
+function SYNCSV_goHome()if(SYNCSV_WakeupType=="1")then
+ChangeXla("Home")else
+ChangeXla("HomeScreen")end
+end
+function DispScreen(e)DisplayScreenFromRes(e)end
+function SYNCSV_OnCancel()if(SYNCSV_XmsConn~=0)then
+xipdbg("In Lua: SYNCSV_OnCancel, xal_xms_deInit ")xal_xms_deInit(SYNCSV_XmsConn)end
+SYNCSV_goHome()end
+function mysplit(n,e)if e==nil then
+e="%s"end
+local t={};i=1
+for e in string.gmatch(n,"([^"..e.."]+)")do
+t[i]=e
+i=i+1
+end
+return t
+end
+function GetMultipleLines(e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end[syncProgressScreen]
+screenType=0
+size=708
+Buff=<screen><screenName name="syncProgressScreen"/><screenType id="0"/><widget name="title" text="PRSNG"/><string x="8" y="40" text="SYNC" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="65" y="38" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="90" y="40" text="TXNOF" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="55" text="TOTAL" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="50" y="53" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SYNCSV_OnCancel"/><ticker tickerenable="0"/></screen>
+[syncSuccessScreen]
+screenType=0
+size=776
+Buff=<screen><screenName name="syncSuccessScreen"/><screenType id="0"/><widget name="title" text="SYSUC"/><string x="8" y="45" text="SYSUC1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="SYSUC2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="85" text="SYNCTXN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="80" y="83" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="100" text="TXNAMT" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="80" y="98" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SYNCSV_goHome" key_ok="SYNCSV_goHome"/></screen>
+[syncFailureScreen]
+screenType=0
+size=749
+Buff=<screen><screenName name="syncFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SYNCSV_goHome" key_ok="SYNCSV_goHome"/></screen>
+[syncTimeout]
+screenType=0
+size=313
+Buff=<screen><screenName name="syncTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SYNCSV_goHome" key_ok="SYNCSV_goHome"/></screen>
+[CRC]
+size=10
+Buff=XQ==

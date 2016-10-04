@@ -1,0 +1,23 @@
+[properties]
+size=574
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="SysInfo" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="SI_OnInstall" onload="SI_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=517
+Buff=<strings><language><EN><str SYSINFO="System info"/><str XID="XID:"/><str MSISDN="MSISDN:"/><str NW="Network:"/><str SN="Signal:"/><str BAT="Batt:"/><str GPRS="GPRS:"/><str BUILD="Build:"/><str VER="Version:"/><str HW="HW:"/><str AUTH="Auth Till:"/></EN>
+<SP><str SYSINFO="System info"/><str XID="XID:"/><str MSISDN="MSISDN:"/><str NW="Network:"/><str SN="Signal:"/><str BAT="Batt:"/><str GPRS="GPRS:"/><str BUILD="Build:"/><str VER="Version:"/><str HW="HW:"/><str AUTH="Auth Till:"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=587
+Buff=function SI_OnLoad()xipdbg("Calling DisplayScreenFromRes")xid=GetDeviceXID()msisdn=GetDeviceMSISDN()activeMnc=GetActiveMnc()homeMnc=GetIMSINumber()network=activeMnc.."/"..string.sub(homeMnc,1,5)signal=xal_xms_getSignalStn()batt=xal_xms_getBattStatus()gprs=GetGPRSFlag()buildDate=GetBuildDate()version=GetBuildVersion()hwVer=xip_release_hw_ver()relVerNo=xip_release_verno()hw=hwVer.."/"..relVerNo
+authExp=GetKeyExpiryTime()DisplayScreenFromRes("systemInfoScreen",xid,msisdn,network,signal,batt,gprs,buildDate,version,hw,authExp)end
+function SI_goHome()ChangeXla("PreferencesMenu")end[systemInfoScreen]
+screenType=0
+size=2037
+Buff=<screen><screenName name="systemInfoScreen"/><screenType id="0"/><widget name="title" text="SYSINFO"/><string x="8" y="35" text="XID" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="35" y="35" text="@1" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="45" text="MSISDN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="65" y="45" text="@2" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="55" text="NW" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="65" y="55" text="@3" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="65" text="SN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="53" y="65" text="@4" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="65" y="65" text="BAT" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="100" y="65" text="@5" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="110" y="65" text="GPRS" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="145" y="65" text="@6" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="75" text="BUILD" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="53" y="75" text="@7" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="85" text="VER" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="60" y="85" text="@8" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="95" text="HW" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="38" y="95" text="@9" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="105" text="AUTH" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="75" y="105" text="@10" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SI_goHome" key_ok="SI_goHome"/></screen>
+[CRC]
+size=10
+Buff=Cw==

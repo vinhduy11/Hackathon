@@ -1,0 +1,11 @@
+function SDN_OnLoad()xipdbg("Calling DisplayScreenFromRes")devOldName=GetConfigValue("devName")if(devOldName==-1)then
+DisplayScreenFromRes("deviceNameEntryScreen"," ")else
+DisplayScreenFromRes("deviceNameEntryScreen",devOldName)end
+end
+function SDN_OnDevNameOk(e)if(e~=nil)then
+xipdbg("Calling deviceNameSuccessScreen, device name = "..e)SetConfigValue("devName",e)DispScreen("deviceNameSuccessScreen")else
+DisplayScreenFromRes("deviceNameFailureScreen","#IMPRDATA")end
+end
+function SDN_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..e)DisplayScreenFromRes(e)end
+function SDN_OnCancel()SDN_goHome()end

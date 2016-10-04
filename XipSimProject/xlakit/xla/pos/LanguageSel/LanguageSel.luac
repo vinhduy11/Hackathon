@@ -1,0 +1,7 @@
+LS_LangId=nil
+function LS_OnLoad()xipdbg("Calling DisplayScreenFromRes")DispScreen("preferencesLanguageMenuScreen")end
+function LS_OnMenuBtn1()xipdbg("In Lua: LS_OnMenuBtn1")LS_LangId="EN"DisplayScreenFromRes("languageSelectionScreen","#LS1")end
+function LS_OnMenuBtn2()xipdbg("In Lua: LS_OnMenuBtn2")LS_LangId="SP"DisplayScreenFromRes("languageSelectionScreen","#LS2")end
+function LS_OnOk()xipdbg("In Lua: LS_OnOk")SetConfigValue("LANG",LS_LangId)LS_goHome()end
+function LS_goHome()ChangeXla("HomeScreen")end
+function DispScreen(n)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..n)DisplayScreenFromRes(n)end

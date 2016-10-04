@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str NFCPRGS="Tap for amount - " />
+<str PAYRCVD="Payment received" />
+<str RCVD="Received" />
+<str TAPTO="Tap timeout" />
+<str UNREAD="Unable to read card" />
+<str TRYAGN="please try again" />
+<str INVLDCARD="Card does not support" />
+<str INVLDCARD1="SV transaction" />
+<str CARDEXPR="Card is expired" />
+<str INSBAL="Insufficient Balance" />
+<str NOSV="Not support SV and" />
+<str ONLNRCV="Online Receive." />
+<str TAPORIGTAG="Please tap original card" />
+<str PMMAX="Receive value exceeds" />
+<str LTEXD="allowed limit" />
+<str NFCFAIL="NFC Couldnot be start" />
+<str SYNC="SyncNow" />
+<str AMT="Enter amount to get" />
+<str SYNCFUL="SV wallet Full" />
+<str SYNC1="SV cards won't be" />
+<str SYNC2="accepted till wallet" />
+<str SYNC3="is synced" />
+</EN>
+<SP>
+<str NFCPRGS="Tap for amount - " />
+<str PAYRCVD="Payment received" />
+<str RCVD="Received" />
+<str TAPTO="Tap timeout" />
+<str UNREAD="Unable to read card" />
+<str TRYAGN="please try again" />
+<str INVLDCARD="Card does not support" />
+<str INVLDCARD1="SV transaction" />
+<str CARDEXPR="Card is expired" />
+<str INSBAL="Insufficient Balance" />
+<str NOSV="Not support SV and" />
+<str ONLNRCV="Online Receive." />
+<str TAPORIGTAG="Please tap original card" />
+<str PMMAX="Receive value exceeds" />
+<str LTEXD="allowed limit" />
+<str NFCFAIL="NFC Couldnot be start" />
+<str SYNC="SyncNow" />
+<str SYNCFUL="SV wallet Full" />
+<str SYNC1="SV cards won't be" />
+<str SYNC2="accepted till wallet" />
+<str SYNC3="is synced" />
+<str AMT="Enter amount to get" />
+</SP>
+</language>
+</strings>

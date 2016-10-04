@@ -1,0 +1,33 @@
+<xla-preload mno="xlakit">
+	<bundle name="pos" defaultpath="XLA/pos" startup-xla="ActivatePos" onready-xla="ActivatePos">
+		<xla package ="XLAKIT"  ver="1.0.0" name="BalanceEnquiry" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="ChangeMPIN" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="ChangeDPIN" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="DPIN" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="Global" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="Perso" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="RecentTransactions" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="SendMoney" />	
+		<xla package ="XLAKIT"  ver="1.0.0" name="Image" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="Home" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="SyncSV" />		
+		<xla package ="XLAKIT"  ver="1.0.0" name="HomeScreen" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="CommonMenu" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="Wakeup" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="TopUp" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="ReceiveOffline" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="SVRecentTransactions" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="ReceiveOnline" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="CustBalance" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="SaleSummary" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="GetConfig" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="LanguageSel" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="PreferencesMenu" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="ServerSync" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="SetAuth" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="SetDeviceName" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="SysInfo" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="Print" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="PrinterSetup" />
+	</bundle>
+</xla-preload>

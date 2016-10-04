@@ -1,0 +1,44 @@
+SA_xmsConn=0
+array={}function SA_OnLoad()xipdbg("In Lua: SA_OnLoad")DispScreen("setAuthProgressScreen")cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="SETAUTH".."|".."7/f"else txnType="SETAUTH".."|"..cntType end
+SA_xmsConn=xal_xms_init("NULL",txnType,0,"SETAUTH_CB")ret=xal_xms_request(SA_xmsConn,1)end
+function SETAUTH_CB()XMSSCData=xal_xms_get_params(SA_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)xal_xms_deInit(SA_xmsConn)SA_xmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+xipdbg("In Lua: Displaying setAuthSuccessScreen: SC = "..xmsSC)DisplayScreenFromRes("setAuthSuccessScreen")elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("setAuthTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("setAuthFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("setAuthFailureScreen",xmsSC,SCDetails[2])end
+end
+end
+function SA_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..e)DisplayScreenFromRes(e)end
+function SA_OnCancel()if(SA_xmsConn~=0)then
+xal_xms_deInit(SA_xmsConn)end
+SA_goHome()end
+function mysplit(t,e)if e==nil then
+e="%s"end
+local n={};i=1
+xipdbg("LFT: Split: Input String val = "..t)for e in string.gmatch(t,"([^"..e.."]+)")do
+n[i]=e
+xipdbg("LFT: Individual Split String val = "..n[i])i=i+1
+end
+return n
+end
+function GetMultipleLines(e)xipdbg("DisplayMultipleLines:Line Received : "..e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end

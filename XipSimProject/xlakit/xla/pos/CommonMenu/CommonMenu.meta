@@ -1,0 +1,21 @@
+<properties>
+	 <XLAmeta>
+		<package name="XLAKIT" XLA="CommonMenu" ver="1.0.0" desc="POS based on XLAs" />
+		<device version="2.2.1" /> <server version="2.0.0" />
+		<entry oninstall="CM_OnInstall" onload="CM_OnLoad" />
+		<script lua="yes" />
+		<reqlualib LuaLibName="xla" />
+		<reqlualib LuaLibName="screen" />
+		<reqlualib LuaLibName="config" />
+		<reqlualib LuaLibName="trigger" />
+		<require>
+			<XipXla name="Global.xla" />
+		</require>
+	 </XLAmeta>
+	 <params>
+		<param refreshGPRS="1" />
+		<param showLastTxn="0" />
+		<param Language="SP" />
+	 </params>
+ </properties>
+ 

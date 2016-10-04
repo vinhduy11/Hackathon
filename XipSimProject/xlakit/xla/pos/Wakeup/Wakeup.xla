@@ -1,0 +1,18 @@
+[properties]
+size=536
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="Wakeup" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="W_OnInstall" onload="W_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="record"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=57
+Buff=<strings><language><EN/><SP/></language>
+</strings>
+[LUAScript]
+size=326
+Buff=function W_OnLoad()xipdbg("In Lua: XPW_OnLoad")SyncMinTxnCnt=GetMiniRecordCount()xipdbg("In Lua: SyncMinTxnCnt: "..SyncMinTxnCnt)txnCount=xal_getRecordCount()xipdbg("In Lua: txnCount is ----"..txnCount)if(txnCount>=tonumber(SyncMinTxnCnt))then
+SetSessionValue("SyncUp","1")ChangeXla("SyncSV")else
+ChangeXla("Home")end
+end[CRC]
+size=10
+Buff=IA==

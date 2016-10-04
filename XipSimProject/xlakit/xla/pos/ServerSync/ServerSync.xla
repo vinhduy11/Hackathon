@@ -1,0 +1,93 @@
+[properties]
+size=609
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="ServerSync" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="SS_OnInstall" onload="SS_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appmgr"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=993
+Buff=<strings><language><EN><str SSPROG="Update XipPOS .."/><str SSSUC_1="XipPOS updated "/><str SSSUC_2="successfully."/><str RBOOT="Restart"/><str SYNCSUCC="A newer version is"/><str SYNCSUCC2="available"/><str SYNCSUCC1="Your device is up to"/><str SYNCSUCC3="date"/><str NEWAPPS="Please restart the device"/><str NOAPPS="No updates available"/><str RESTARTSTR="Restart to update XipPOS"/><str SYNCERR="XipPOS Update failed"/><str CONT="Press Ok to continue"/><str NEWAPPS1="to update."/></EN>
+<SP><str SSPROG="Update XipPOS .."/><str SSSUC_1="XipPOS updated "/><str SSSUC_2="successfully."/><str RBOOT="Restart"/><str SYNCSUCC="A newer version is"/><str SYNCSUCC2="available"/><str SYNCSUCC1="Your device is up to"/><str SYNCSUCC3="date"/><str NEWAPPS="Please restart the device"/><str NOAPPS="No updates available"/><str RESTARTSTR="Restart to update XipPOS"/><str SYNCERR="XipPOS Update failed"/><str CONT="Press Ok to continue"/><str NEWAPPS1="to update."/></SP>
+</language>
+</strings>
+[LUAScript]
+size=2635
+Buff=SS_xmsConn=0
+array={}function SS_OnLoad()xipdbg("In Lua: SS_OnLoad")DispScreen("ServerSyncProgressScreen")xal_CheckUpdates("OnXlaGAPP")end
+function SERVERSYNC_CB()xipdbg("In Lua: SERVERSYNC_CB, Res = "..res)XMSSCData=xal_xms_get_params(SS_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)xal_xms_deInit(SS_xmsConn)SS_xmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+xipdbg("In Lua: Displaying ServerSyncSuccessScreen: SC = "..xmsSC)DisplayScreenFromRes("ServerSyncSuccessScreen")elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("ServerSyncTimeout")else
+if SCDetails[2]~=nil or SCDetails[2]~=''then
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("ServerSyncFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("ServerSyncFailureScreen",xmsSC,SCDetails[2])end
+else
+err1,err2=GetTxnErrorStr(xmsSC)DisplayScreenFromRes("ServerSyncFailureScreen",xmsSC,err1,err2)end
+end
+end
+function SS_goHome()xipdbg("DispScreen: Canceling the updates ")xal_CancelUpdates()ChangeXla("HomeScreen")end
+function DispScreen(e)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..e)DisplayScreenFromRes(e)end
+function SS_OnCancel()if(SS_xmsConn~=0)then
+xal_xms_deInit(SS_xmsConn)end
+SS_goHome()end
+function mysplit(S,n)if n==nil then
+n="%s"end
+local e={};i=1
+xipdbg("LFT: Split: Input String val = "..S)for n in string.gmatch(S,"([^"..n.."]+)")do
+e[i]=n
+xipdbg("LFT: Individual Split String val = "..e[i])i=i+1
+end
+return e
+end
+function GetMultipleLines(e)xipdbg("DisplayMultipleLines:Line Received : "..e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<4)do
+array[count]=" "count=count+1
+end
+end
+function OnXlaGAPP(n,e,S)xipdbg("OnXlaGAPP: Download Status =  "..n.." XmsStatus = "..e.." XmsStatus Len "..string.len(e))if(tonumber(n)==200)then
+nXlas=tonumber(e)xipdbg("OnXlaGAPP: nXlas  = "..nXlas)if nXlas>0 then
+DisplayScreenFromRes("GAPPStatusScr","#Global:STATUS","#SYNCSUCC","#SYNCSUCC2"," ","#NEWAPPS","#NEWAPPS1"," "," "," "," ")else
+DisplayScreenFromRes("GAPPStatusScr","#Global:STATUS","#SYNCSUCC1","#SYNCSUCC3"," ","#CONT"," "," ","#Global:OK","SS_goHome","SS_goHome")end
+else
+DisplayScreenFromRes("GAPPStatusScrErr","#Global:STATUS","","#SYNCERR","","#CONT"," "," ")end
+end[ServerSyncProgressScreen]
+screenType=0
+size=248
+Buff=<screen><screenName name="ServerSyncProgressScreen"/><screenType id="0"/><widget name="title" text="SSPROG"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SS_OnCancel"/><ticker tickerenable="0"/></screen>
+[ServerSyncSuccessScreen]
+screenType=0
+size=412
+Buff=<screen><screenName name="ServerSyncSuccessScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="8" y="50" text="SSSUC_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="SSSUC_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SS_goHome" key_ok="SS_goHome"/></screen>
+[ServerSyncFailureScreen]
+screenType=0
+size=747
+Buff=<screen><screenName name="ServerSyncFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SS_goHome" key_ok="SS_goHome"/></screen>
+[ServerSyncTimeout]
+screenType=0
+size=311
+Buff=<screen><screenName name="ServerSyncTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SS_goHome" key_ok="SS_goHome"/></screen>
+[GAPPStatusScrErr]
+screenType=0
+size=737
+Buff=<screen><screenName name="GAPPStatusScrErr"/><screenType id="0"/><widget name="title" text="@1"/><string x="65" y="19" text="@2" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@6" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="90" text="@7" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SS_goHome" key_ok="SS_goHome"/></screen>
+[GAPPStatusScr]
+screenType=0
+size=723
+Buff=<screen><screenName name="GAPPStatusScr"/><screenType id="0"/><widget name="title" text="@1"/><string x="2" y="45" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="2" y="61" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="2" y="81" text="@4" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="2" y="91" text="@5" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="2" y="101" text="@6" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="2" y="111" text="@7" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="@8"/><actions key_brsk="@9" key_ok="@10"/></screen>
+[CRC]
+size=10
+Buff=CA==

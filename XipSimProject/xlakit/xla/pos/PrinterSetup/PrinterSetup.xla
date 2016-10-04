@@ -1,0 +1,154 @@
+[properties]
+size=628
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="PrinterSetup" ver="1.0.0" desc="Printer Setup"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="OnInstall" onload="OnLoad" onunload="OnUnload"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="print"/><reqlualib LuaLibName="bt"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/></XLAmeta>
+<require><XipXla name="Global.xla"/></require>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="$Startup.language"/></params>
+</properties>
+[strings]
+size=2258
+Buff=<strings><language><EN><str PRNSETUP="Printer Setup"/><str PRNWIZ="Setup wizard"/><str PRNTST="Print test page"/><str PRNTSAM="Print sample receipt"/><str RECEIPT="Sample Receipt"/><str BCK="Back"/><str WIZMSG1="Please ensure, printer"/><str WIZMSG2="is switched ON and"/><str WIZMSG3="placed next to you"/><str SETPRN="Searching printer..."/><str TSTPRNPG="Printing test page..."/><str TSTPRNPG1="Printing SampleReceipt..."/><str SUCCMSG1="Congratulations!!!"/><str SUCCMSG2="You have successfully"/><str SUCCMSG3="setup your printer"/><str YES="Yes"/><str NO="No"/><str TSTPRNMSG1="Would you like to print"/><str TSTPRNMSG2="a test page now?"/><str TSTPRNMSG3="now?"/><str PRNSUCCMSG1="Did the test page"/><str PRNSUCCMSG2="print correctly?"/><str PRNTESTERR="Error Printing!!!"/><str PRNTDCON="Printer Disconnected!!!"/><str PRNSETUPERR="Printer Not Found!!!"/><str NOPRINTER1="Printer Not Configured!!!"/><str NOPRINTER2="Would you like to set up"/><str NOPRINTER3="a printer now?"/><str MNAME="Nearex Pte Ltd."/><str VER="POS Version"/><str STPVER="XLA Version"/><str PNAME="Printer Name"/><str DATE="Date"/><str SCAN="Scan"/><str PAIR="Pair"/><str EMPTY="\r\n"/><str DASH="-------------------------------"/></EN>
+<SP><str PRNSETUP="Printer Setup"/><str PRNWIZ="Setup wizard"/><str PRNTST="Print test page"/><str BCK="Back"/><str WIZMSG1="Please ensure, printer"/><str WIZMSG2="is switched ON and"/><str WIZMSG3="placed next to you"/><str SETPRN="Searching printer..."/><str TSTPRNPG="Printing test page..."/><str SUCCMSG1="Congratulations!!!"/><str SUCCMSG2="You have successfully"/><str SUCCMSG3="setup your printer"/><str YES="Yes"/><str NO="No"/><str TSTPRNMSG1="Would you like to print"/><str TSTPRNMSG2="a test page now?"/><str TSTPRNMSG3="now?"/><str PRNSUCCMSG1="Did the test page"/><str PRNSUCCMSG2="print correctly?"/><str PRNTESTERR="Error Printing!!!"/><str PRNSETUPERR="Printer Not Found!!!"/><str NOPRINTER1="Printer Not Configured!!!"/><str NOPRINTER2="Would you like to set up"/><str NOPRINTER3="a printer now?"/><str MNAME="Nearex Pte Ltd."/><str VER="POS Version"/><str STPVER="XLA Version"/><str PNAME="Printer Name"/><str DATE="Date"/><str EMPTY="\r\n"/><str DASH="-------------------------------"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=5598
+Buff=btresult=0
+printerName=""resStr1=""resStr2=""resStr3=""resStr4=""resStr5=""PrintBuffer=0
+Btscanflag=0
+PrnLen=0
+CurrDate=0
+SampleReceipt=0
+printProgress=0
+function OnLoad()DisplayScreenFromRes("printerSetupMenu")CurrDate=GetConfigValue("dt")end
+function OnCancel()bt_deinit()bt_power()ChangeXla("HomeScreen")end
+function PS_OnStartPrintWiz()DisplayScreenFromRes("printerSetupStep1")end
+function PS_OnPrintSampleReceipt()SampleReceipt=1
+printerName=GetConfigValue("printName")ret=bt_ispaired(printerName)if(ret==1)then
+resStr1=GetXlaString("TSTPRNPG1")DisplayScreenFromRes("printerProgress",resStr1)printProgress=1
+bt_init("BT_OnTstPrintInit")else
+DisplayScreenFromRes("printerNotConfigured")end
+end
+function OnWizNext()Scanlist={}DisplayScreenFromRes("MenuScan","Scanning devices  ...",Scanlist[0],Scanlist[1],Scanlist[2],Scanlist[3],Scanlist[4],Scanlist[5],Scanlist[6],Scanlist[7],Scanlist[8],Scanlist[9],Scanlist[10],Scanlist[11],"","")printProgress=1
+bt_init("BT_OnInit")end
+function OnOpsCancel()bt_cancel()OnCancel()end
+function BT_OnInit(e)if(e=="0")then
+Scancnt=0
+Btscanflag=0
+Scanlist={}bt_scan(12,"ONBTSCAN")else
+OnCancel()end
+end
+function BT_OnDeviceFound(t,e,t)Scanlist[Scancnt]=e
+Scancnt=Scancnt+1
+DisplayScreenFromRes("MenuPage","Scanning devices  ...",Scanlist[0],Scanlist[1],Scanlist[2],Scanlist[3],Scanlist[4],Scanlist[5],Scanlist[6],Scanlist[7],Scanlist[8],Scanlist[9],Scanlist[10],Scanlist[11])end
+function ONBTSCAN(e,e,e)if(Btscanflag~=1)then
+DisplayScreenFromRes("MenuPage","Scan Completed",Scanlist[0],Scanlist[1],Scanlist[2],Scanlist[3],Scanlist[4],Scanlist[5],Scanlist[6],Scanlist[7],Scanlist[8],Scanlist[9],Scanlist[10],Scanlist[11])end
+end
+function BT_OnPair(e)if(e=="0")then
+DisplayScreenFromRes("printerSetupSuccess")else
+resStr1=GetXlaString("PRNWIZ")resStr2=GetXlaString("PRNSETUPERR")PrinterError(resStr1,resStr2)end
+end
+function OnGenericMenu()bt_stop_scan()Btscanflag=1
+MenuText,MenuKeyIndex=GetMenuKeyIndex()z=xipdbg("MenuKeyIndex ----"..MenuKeyIndex.."MenuText = "..MenuText)printerName=MenuText
+SetConfigValue("printName",printerName)DisplayScreenFromRes("BTPAIRINPUT","Enter Passkey","","Ok","Cancel")end
+function BT_OnInputPair(e)DisplayScreenFromRes("printerProgress","Pairing:"..printerName)ret=bt_pair(printerName,e,"BT_OnPair")end
+function OnSuccessNext()DisplayScreenFromRes("printerSetupTestPrintConfirm")end
+function PS_OnPrintTestPage()printerName=GetConfigValue("printName")ret=bt_ispaired(printerName)if(ret==1)then
+resStr1=GetXlaString("TSTPRNPG")DisplayScreenFromRes("printerProgress",resStr1)printProgress=1
+bt_init("BT_OnTstPrintInit")else
+DisplayScreenFromRes("printerNotConfigured")end
+end
+function BT_OnTstPrintInit(e)xipdbg("In Lua: btresult"..e)printerName=GetConfigValue("printName")if(e=="0")then
+if(SampleReceipt==1)then
+bt_connect(printerName,"BT_OnConnect1")else
+bt_connect(printerName,"BT_OnConnect")end
+else
+resStr2=GetXlaString("PRNTESTERR")PrinterError(resStr1,resStr2)end
+end
+function BT_OnConnect1(e)xipdbg("In Lua: btresult"..e)if(e=="0")then
+xipdbg("In Lua: PrintSamplereceipt")InitPrintBuff()dateTime=xal_xms_timeStamp()Cdate=string.sub(dateTime,7,8)..":"..string.sub(dateTime,5,6)..":"..string.sub(dateTime,1,4).." "..string.sub(dateTime,9,10)..":"..string.sub(dateTime,11,12)..":"..string.sub(dateTime,13,14)PrintFromRes("printerTestPageItem1","Nearex Pvt Ltd")PrintFromRes("printerTestPageItem1","184,1st Floor,BMR Complex,")PrintFromRes("printerTestPageItem1","Hennur Cross,Hennur Main")PrintFromRes("printerTestPageItem1","Bengalure-560043")resStr1=GetXlaString("DASH")PrintFromRes("printerTestPageItem",resStr1)PrintFromRes("printerTestPageItem1","RECEIPT")PrintFromRes("printerTestPageItem",resStr1)PrintFromRes("printerTestPageItem","Date:"..Cdate)PrintFromRes("printerTestPageItem",resStr1)PrintFromRes("printerTestPageItem","Consumer   :xxxxxx8918")PrintFromRes("printerTestPageItem","Txn Amount :$10")PrintFromRes("printerTestPageItem","TxnId      :MP15.1302.C76")PrintFromRes("printerTestPageItem",resStr1)PrintFromRes("printerTestPageItem","Thank you for shopping with ")PrintFromRes("printerTestPageItem1","XIPPOS")PrintFromRes("printerTestPageItem",resStr1)PrintFromRes("printerTestPageItem1","***Please Visit Again***")PrintBuffer,PrnLen=GetPrintBuff()resStr1=GetXlaString("RECEIPT")bt_send(PrintBuffer,PrnLen,50,"BT_OnSend")else
+resStr2=GetXlaString("NOPRINTER1")PrinterError(resStr1,resStr2)end
+end
+function BT_OnConnect(e)xipdbg("In Lua: btresult"..e)if(e=="0")then
+xipdbg("In Lua: printerTestPage")InitPrintBuff()PrintFromRes("printerTestPage",CurrDate,"2.0.3.DEV.pos","1.0.0.0",printerName)resStr1=GetXlaString("DASH")PrintFromRes("printerTestPageItem",resStr1)PrintFromRes("printerTestPageItem","End of Test Page")PrintFromRes("printerTestPageItem",resStr1)PrintBuffer,PrnLen=GetPrintBuff()resStr1=GetXlaString("PRNWIZ")bt_send(PrintBuffer,PrnLen,50,"BT_OnSend")else
+resStr2=GetXlaString("NOPRINTER1")PrinterError(resStr1,resStr2)end
+end
+function BT_OnSend(e)DeInitPrintBuff()if(e=="0")then
+resStr2=GetXlaString("PRNSUCCMSG1")resStr3=GetXlaString("PRNSUCCMSG2")DisplayScreenFromRes("successPage",resStr1,resStr2,resStr3)else
+resStr2=GetXlaString("PRNTESTERR")PrinterError(resStr1,resStr2)end
+printProgress=0
+end
+function PrinterError(e,t)resStr3=GetXlaString("WIZMSG1")resStr4=GetXlaString("WIZMSG2")resStr5=GetXlaString("WIZMSG3")DisplayScreenFromRes("failurePage",e,t,resStr3,resStr4,resStr5)printProgress=0
+end
+function BT_OnDisconnect(e)if(printProgress==1)then
+resStr2=GetXlaString("PRNTESTERR")else
+resStr2=GetXlaString("PRNTDCON")end
+PrinterError(resStr1,resStr2)end
+function OnOk()OnCancel()end[printerSetupMenu]
+screenType=2
+Menus=3
+size=553
+Buff=<screen><screenName name="printerSetupMenu"/><screenType id="2"/><widget name="title" text="PRNSETUP"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1"/><menustr text="PRNWIZ" handler="PS_OnStartPrintWiz"/><menustr text="PRNTST" handler="PS_OnPrintTestPage"/><menustr text="PRNTSAM" handler="PS_OnPrintSampleReceipt"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="blsk" text="BCK"/><actions key_blsk="OnCancel"/></screen>
+[printerSetupStep1]
+screenType=0
+size=557
+Buff=<screen><screenName name="printerSetupStep1"/><screenType id="0"/><widget name="title" text="PRNWIZ"/><widget name="blsk" text="Global:CNCL"/><widget name="brsk" text="Global:NXT"/><string x="8" y="40" text="WIZMSG1" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="56" text="WIZMSG2" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="72" text="WIZMSG3" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><actions key_blsk="OnCancel" key_brsk="OnWizNext" key_ok="OnWizNext"/></screen>
+[printerSetupSuccess]
+screenType=0
+size=506
+Buff=<screen><screenName name="printerSetupSuccess"/><screenType id="0"/><widget name="title" text="PRNWIZ"/><widget name="brsk" text="Global:NXT"/><string x="8" y="40" text="SUCCMSG1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="56" text="SUCCMSG2" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="72" text="SUCCMSG3" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><actions key_brsk="OnSuccessNext" key_ok="OnSuccessNext"/></screen>
+[printerSetupTestPrintConfirm]
+screenType=0
+size=479
+Buff=<screen><screenName name="printerSetupTestPrintConfirm"/><screenType id="0"/><widget name="title" text="PRNWIZ"/><widget name="blsk" text="NO"/><widget name="brsk" text="YES"/><string x="8" y="40" text="TSTPRNMSG1" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="56" text="TSTPRNMSG2" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><actions key_blsk="OnCancel" key_brsk="PS_OnPrintTestPage" key_ok="PS_OnPrintTestPage"/></screen>
+[printerNotConfigured]
+screenType=0
+size=567
+Buff=<screen><screenName name="printerNotConfigured"/><screenType id="0"/><widget name="title" text="PRNWIZ"/><widget name="blsk" text="NO"/><widget name="brsk" text="YES"/><string x="8" y="40" text="NOPRINTER1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="56" text="NOPRINTER2" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="72" text="NOPRINTER3" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><actions key_blsk="OnCancel" key_brsk="PS_OnStartPrintWiz" key_ok="PS_OnStartPrintWiz"/></screen>
+[printerProgress]
+screenType=0
+size=209
+Buff=<screen><screenName name="printerProgress"/><screenType id="0"/><widget name="title" text="@1"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="OnOpsCancel"/></screen>
+[successPage]
+screenType=0
+size=411
+Buff=<screen><screenName name="successPage"/><screenType id="0"/><widget name="title" text="@1"/><widget name="blsk" text="NO"/><widget name="brsk" text="YES"/><string x="8" y="40" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="56" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><actions key_blsk="OnSuccessNext" key_brsk="OnOk" key_ok="OnOk"/></screen>
+[failurePage]
+screenType=0
+size=549
+Buff=<screen><screenName name="failurePage"/><screenType id="0"/><widget name="title" text="@1"/><widget name="brsk" text="Global:OK"/><string x="8" y="40" text="@2" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="56" text="@3" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="72" text="@4" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="88" text="@5" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><actions key_brsk="OnOk" key_ok="OnOk"/></screen>
+[MenuScan]
+screenType=2
+Menus=12
+size=684
+Buff=<screen><screenName name="MenuScan"/><screenType id="2"/><widget name="title" text="@1"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/><menustr text="@2"/><menustr text="@3"/><menustr text="@4"/><menustr text="@5"/><menustr text="@6"/><menustr text="@7"/><menustr text="@8"/><menustr text="@9"/><menustr text="@10"/><menustr text="@11"/><menustr text="@12"/><menustr text="@13"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="blsk" text="@14"/><widget name="brsk" text="@15"/><actions key_blsk="OnOpsCancel"/></screen>
+[MenuPage]
+screenType=2
+Menus=12
+size=693
+Buff=<screen><screenName name="MenuPage"/><screenType id="2"/><widget name="title" text="@1"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/><menustr text="@2"/><menustr text="@3"/><menustr text="@4"/><menustr text="@5"/><menustr text="@6"/><menustr text="@7"/><menustr text="@8"/><menustr text="@9"/><menustr text="@10"/><menustr text="@11"/><menustr text="@12"/><menustr text="@13"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="blsk" text="Global:CNCL"/><widget name="brsk" text="PAIR"/><actions key_blsk="OnOpsCancel"/></screen>
+[BTPAIRINPUT]
+screenType=1
+size=448
+Buff=<screen><screenName name="BTPAIRINPUT"/><screenType id="1"/><widget name="title" text="@1"/><string x="8" y="60" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="alphainput" inputtype="4" maxinputlen="4"/><widget name="brsk" text="@3"/><widget name="blsk" text="@4"/><actions key_blsk="OnOpsCancel" key_brsk="BT_OnInputPair" key_ok="BT_OnInputPair" key_xip="BT_OnInputPair"/><ticker tickerenable="0"/></screen>
+[printerTestPage]
+size=910
+Buff=<receipt><receiptname name="printerTestPage"/><widget name="header" imageid="img_xip_ico" text="MNAME" textx="96"/><line font="2"><string text="DATE" font="1" width="12" align="left" bold="1" italic="1"/><string text="@1" font="2" width="20" align="right" bold="1" italic="1"/></line>
+<line font="2"><string text="DASH" font="2" width="32" align="left" bold="1" italic="1"/></line>
+<line font="2"><string text="VER" font="1" width="16" align="left" bold="1" italic="1"/><string text="@2" font="2" width="16" align="right" bold="1" italic="1"/></line>
+<line font="2"><string text="STPVER" font="1" width="16" align="left" bold="1" italic="1"/><string text="@3" font="2" width="16" align="right" bold="1" italic="1"/></line>
+<line font="2"><string text="PNAME" font="1" width="16" align="left" bold="1" italic="1"/><string text="@4" font="2" width="16" align="right" bold="1" italic="1"/></line>
+</receipt>
+[printerTestPageItem]
+size=197
+Buff=<receipt><receiptname name="printerTestPageItem"/><basereport name="printerTestPage"/><line font="2"><string text="@1" width="30" font="1" align="left" bold="1" italic="1"/></line>
+</receipt>
+[printerTestPageItem1]
+size=200
+Buff=<receipt><receiptname name="printerTestPageItem1"/><basereport name="printerTestPage"/><line font="2"><string text="@1" width="30" font="1" align="center" bold="1" italic="1"/></line>
+</receipt>
+[CRC]
+size=10
+Buff=WA==

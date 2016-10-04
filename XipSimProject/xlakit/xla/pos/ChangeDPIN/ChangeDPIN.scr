@@ -1,0 +1,84 @@
+<screen>
+	<screenName name="changeDPinOldDPinEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="GETOLDPIN" />
+	
+	<string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="55" text="GETOLDPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="65" text="GETOLDPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="input" inputtype="0" maxinputlen="4" />
+	
+	<widget name="brsk" text="Global:NXT" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="CHNGDPIN_OnCancel" key_brsk="CHNGDPIN_OnOldDPINNext" key_ok="CHNGDPIN_OnOldDPINNext"/>	
+</screen>
+
+
+<screen>
+	<screenName name="changeDPinNewDPinEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="GETNEWPIN" />
+	
+	<string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="55" text="GETNEWPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="input" inputtype="0" maxinputlen="4" />
+	
+	<widget name="brsk" text="Global:NXT" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="CHNGDPIN_OnCancel" key_brsk="CHNGDPIN_OnNewDPINNext" key_ok="CHNGDPIN_OnNewDPINNext"/>
+</screen>
+
+<screen>
+	<screenName name="changeDPinReEnterNewDPinEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="GETRENEWPIN" />
+	
+	<string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="55" text="GETRENEWPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="65" text="GETRENEWPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="input" inputtype="0" maxinputlen="4" />
+	
+	<widget name="brsk" text="Global:NXT" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="CHNGDPIN_OnCancel" key_brsk="CHNGDPIN_OnReNewDPINNext" key_ok="CHNGDPIN_OnReNewDPINNext"/>
+</screen>
+
+<screen>
+	<screenName name="changeDPinDPinsNotMatchedScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="CHNGDPIN" />
+	
+	<string x="8" y="50" text="NOTMATCHPIN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="CHNGDPIN_goHome" key_ok="CHNGDPIN_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="changeDPinOldDPinNotMatchedScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="CHNGDPIN" />
+	
+	<string x="8" y="50" text="NOTMATCHPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="60" text="NOTMATCHPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="70" text="NOTMATCHPIN_3" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="CHNGDPIN_goHome" key_ok="CHNGDPIN_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="changeDPinSuccessScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="CHNGDPIN" />
+
+	<string x="8" y="50" text="CHNGSUC_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="60" text="CHNGSUC_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="70" text="CHNGSUC_3" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="CHNGDPIN_goHome" key_ok="CHNGDPIN_goHome"/>
+</screen>

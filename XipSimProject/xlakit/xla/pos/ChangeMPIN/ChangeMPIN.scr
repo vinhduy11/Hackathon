@@ -1,0 +1,133 @@
+<screen>
+	<screenName name="NFCProgress"/>
+	<screenType id="0" />
+	<widget name="title" text="NFCPRGS" />
+	
+	<widget name="nfcanim"/>
+	
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="CHNGMPIN_OnCancel"/>
+</screen>
+
+<screen>
+	<screenName name="changeMPinOldMPinEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="GETOLMPIN" />
+	
+	<string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="55" text="GETOLMPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="65" text="GETOLMPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="input" inputtype="0" maxinputlen="4" />
+	
+	<widget name="brsk" text="Global:NXT" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="CHNGMPIN_OnCancel" key_brsk="CHNGMPIN_OnOldMPINNext" key_ok="CHNGMPIN_OnOldMPINNext"/>
+</screen>
+
+<screen>
+	<screenName name="changeMPinNewMPinEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="GETNEWPIN" />
+	
+	<string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="55" text="GETNEWPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="input" inputtype="0" maxinputlen="4" />
+	
+	<widget name="brsk" text="Global:NXT" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="CHNGMPIN_OnCancel" key_brsk="CHNGMPIN_OnNewMPINNext" key_ok="CHNGMPIN_OnNewMPINNext"/>
+</screen>
+
+<screen>
+	<screenName name="changeMPinReEnterNewMPinEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="GETRENEWPIN" />
+	
+	<string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="55" text="GETRENEWPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="65" text="GETRENEWPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="input" inputtype="0" maxinputlen="4" />
+	
+	<widget name="brsk" text="Global:NXT" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="CHNGMPIN_OnCancel" key_brsk="CHNGMPIN_OnReNewMPINNext" key_ok="CHNGMPIN_OnReNewMPINNext"/>
+</screen>
+
+<screen>
+	<screenName name="changeMPinMPinsNotMatchedScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="CHNGMPIN" />
+	
+	<string x="8" y="50" text="NOTMATCHPIN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="CHNGMPIN_goHome" key_ok="CHNGMPIN_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="changeMPinProgressScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+	
+	<widget name="progress" />
+	
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="CHNGMPIN_OnCancel"/>
+    <ticker tickerenable="0"/>
+</screen>
+
+<screen>
+	<screenName name="changeMPinSuccessScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="CHNGMPIN" />
+
+	<string x="8" y="50" text="CHNGSUC" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="CHNGMPIN_goHome" key_ok="CHNGMPIN_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="changeMPinFailureScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:STATUS" />
+	<string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	
+	<string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="CHNGMPIN_goHome" key_ok="CHNGMPIN_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="changeMPinTimeout"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:TXNTO" />	
+	
+	<string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="CHNGMPIN_goHome" key_ok="CHNGMPIN_goHome"/>
+	
+</screen>
+
+<screen>
+	<screenName name="changeMPinOTPEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="EOTP" />
+	
+	<string x="8" y="40" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="50" text="GETOLMPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<widget name="input" inputtype="0" maxinputlen="4" />
+	
+	<widget name="blsk" text="Global:CNCL" />
+	<widget name="brsk" text="Global:NXT" />	
+	<actions  key_blsk="CHNGMPIN_OnCancel" key_brsk="CHNGMPIN_OnOTPNext" key_ok="CHNGMPIN_OnOTPNext"/>
+</screen>

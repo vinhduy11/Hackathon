@@ -1,0 +1,32 @@
+[properties]
+size=549
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="PreferencesMenu" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="PRM_OnInstall" onload="PRM_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=543
+Buff=<strings><language><EN><str PRFNCS="Preferences"/><str PRM1="Device dPIN"/><str PRM2="Set device name"/><str PRM3="System info"/><str PRM4="Get auth"/><str PRM5="Get config"/><str PRM6="Language selection"/><str PRM7="Update XipPOS"/><str PRM8="Printer Setup"/></EN>
+<SP><str PRFNCS="Preferences"/><str PRM1="Device dPIN"/><str PRM2="Set device name"/><str PRM3="System info"/><str PRM4="Get auth"/><str PRM5="Get config"/><str PRM6="Language selection"/><str PRM7="Update XipPOS"/><str PRM8="Printer Setup"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=920
+Buff=function PRM_OnLoad()xipdbg("Calling DisplayScreenFromRes")DisplayScreenFromRes("preferencesMenuScreen")end
+function PRM_OnMenuBtn1()xipdbg("In Lua: PRM_OnMenuBtn1 ChangeDPIN")ChangeXla("ChangeDPIN")end
+function PRM_OnMenuBtn2()xipdbg("In Lua: PRM_OnMenuBtn2 SetDeviceName")ChangeXla("SetDeviceName")end
+function PRM_OnMenuBtn3()xipdbg("In Lua: PRM_OnMenuBtn3 SysInfo")ChangeXla("SysInfo")end
+function PRM_OnMenuBtn4()xipdbg("In Lua: PRM_OnMenuBtn4 SetAuth")ChangeXla("SetAuth")end
+function PRM_OnMenuBtn5()xipdbg("In Lua: PRM_OnMenuBtn5 GetConfig")ChangeXla("GetConfig")end
+function PRM_OnMenuBtn6()xipdbg("In Lua: PRM_OnMenuBtn6 LanguageSel")ChangeXla("LanguageSel")end
+function PRM_OnMenuBtn7()xipdbg("In Lua: PRM_OnMenuBtn7 Server Sync")ChangeXla("ServerSync")end
+function PRM_OnMenuBtn8()xipdbg("In Lua: PRM_OnMenuBtn8 Printer setup")ChangeXla("PrinterSetup")end
+function PRM_goHome()ChangeXla("HomeScreen")end[preferencesMenuScreen]
+screenType=2
+Menus=8
+size=815
+Buff=<screen><screenName name="preferencesMenuScreen"/><screenType id="2"/><widget name="title" text="PRFNCS"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1"/><menustr text="PRM1" handler="PRM_OnMenuBtn1"/><menustr text="PRM2" handler="PRM_OnMenuBtn2"/><menustr text="PRM3" handler="PRM_OnMenuBtn3"/><menustr text="PRM4" handler="PRM_OnMenuBtn4"/><menustr text="PRM5" handler="PRM_OnMenuBtn5"/><menustr text="PRM6" handler="PRM_OnMenuBtn6"/><menustr text="PRM7" handler="PRM_OnMenuBtn7"/><menustr text="PRM8" handler="PRM_OnMenuBtn8"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="brsk" text="Global:OK"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="PRM_goHome"/></screen>
+[CRC]
+size=10
+Buff=PA==

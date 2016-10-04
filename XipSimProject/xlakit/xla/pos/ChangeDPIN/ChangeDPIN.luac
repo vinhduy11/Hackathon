@@ -1,0 +1,24 @@
+CHNGDPIN_OldDPIN=0
+CHNGDPIN_NewDPIN=0
+function CHNGDPIN_OnLoad()xipdbg("Calling DisplayScreenFromRes")DisplayScreenFromRes("changeDPinOldDPinEntryScreen"," ")end
+function CHNGDPIN_OnOldDPINNext(e)if(e~=nil and e:len()==4)then
+CHNGDPIN_OldDPIN=e
+DisplayScreenFromRes("changeDPinNewDPinEntryScreen"," ")else
+DisplayScreenFromRes("changeDPinOldDPinEntryScreen","#INCRCTPIN")end
+end
+function CHNGDPIN_OnNewDPINNext(e)if(e~=nil and e:len()==4)then
+CHNGDPIN_NewDPIN=e
+DisplayScreenFromRes("changeDPinReEnterNewDPinEntryScreen"," ")else
+DisplayScreenFromRes("changeDPinNewDPinEntryScreen","#INCRCTPIN")end
+end
+function CHNGDPIN_OnReNewDPINNext(e)if(e~=nil and e:len()==4)then
+oldDPIN=GetConfigValue("dPIN")if((CHNGDPIN_NewDPIN==e)and(CHNGDPIN_OldDPIN==oldDPIN))then
+SetConfigValue("dPIN",CHNGDPIN_NewDPIN)DispScreen("changeDPinSuccessScreen")elseif(CHNGDPIN_NewDPIN~=e)then
+DispScreen("changeDPinDPinsNotMatchedScreen")elseif(CHNGDPIN_OldDPIN~=oldDPIN)then
+DispScreen("changeDPinOldDPinNotMatchedScreen")end
+else
+DisplayScreenFromRes("changeDPinReEnterNewDPinEntryScreen","#INCRCTPIN")end
+end
+function CHNGDPIN_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)DisplayScreenFromRes(e)end
+function CHNGDPIN_OnCancel()CHNGDPIN_goHome()end

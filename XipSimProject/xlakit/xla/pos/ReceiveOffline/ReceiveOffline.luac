@@ -1,0 +1,83 @@
+RCV_Amount=0
+RCV_nfcSess=0
+RCV_PurseAction="A"RCV_TagBal=0
+RCV_TagExpDate=0
+ePurseId=0
+RCV_Xid=0
+RCV_SVXid=0
+array={}RCV_MenuFlag=0
+function RCV_OnLoad()SVStatus=GetSVStatus()RecStoreAvl=xal_isStoreAvailable()xipdbg("RCV_OnLoad: RecStoreAvl----"..RecStoreAvl)if(RecStoreAvl==0)then
+RCV_goHome()else
+MaxRecCount=GetConfigValue("xat")xipdbg("RCV_OnLoad: MaxRecCount is ----"..MaxRecCount)txnCount=xal_getRecordCount()xipdbg("RCV_OnLoad: txnCount is ----"..txnCount)if(txnCount>=tonumber(MaxRecCount))then
+DisplayScreenFromRes("receiveSyncScreen"," "," ")else
+RCV_amount()end
+end
+end
+function RCV_SyncNow()ChangeXla("SyncSV")end
+function RCV_amount()ret=GetSessionValue("rcvamount")DisplayScreenFromRes("receiveAmountEntryScreen")maxAmt=GetDeviceMaxAmount()DisplaySetMaxInputDataLen(maxAmt)end
+function RCV_OnAmountNext(e)DisplaySetMaxInputDataLen("0")if(e~=nil and tonumber(e)>0)then
+RCV_Amount=e
+DisplayScreenFromRes("NFCProgress",GetCurrencySymbol(),RCV_Amount)RCV_nfcSess=sysnfc_init("RCV_OnNFCGetCardData")if(RCV_nfcSess==-1)then
+DisplayScreenFromRes("receiveFailureScreen"," "," ","#NFCFAIL","#TRYAGN")end
+else
+RCV_goHome()end
+end
+function RCV_OnNFCGetCardData(n,e,t)RCV_Xid=e
+ePurseId=GetEpurseID()sysnfc_svEpurseSetId(RCV_nfcSess,ePurseId)if(n=="true")then
+intamt=sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)SVPMMax=GetSVPMMaxAmount()if(intamt>sysnfc_svEpurseConvAmtDec2Int(SVPMMax))then
+DisplayScreenFromRes("receiveFailureScreen"," "," ","#PMMAX","#LTEXD")else
+RCV_OfflineFlowHandling()end
+else
+DisplayScreenFromRes("receiveFailureScreen"," "," ","#TAPTO")end
+end
+function RCV_OfflineFlowHandling()intamt=sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)SVPMMax=GetSVPMMaxAmount()if(intamt>sysnfc_svEpurseConvAmtDec2Int(SVPMMax))then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#PMMAX","#LTEXD"," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")else
+ePurseId=GetEpurseID()sysnfc_svEpurseSetId(RCV_nfcSess,ePurseId)sysnfc_svEpurseDebitAmount(RCV_nfcSess,intamt,"StoreValueRecord")end
+end
+function RCV_offlineReadDetectCard(e,n,t)RCV_SVXid=n
+RCV_Xid=GetSessionValue("RCVSVXID")if(e=="true")then
+if(RCV_SVXid==RCV_Xid)then
+intamt=sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)SVPMMax=GetSVPMMaxAmount()if(intamt>sysnfc_svEpurseConvAmtDec2Int(SVPMMax))then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#PMMAX","#LTEXD"," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")else
+ePurseId=GetEpurseID()sysnfc_svEpurseSetId(RCV_nfcSess,ePurseId)sysnfc_svEpurseDebitAmount(RCV_nfcSess,intamt,"StoreValueRecord")end
+else
+DisplayScreenFromRes("receiveSVMultiTagFailureScreen")end
+else
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," "," ","#TAPTO"," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")end
+end
+function RCV_OnSVTagFailOK()if(RCV_nfcSess~=0)then
+sysnfc_nfc_cancel(RCV_nfcSess)end
+DisplayScreenFromRes("NFCProgress",GetCurrencySymbol(),RCV_Amount)RCV_nfcSess=sysnfc_init("RCV_offlineReadDetectCard")end
+function RCV_goHome()ChangeXla("HomeScreen")end
+function RCV_OnCancel()DisplaySetMaxInputDataLen("0")if(RCV_nfcSess~=0)then
+sysnfc_nfc_cancel(RCV_nfcSess)end
+RCV_goHome()end
+function StoreValueRecord(e,n,t)xipdbg("In Lua: StoreValueRecord amount "..n)xipdbg("In Lua: StoreValueRecord status "..e)xipdbg("expiryDate "..t)if(e=="0")then
+TS=xal_xms_timeStamp()Type="PM"TxnId=generateUUID()TXN_STATUS="S"RCV_TagBal=sysnfc_svEpurseConvAmtInt2Dec(n)RCV_TagExpDate=t
+amtVal=sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)RCV_EntAmt=sysnfc_svEpurseConvAmtInt2Dec(tostring(amtVal))RCV_SVversion="V1"RCV_UpTime=GetUpTime()RCV_Location=GetLocationDetails()RCV_SignalStr=GetSignalStrength()RCV_Msisdn=GetDeviceMSISDN()RecordData=RCV_SVversion.."~"..TS.."~"..Type.."~"..TxnId.."~"..GetEpurseID().."~"..RCV_PurseAction.."~"..RCV_EntAmt.."~"..RCV_Xid.."~"..TXN_STATUS.."~"..RCV_TagBal.."~"..RCV_TagExpDate.."~"..RCV_UpTime.."~"..RCV_Location.."~"..RCV_SignalStr.."~"..RCV_Msisdn
+iRet,rec_id=xal_addRecord(RecordData,string.len(RecordData),1)SVCurAmt=GetConfigValue("sta")if(SVCurAmt==-1)then
+SetConfigValue("sta",RCV_Amount)else
+SVTotalAmt=sysnfc_svEpurseConvAmtDec2Int(SVCurAmt)+sysnfc_svEpurseConvAmtDec2Int(RCV_Amount)totalamt=sysnfc_svEpurseConvAmtInt2Dec(SVTotalAmt)SetConfigValue("sta",totalamt)end
+SVCurTxns=GetConfigValue("stt")if(SVCurTxns==-1)then
+SetConfigValue("stt","1")else
+SVTotalTxns=tonumber(SVCurTxns)+1
+SetConfigValue("stt",tostring(SVTotalTxns))end
+xip_led_viberator_enable()tagXid=string.sub(RCV_Xid,1,1).."-"..string.sub(RCV_Xid,2,5).."-".."xxxx".."-"..string.sub(RCV_Xid,14,17)DisplayScreenFromRes("receiveSuccessScreen",GetCurrencySymbol().." "..RCV_Amount,tagXid)elseif(e=="1")then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#UNREAD","#TRYAGN"," "," ","#Global:CNCL","#Global:RETRY","RCV_OnCancel","RCV_retry","RCV_retry")elseif(e=="2"or e=="6"or e=="7")then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," ","#INVLDCARD","#INVLDCARD1"," "," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")elseif(e=="3")then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#CARDEXPR"," "," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")elseif(e=="5")then
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#INSBAL"," "," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")else
+DisplayScreenFromRes("receiveFailureScreen","#Global:STATUS"," "," ","#NOSV","#ONLNRCV"," "," "," ","#Global:OK"," ","RCV_goHome","RCV_goHome")end
+end
+function syncTxnCheck()PrevTxnTime=GetConfigValue("SVST")currentTxnTime=sysnfc_svEpurseGetEpochNow()if(PrevTxnTime==-1)then
+timeInvl=0
+else
+timeInvl=currentTxnTime-tonumber(PrevTxnTime)end
+SyncInterval=GetConfigValue("sti")SyncMaxTxnNo=GetConfigValue("stc")txnCount=xal_getRecordCount()if((timeInvl>=tonumber(SyncInterval)and txnCount>=1)or txnCount>=tonumber(SyncMaxTxnNo))then
+SetConfigValue("SVST",tostring(currentTxnTime))RCV_SyncNow()else
+RCV_goHome()end
+end
+function RCV_SyncNow()ChangeXla("SyncSV")end
+function RCV_retry()if(RCV_nfcSess~=0)then
+sysnfc_nfc_cancel(RCV_nfcSess)end
+DisplayScreenFromRes("NFCProgress",GetCurrencySymbol(),RCV_Amount)RCV_nfcSess=sysnfc_init("RCV_offlineReadDetectCard")end

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str PRSNG="Processing SV sync" />
+<str SYNC="Syncing" />
+<str TXNOF="txns of" />
+<str TOTAL="total" />
+<str TXNAMT="txn amount: " />
+<str SYSUC="Sync success" />
+<str SYNCTXN="sync txn: " />
+<str TID="tid: " />
+<str EMTTXN="No transactions" />
+<str SYSUC1="Sync is reflected" />
+<str SYSUC2="in few minutes" />
+</EN>
+<SP>
+<str PRSNG="Processing SV sync" />
+<str SYNC="Syncing" />
+<str TXNOF="txns of" />
+<str TOTAL="total" />
+<str TXNAMT="txn amount: " />
+<str SYSUC="Sync success" />
+<str SYNCTXN="sync txn: " />
+<str TID="tid: " />
+<str EMTTXN="No transactions" />
+<str SYSUC1="Sync is reflected" />
+<str SYSUC2="in few minutes" />
+</SP>
+</language>
+</strings>

@@ -1,0 +1,37 @@
+<receipt>
+<receiptname name="printerTestPage"/>
+<widget name="header" imageid="img_xip_ico" text="MNAME" textx="96"/>
+<line  font="2">
+	<string text="DATE" font="1" width="12" align = "left" bold="1"  italic="1"/>
+	<string text="@1" font="2" width="20" align = "right" bold="1"  italic="1" />
+</line>
+<line font="2">
+	<string text="DASH" font="2" width="32" align = "left" bold="1"  italic="1" />
+</line>
+<line font="2">
+	<string text="VER" font="1" width="16" align = "left" bold="1"  italic="1"/>
+	<string text="@2" font="2" width="16" align = "right" bold="1"  italic="1"/>
+</line>
+<line font="2">
+	<string text="STPVER" font="1" width="16" align = "left" bold="1"  italic="1" />
+	<string text="@3" font="2" width="16" align = "right" bold="1"  italic="1" />
+</line>
+<line font="2">
+	<string text="PNAME" font="1" width="16" align = "left" bold="1"  italic="1" />
+	<string text="@4" font="2" width="16" align = "right" bold="1"  italic="1" />
+</line>
+</receipt>
+<receipt>
+<receiptname name="printerTestPageItem"/>
+<basereport name="printerTestPage" />
+<line  font="2">
+	<string  text="@1" width="30" font="1" align = "left" bold="1"  italic="1" />
+</line>
+</receipt>
+<receipt>
+<receiptname name="printerTestPageItem1"/>
+<basereport name="printerTestPage" />
+<line  font="2">
+	<string  text="@1" width="30" font="1" align = "center" bold="1"  italic="1" />
+</line>
+</receipt>

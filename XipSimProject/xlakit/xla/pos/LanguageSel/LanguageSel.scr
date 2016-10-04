@@ -1,0 +1,32 @@
+<screen>
+	<screenName name="preferencesLanguageMenuScreen"/>
+	<screenType id="2" />
+	<widget name="title" text="LANG" />
+	<menus>
+		<menustart menutype="0" x="8" y="42" hotkeyflag="1"/>
+		<menustr text="LS1"  handler="LS_OnMenuBtn1"/>
+		<menustr text="LS2"  handler="LS_OnMenuBtn2"/>
+		<menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/>
+		<menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/>
+	</menus>
+	<widget name="brsk" text="Global:OK" />
+	<widget name="blsk" text="Global:CNCL" />	
+	<actions  key_blsk="LS_goHome"  key_ok="LS_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="languageSelectionScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="LANGSEL" />
+
+	<string x="3" y="50" text="LANGCHNG" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="50" y="60" text="@1" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="3" y="80" text="RSTDEV" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="3" y="90" text="CHNGLANG" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<widget name="blsk" text="REVERT" />
+	<actions  key_blsk="LS_goHome" key_brsk="LS_OnOk" key_ok="LS_OnOk"/>
+</screen>
+
+

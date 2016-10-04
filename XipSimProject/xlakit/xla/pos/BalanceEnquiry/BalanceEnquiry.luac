@@ -1,0 +1,59 @@
+BE_xmsConn=0
+BE_MPIN=0
+BE_nfcSess=0
+BE_Xid=0
+BE_Exid=0
+BE_Type=0
+array={}BE_IsuId=0
+BE_MSISDN=0
+BE_Name=0
+function BE_OnLoad()DisplayScreenFromRes("balanceMPinEntryScreen","#BEMPIN"," ")end
+function BE_OnMPINOk(e)if(e~=nil and e:len()==4)then
+BE_MPIN=e
+XmsRequest_BE()else
+DisplayScreenFromRes("balanceMPinEntryScreen","#BEMPIN","#BEINCRCT")end
+end
+function XmsRequest_BE()xipdbg("In Lua: XmsRequest_BE")DisplayScreenFromRes("balanceProgress")cntType=xal_xms_getcontentType()xipdbg("In Lua: XmsRequest_BE content Type:"..cntType)if(cntType==-1)then txnType="BE".."|".."7/f"else txnType="BE".."|"..cntType end
+BE_xmsConn=xal_xms_init("NULL",txnType,0,"BE_CB")mccMnc=GetMncMcc()xal_xms_add_params(BE_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(BE_xmsConn,"mnc",string.sub(mccMnc,4,-1))xid=GetDeviceXID()xal_xms_add_params(BE_xmsConn,"xid",xid)exid=GetDeviceExid()xal_xms_add_params(BE_xmsConn,"exid",exid)xal_xms_add_params(BE_xmsConn,"mp",BE_MPIN)ret=xal_xms_request(BE_xmsConn,1)end
+function BE_CB()XMSSCData=xal_xms_get_params(BE_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)uBalVal=xal_xms_get_params(BE_xmsConn,"cbal")xal_xms_deInit(BE_xmsConn)xipdbg("In Lua: Displaying balanceSuccessScreen: SC = "..xmsSC.."Balance = "..uBalVal)if tonumber(xmsSC)==0 then
+DisplayScreenFromRes("balanceSuccessScreen",GetSessionValue("CURR").." "..uBalVal)elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("balanceTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("balanceFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("balanceFailureScreen",xmsSC,SCDetails[2])end
+end
+end
+function BE_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)DisplayScreenFromRes(e)end
+function BE_OnCancel()if(BE_nfcSess~=0)then
+sysnfc_nfc_cancel(BE_nfcSess)end
+if(BE_xmsConn~=0)then
+xal_xms_deInit(BE_xmsConn)end
+BE_goHome()end
+function mysplit(s,n)if n==nil then
+n="%s"end
+local e={};i=1
+xipdbg("LFT: Split: Input String val = "..s)for n in string.gmatch(s,"([^"..n.."]+)")do
+e[i]=n
+xipdbg("LFT: Individual Split String val = "..e[i])i=i+1
+end
+return e
+end
+function GetMultipleLines(e)xipdbg("DisplayMultipleLines:Line Received : "..e)count=1
+result=""for e in e:gmatch("%w+")do
+if(string.len(result)+string.len(e)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=e
+elseif(string.len(result)>0)then
+result=result.." "..e
+else
+result=e
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<4)do
+array[count]=" "count=count+1
+end
+end

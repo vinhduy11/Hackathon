@@ -1,0 +1,17 @@
+<screen>
+	<screenName name="CommonMenuScreen"/>
+    <screenType id="2" />
+	<widget name="title" text="MENUT" />
+	<menus>
+		<menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/>
+		<menustr text="CM1" />
+		<menustr text="CM2" />
+		<menustr text="CM3" />
+		<menustr text="CM4" />
+		<menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/>
+		<menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/>
+	</menus>
+	<widget name="brsk" text="Global:OK" />
+	<widget name="blsk" text="Global:CNCL" />	
+	<actions  key_blsk="CM_goHome" />
+</screen>

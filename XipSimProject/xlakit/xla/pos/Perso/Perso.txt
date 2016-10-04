@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str RETRY="Retry" />
+<str OVRW="Overwrite" />
+<str NFCPRGS="Tap to register" />
+<str NFCPRGS_1="Please wait..." />
+<str NFCPRGS_2="writing the card" />
+<str PERVAL="Card Already registered." />
+<str GETNICK="Enter nickname" />
+<str GETMSISDN="Enter MSISDN" />
+<str GETPIN="Enter consumer mPIN" />
+<str GETPIN_1="to do card register" />
+<str PERSOPROG="Processing register" />
+<str GETOTP="Enter OTP" />
+<str TAPORIGTAG="Please tap original card" />
+<str VALPROG="Processing validation" />
+<str PERSOSUC="Personalization success" />
+<str TAPTO="Tap timeout" />
+<str NFCRPGRS="reading the tag" />
+<str INCRCT="Incorrect mPIN" />
+<str IMPRDATAENR="Improper data entered" />
+<str IMPRDATARCV="Improper data received" />
+<str INCROTP="Incorrect OTP" />
+<str TRYAGAIN="please try again" />
+<str NFCFAIL="NFC Couldnot be start" />
+<str INVALID1="Card does not support" />
+<str INVALID2="online transaction" />
+</EN>
+<SP>
+<str RETRY="Retry" />
+<str OVRW="Overwrite" />
+<str NFCPRGS="Tap to register" />
+<str NFCPRGS_1="Please wait..." />
+<str NFCPRGS_2="writing the card" />
+<str PERVAL="Card Already registered." />
+<str GETNICK="Enter nickname" />
+<str GETMSISDN="Enter MSISDN" />
+<str GETPIN="Enter consumer mPIN" />
+<str GETPIN_1="to do card register" />
+<str PERSOPROG="Processing register" />
+<str GETOTP="Enter OTP" />
+<str TAPORIGTAG="Please tap original card" />
+<str VALPROG="Processing validation" />
+<str PERSOSUC="Personalization success" />
+<str TAPTO="Tap timeout" />
+<str NFCRPGRS="reading the tag" />
+<str INCRCT="Incorrect mPIN" />
+<str IMPRDATAENR="Improper data entered" />
+<str IMPRDATARCV="Improper data received" />
+<str INCROTP="Incorrect OTP" />
+<str TRYAGAIN="please try again" />
+<str NFCFAIL="NFC Couldnot be start" />
+<str INVALID1="Card does not support" />
+<str INVALID2="online transaction" />
+</SP>
+</language>
+</strings>

@@ -1,0 +1,4 @@
+function W_OnLoad()xipdbg("In Lua: XPW_OnLoad")SyncMinTxnCnt=GetMiniRecordCount()xipdbg("In Lua: SyncMinTxnCnt: "..SyncMinTxnCnt)txnCount=xal_getRecordCount()xipdbg("In Lua: txnCount is ----"..txnCount)if(txnCount>=tonumber(SyncMinTxnCnt))then
+SetSessionValue("SyncUp","1")ChangeXla("SyncSV")else
+ChangeXla("Home")end
+end

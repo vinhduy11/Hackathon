@@ -1,0 +1,26 @@
+<screen>
+	<screenName name="DPINEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="WELCOME" />
+	
+	<string x="45" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="45" text="@2" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="55" text="DEVPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="65" text="DEVPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<widget name="input" inputtype="0" maxinputlen="4" />
+	
+	<widget name="brsk" text="Global:OK" />
+	<actions key_xip="DPIN_OnFetchTrigger" key_brsk="DPIN_OnOk" key_ok="DPIN_OnOk"/>	
+</screen>
+
+<screen>
+	<screenName name="DPINResetSuccessScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="DPINRST" />
+
+	<string x="8" y="50" text="RSTSUC_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="60" text="RSTSUC_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="DPINReset_OnOk" key_ok="DPINReset_OnOk"/>
+</screen>

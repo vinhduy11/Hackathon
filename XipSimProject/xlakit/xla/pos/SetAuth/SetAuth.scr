@@ -1,0 +1,50 @@
+<screen>
+	<screenName name="setAuthProgressScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="SAPROG" />
+	
+	<widget name="progress" />
+	
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="SA_OnCancel"/>
+    <ticker tickerenable="0"/>	
+</screen>
+
+<screen>
+	<screenName name="setAuthSuccessScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:STATUS" />
+
+	<string x="8" y="50" text="SASUC_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="60" text="SASUC_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SA_goHome" key_ok="SA_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="setAuthFailureScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:STATUS" />
+	<string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	
+	<string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SA_goHome" key_ok="SA_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="setAuthTimeout"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:TXNTO" />	
+	
+	<string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SA_goHome" key_ok="SA_goHome"/>
+</screen>

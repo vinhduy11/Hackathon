@@ -1,0 +1,40 @@
+<strings>
+<language>
+	<EN>
+		<str OK="OK"/>
+		<str PRNT="Print"/>
+		<str PRTNG="Printing..."/>
+		<str REPRINT="RePrint"/>
+		<str PRINTSUCCESS="Printing completed."/>
+		<str RPRTMSG="RePrint to print again"/>
+		<str NOPRINTER="Printer Not Configured!!!"/>
+		<str NOPRNMSG1="Please setup printer"/>
+		<str NOPRNMSG2="through Preferences"/>
+		<str NOPRNMSG3="Menu option."/>
+		<str PRNNOTFOUND="Printer Not Found!!!"/>
+		<str PRNMSG1="Please ensure, printer"/>
+		<str PRNMSG2="is switched ON and"/>
+		<str PRNMSG3="placed next to you"/>
+		<str PRNERR="Error Printing!!!"/>
+		<str PRNERRMSG1="Please try again"/>
+	</EN>
+	<KS>
+		<str OK="OK"/>
+		<str PRNT="Print"/>
+		<str PRTNG="Printing..."/>
+		<str REPRINT="RePrint"/>
+		<str PRINTSUCCESS="Printing completed."/>
+		<str RPRTMSG="RePrint to print again"/>
+		<str NOPRINTER="Printer Not Configured!!!"/>
+		<str NOPRNMSG1="Please setup printer"/>
+		<str NOPRNMSG2="through Preferences"/>
+		<str NOPRNMSG3="Menu option."/>
+		<str PRNNOTFOUND="Printer Not Found!!!"/>
+		<str PRNMSG1="Please ensure, printer"/>
+		<str PRNMSG2="is switched ON and"/>
+		<str PRNMSG3="placed next to you"/>
+		<str PRNERR="Error Printing!!!"/>
+		<str PRNERRMSG1="Please try again"/>
+	</KS>
+</language>
+</strings>

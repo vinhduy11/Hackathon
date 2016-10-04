@@ -1,0 +1,76 @@
+<strings>
+<language>
+	<EN>
+		<str PRNSETUP="Printer Setup"/>
+		<str PRNWIZ="Setup wizard"/>
+		<str PRNTST="Print test page"/>
+		<str PRNTSAM="Print sample receipt"/>
+		<str RECEIPT="Sample Receipt"/>
+		<str BCK="Back"/>
+		<str WIZMSG1="Please ensure, printer"/>
+		<str WIZMSG2="is switched ON and"/>
+		<str WIZMSG3="placed next to you"/>
+		<str SETPRN="Searching printer..."/>
+		<str TSTPRNPG="Printing test page..."/>
+		<str TSTPRNPG1="Printing SampleReceipt..."/>
+		<str SUCCMSG1="Congratulations!!!"/>
+		<str SUCCMSG2="You have successfully"/>
+		<str SUCCMSG3="setup your printer"/>
+		<str YES="Yes"/>
+		<str NO="No"/>
+		<str TSTPRNMSG1="Would you like to print"/>
+		<str TSTPRNMSG2="a test page now?"/>
+		<str TSTPRNMSG3="now?"/>
+		<str PRNSUCCMSG1="Did the test page"/>
+		<str PRNSUCCMSG2="print correctly?"/>
+		<str PRNTESTERR="Error Printing!!!"/>
+		<str PRNTDCON="Printer Disconnected!!!"/>
+		<str PRNSETUPERR="Printer Not Found!!!"/>
+		<str NOPRINTER1="Printer Not Configured!!!"/>
+		<str NOPRINTER2="Would you like to set up"/>
+		<str NOPRINTER3="a printer now?"/>
+		<str MNAME="Nearex Pte Ltd."/>
+		<str VER="POS Version"/>
+		<str STPVER="XLA Version"/>
+		<str PNAME="Printer Name"/>
+		<str DATE="Date"/>
+		<str SCAN="Scan"/>
+		<str PAIR="Pair"/>
+		<str EMPTY="\r\n"/>
+		<str DASH="-------------------------------"/>
+	</EN>
+	<SP>
+		<str PRNSETUP="Printer Setup"/>
+		<str PRNWIZ="Setup wizard"/>
+		<str PRNTST="Print test page"/>
+		<str BCK="Back"/>
+		<str WIZMSG1="Please ensure, printer"/>
+		<str WIZMSG2="is switched ON and"/>
+		<str WIZMSG3="placed next to you"/>
+		<str SETPRN="Searching printer..."/>
+		<str TSTPRNPG="Printing test page..."/>
+		<str SUCCMSG1="Congratulations!!!"/>
+		<str SUCCMSG2="You have successfully"/>
+		<str SUCCMSG3="setup your printer"/>
+		<str YES="Yes"/>
+		<str NO="No"/>
+		<str TSTPRNMSG1="Would you like to print"/>
+		<str TSTPRNMSG2="a test page now?"/>
+		<str TSTPRNMSG3="now?"/>
+		<str PRNSUCCMSG1="Did the test page"/>
+		<str PRNSUCCMSG2="print correctly?"/>
+		<str PRNTESTERR="Error Printing!!!"/>
+		<str PRNSETUPERR="Printer Not Found!!!"/>
+		<str NOPRINTER1="Printer Not Configured!!!"/>
+		<str NOPRINTER2="Would you like to set up"/>
+		<str NOPRINTER3="a printer now?"/>
+		<str MNAME="Nearex Pte Ltd."/>
+		<str VER="POS Version"/>
+		<str STPVER="XLA Version"/>
+		<str PNAME="Printer Name"/>
+		<str DATE="Date"/>
+		<str EMPTY="\r\n"/>
+		<str DASH="-------------------------------"/>
+	</SP>
+</language>
+</strings>

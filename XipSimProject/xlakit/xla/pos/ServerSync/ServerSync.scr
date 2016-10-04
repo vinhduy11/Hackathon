@@ -1,0 +1,78 @@
+<screen>
+	<screenName name="ServerSyncProgressScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="SSPROG" />
+	
+	<widget name="progress" />
+	
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="SS_OnCancel"/>
+    <ticker tickerenable="0"/>	
+</screen>
+
+<screen>
+	<screenName name="ServerSyncSuccessScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:STATUS" />
+
+	<string x="8" y="50" text="SSSUC_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="60" text="SSSUC_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SS_goHome" key_ok="SS_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="ServerSyncFailureScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:STATUS" />
+	<string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	
+	<string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SS_goHome" key_ok="SS_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="ServerSyncTimeout"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:TXNTO" />	
+	
+	<string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SS_goHome" key_ok="SS_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="GAPPStatusScrErr"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+	<string x="65" y="19" text="@2" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="50" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="60" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="70" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="80" text="@6" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="90" text="@7" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SS_goHome" key_ok="SS_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="GAPPStatusScr"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+	<string x="2" y="45" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="2" y="61" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="2" y="81" text="@4" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="2" y="91" text="@5" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="2" y="101" text="@6" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="2" y="111" text="@7" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<widget name="brsk" text="@8" />
+	<actions  key_brsk="@9" key_ok="@10"/>
+</screen>

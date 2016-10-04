@@ -1,0 +1,21 @@
+<screen>
+	<screenName name="preferencesMenuScreen"/>
+	<screenType id="2" />
+	<widget name="title" text="PRFNCS" />
+	<menus>
+		<menustart menutype="0" x="8" y="42" hotkeyflag="1"/>
+		<menustr text="PRM1"  handler="PRM_OnMenuBtn1"/>
+		<menustr text="PRM2"  handler="PRM_OnMenuBtn2"/>
+		<menustr text="PRM3"  handler="PRM_OnMenuBtn3"/>
+		<menustr text="PRM4"  handler="PRM_OnMenuBtn4"/>
+		<menustr text="PRM5"  handler="PRM_OnMenuBtn5"/>
+		<menustr text="PRM6"  handler="PRM_OnMenuBtn6"/>
+		<menustr text="PRM7"  handler="PRM_OnMenuBtn7"/>
+		<menustr text="PRM8"  handler="PRM_OnMenuBtn8"/>
+		<menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/>
+		<menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/>
+	</menus>
+	<widget name="brsk" text="Global:OK" />
+	<widget name="blsk" text="Global:CNCL" />	
+	<actions  key_blsk="PRM_goHome" />
+</screen>

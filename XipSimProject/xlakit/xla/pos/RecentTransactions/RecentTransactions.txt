@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str BACK="Back" />
+<str RTPROG="Fetching records.." />
+<str RTMENU="Recent transactions" />
+<str DATE="Date:" />
+<str CNSMR="Consumer:" />
+<str TID="Id:" />
+<str TYPE="Type:" />
+<str STAT="Status:" />
+<str CRDT="Credit" />
+<str SUCC="Success" />
+<str DBT="Debit" />
+<str FAIL="Fail" />
+<str GETPIN_1="To get recent" />
+<str GETPIN_2="transactions" />
+<str GETMPIN="Enter merchant mPIN" />
+<str INCRCT="Incorrect mPIN" />
+</EN>
+<SP>
+<str BACK="Back" />
+<str RTPROG="Fetching records.." />
+<str RTMENU="Recent transactions" />
+<str DATE="Date:" />
+<str CNSMR="Consumer:" />
+<str TID="Id:" />
+<str TYPE="Type:" />
+<str STAT="Status:" />
+<str CRDT="Credit" />
+<str SUCC="Success" />
+<str DBT="Debit" />
+<str FAIL="Fail" />
+<str GETPIN_1="To get recent" />
+<str GETPIN_2="transactions" />
+<str GETMPIN="Enter merchant mPIN" />
+<str INCRCT="Incorrect mPIN" />
+</SP>
+</language>
+</strings>

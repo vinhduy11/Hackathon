@@ -1,0 +1,34 @@
+local e={}local n={}Var1=0
+Var2=0
+index1=0
+index2=0
+index3=0
+index4=0
+index5=0
+function G_OnLoad()xipdbg("Global Lua OnLoad")end
+function mysplit(l,n)if n==nil then
+n="%s"end
+i=1
+xipdbg(" Global: Split: Input String val = "..l)for n in string.gmatch(l,"([^"..n.."]+)")do
+e[i]=n
+xipdbg(" Global: Individual Split String val = "..e[i])i=i+1
+end
+Var1=e[1]Var2=e[2]end
+function GetMultipleLines(i)xipdbg("DisplayMultipleLines: Global:Received : "..i)count=1
+result=""for i in i:gmatch("%w+")do
+if(string.len(result)+string.len(i)+1>20)then
+xipdbg("DisplayMultipleLines: Global:chunk : "..result)n[count]=result
+count=count+1
+result=i
+elseif(string.len(result)>0)then
+result=result.." "..i
+else
+result=i
+end
+end
+xipdbg("DisplayMultipleLines: Global:chunk : "..result)n[count]=result
+count=count+1
+while(count<=5)do
+n[count]=" "count=count+1
+end
+index1=n[1]index2=n[2]index3=n[3]index4=n[4]index5=n[5]end

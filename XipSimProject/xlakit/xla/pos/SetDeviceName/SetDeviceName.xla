@@ -1,0 +1,39 @@
+[properties]
+size=518
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="SetDeviceName" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="SDN_OnInstall" onload="SDN_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=481
+Buff=<strings><language><EN><str DEVNAME="Set device name"/><str DEVNAME_1="Enter device name to set"/><str SDNSUC="Device name"/><str SDNSUC_1="The device name set"/><str SDNSUC_2="successful."/><str IMPRDATA="Improper data entered"/></EN>
+<SP><str DEVNAME="Set device name"/><str DEVNAME_1="Enter device name to set"/><str SDNSUC="Device name"/><str SDNSUC_1="The device name set"/><str SDNSUC_2="successful."/><str IMPRDATA="Improper data entered"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=681
+Buff=function SDN_OnLoad()xipdbg("Calling DisplayScreenFromRes")devOldName=GetConfigValue("devName")if(devOldName==-1)then
+DisplayScreenFromRes("deviceNameEntryScreen"," ")else
+DisplayScreenFromRes("deviceNameEntryScreen",devOldName)end
+end
+function SDN_OnDevNameOk(e)if(e~=nil)then
+xipdbg("Calling deviceNameSuccessScreen, device name = "..e)SetConfigValue("devName",e)DispScreen("deviceNameSuccessScreen")else
+DisplayScreenFromRes("deviceNameFailureScreen","#IMPRDATA")end
+end
+function SDN_goHome()ChangeXla("HomeScreen")end
+function DispScreen(e)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..e)DisplayScreenFromRes(e)end
+function SDN_OnCancel()SDN_goHome()end[deviceNameEntryScreen]
+screenType=1
+size=545
+Buff=<screen><screenName name="deviceNameEntryScreen"/><screenType id="1"/><widget name="title" text="DEVNAME"/><string x="8" y="50" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="65" text="DEVNAME_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="alphainput" inputtype="2" maxinputlen="15" alphatype="1"/><widget name="brsk" text="Global:OK"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SDN_OnCancel" key_brsk="SDN_OnDevNameOk" key_ok="SDN_OnDevNameOk"/></screen>
+[deviceNameSuccessScreen]
+screenType=0
+size=409
+Buff=<screen><screenName name="deviceNameSuccessScreen"/><screenType id="0"/><widget name="title" text="SDNSUC"/><string x="8" y="50" text="SDNSUC_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="SDNSUC_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SDN_goHome" key_ok="SDN_goHome"/></screen>
+[deviceNameFailureScreen]
+screenType=0
+size=308
+Buff=<screen><screenName name="deviceNameFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="8" y="70" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SDN_goHome" key_ok="SDN_goHome"/></screen>
+[CRC]
+size=10
+Buff=Ng==

@@ -1,0 +1,6 @@
+<screen>
+  <screenName name="MerchantHomeScreen1"/> 
+  <screenType id="0" />
+  <widget name="hometl" imageid="icon.gif" />
+  <widget name="hometr" imageid="note.gif" />
+</screen>

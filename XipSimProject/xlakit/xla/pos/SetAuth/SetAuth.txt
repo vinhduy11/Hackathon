@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str SAPROG="Fetching key .." />
+<str SASUC_1="Dynamic key downloaded" />
+<str SASUC_2="successfully." />
+</EN>
+<SP>
+<str SAPROG="Fetching key .." />
+<str SASUC_1="Dynamic key downloaded" />
+<str SASUC_2="successfully." />
+</SP>
+</language>
+</strings>

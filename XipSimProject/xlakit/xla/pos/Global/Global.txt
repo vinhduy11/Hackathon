@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str OK="OK" />
+<str WELCOME="Welcome back" />
+<str CONTINUE="Continue" />
+<str CNCL="Cancel" />
+<str NXT="Next" />
+<str NFCPRGS="Tap now" />
+<str MENU="Menu" />
+<str RETRY="Retry" />
+<str SERVALERT="Service Alert - " />
+<str NWERR="Network error" />
+<str NWERR1="Please wait or try" />
+<str NWERR2="moving to a different" />
+<str NWERR3="location" />
+<str STATUS="Status" />
+<str OF="of" />
+<str FRM="from" />
+<str TID="tid" />
+<str TXNTO="TXN timeout" />
+<str TXNFAIL="Transaction failed" />
+<str TO="to" />
+</EN>
+<SP>
+<str OK="OK" />
+<str WELCOME="Welcome back" />
+<str CONTINUE="Continue" />
+<str CNCL="Cancel" />
+<str NXT="Next" />
+<str NFCPRGS="Tap now" />
+<str MENU="Menu" />
+<str RETRY="Retry" />
+<str SERVALERT="Service Alert - " />
+<str NWERR="Network error" />
+<str NWERR1="Please wait or try" />
+<str NWERR2="moving to a different" />
+<str NWERR3="location" />
+<str STATUS="Status" />
+<str OF="of" />
+<str FRM="from" />
+<str TID="tid" />
+<str TXNTO="TXN timeout" />
+<str TXNFAIL="Transaction failed" />
+<str TO="to" />
+</SP>
+</language>
+</strings>

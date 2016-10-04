@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str NFCPRGS="Tap for amount - " />
+<str PRSNG="Processing receive" />
+<str PRSNG_1="Receiving" />
+<str CMPIN="Enter consumer mPIN" />
+<str CMPIN_1="Enter mPIN for paying" />
+<str PAYRCVD="Payment received" />
+<str RCVD="Received" />
+<str INCRCT="Incorrect mPIN" />
+<str INVALID1="Card does not support" />
+<str INVALID2="online transaction" />
+<str TAPTO="Tap timeout" />
+<str TAPORIGTAG="Please tap original card" />
+<str TRYAGAIN="please try again" />
+<str NFCFAIL="NFC Couldnot be start" />
+<str AMT="Enter amount to get" />
+<str TAPORIGTAG="Please tap original card" />
+<str INVALID1="Card does not support" />
+<str INVALID2="online transaction" />
+<str PMMAX="Receive value exceeds" />
+<str LTEXD="allowed limit" />
+</EN>
+<SP>
+<str NFCPRGS="Tap for amount - " />
+<str PRSNG="Processing receive" />
+<str PRSNG_1="Receiving" />
+<str CMPIN="Enter consumer mPIN" />
+<str CMPIN_1="Enter mPIN for paying" />
+<str PAYRCVD="Payment received" />
+<str RCVD="Received" />
+<str INCRCT="Incorrect mPIN" />
+<str INVALID1="Card does not support" />
+<str INVALID2="online transaction" />
+<str TAPTO="Tap timeout" />
+<str TAPORIGTAG="Please tap original card" />
+<str TRYAGAIN="please try again" />
+<str NFCFAIL="NFC Couldnot be start" />
+<str AMT="Enter amount to get" />
+<str TAPORIGTAG="Please tap original card" />
+<str INVALID1="Card does not support" />
+<str INVALID2="online transaction" />
+<str PMMAX="Receive value exceeds" />
+<str LTEXD="allowed limit" />
+</SP>
+</language>
+</strings>

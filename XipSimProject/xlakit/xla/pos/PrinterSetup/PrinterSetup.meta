@@ -1,0 +1,24 @@
+<properties>
+	 <XLAmeta>
+		<package name="XLAKIT" XLA="PrinterSetup" ver="1.0.0" desc="Printer Setup" />
+		<device version="2.2.1" /> <server version="2.0.0" />
+		<entry oninstall="OnInstall" onload="OnLoad" onunload="OnUnload" />
+		<script lua="yes" />
+		<reqlualib LuaLibName="xla" />
+		<reqlualib LuaLibName="xms" />
+		<reqlualib LuaLibName="screen" />
+		<reqlualib LuaLibName="print" />
+		<reqlualib LuaLibName="bt" />
+		<reqlualib LuaLibName="indicator" />
+		<reqlualib LuaLibName="config" />
+	 </XLAmeta>
+	<require>
+		<XipXla name="Global.xla" />
+	</require>
+	 <params>
+		<param refreshGPRS="1" />
+		<param showLastTxn="0" />
+		<param Language="$Startup.language" />
+	 </params>
+ </properties>
+ 

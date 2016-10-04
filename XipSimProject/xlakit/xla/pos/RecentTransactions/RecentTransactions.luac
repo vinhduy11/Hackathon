@@ -1,0 +1,85 @@
+RT_xmsConn=0
+RT_gMPIN=0
+txnId={}txnDate={}ConsumerId={}txnType={}txnAmount={}lftTxn={}gTxnDateStr={}txnTypeDetails={}txnStatus={}RT_Type=0
+array={}function RT_OnLoad()DisplayScreenFromRes("RecentTxnsMPinEntryScreen","#GETMPIN"," ")end
+function RT_OnMPINNext(n)if(n~=nil and n:len()==4)then
+RT_MPIN=n
+XmsRequest_RT()else
+DisplayScreenFromRes("RecentTxnsMPinEntryScreen","#GETMPIN","#INCRCT")end
+end
+function XmsRequest_RT()DispScreen("RecentTxnsProgress")cntType=xal_xms_getcontentType()xipdbg("In Lua: XmsRequest_RT content Type:"..cntType)if(cntType==-1)then txnCType="LFT".."|".."7/f"else txnCType="LFT".."|"..cntType end
+RT_xmsConn=xal_xms_init("NULL",txnCType,0,"RT_CB")xid=GetDeviceXID()xal_xms_add_params(RT_xmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(RT_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(RT_xmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(RT_xmsConn,"exid",exid)if(RT_Type=="1"or RT_Type=="2")then
+xal_xms_add_params(RT_xmsConn,"mp",RT_MPIN)end
+ret=xal_xms_request(RT_xmsConn,1)end
+function RT_CB()XMSSCData=xal_xms_get_params(RT_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)if tonumber(xmsSC)==0 then
+txnCount=xal_xms_GetTxnCount(xmsConn)for n=0,txnCount-1 do
+txnId[n],txnDate[n],ConsumerId[n],txnType[n],txnAmount[n]=xal_xms_GetTxnDetails(xmsConn,n)xipdbg("TestXMS: "..txnId[n].."  "..txnDate[n].."  "..ConsumerId[n].."  "..txnType[n].."  "..txnAmount[n])lTxnDateStr=NIL
+lTxnDateStr=xipGetDateStr(txnDate[n])gTxnDateStr[n]=xipGetDateTimeStr(txnDate[n])lftTxn[n]=lTxnDateStr.."   "..GetCurrencySymbol().." "..txnAmount[n]xipdbg("In Lua: Displaying last5TxnsMenuScreen: lftTxn["..n.."] = "..lftTxn[n])end
+xipdbg("In Lua: Displaying last5TxnsMenuScreen: LFT")DisplayScreenFromRes("RecentTxnsMenuScreen",lftTxn[0],lftTxn[1],lftTxn[2],lftTxn[3],lftTxn[4])elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("RecentTxnsTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("RecentTxnsFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("RecentTxnsFailureScreen",xmsSC,SCDetails[2])end
+end
+xal_xms_deInit(RT_xmsConn)RT_xmsConn=0
+end
+function RT_OnMenuBtn1()DisplayLFTDetails(0)end
+function RT_OnMenuBtn2()DisplayLFTDetails(1)end
+function RT_OnMenuBtn3()DisplayLFTDetails(2)end
+function RT_OnMenuBtn4()DisplayLFTDetails(3)end
+function RT_OnMenuBtn5()DisplayLFTDetails(4)end
+function OnLFTMenuOk()xipdbg("OnLFTMenuOk")end
+function RT_OnBack()if(RT_Type=="1")then
+DisplayScreenFromRes("RecentTxnsMenuScreen",lftTxn[0],lftTxn[1],lftTxn[2],lftTxn[3],lftTxn[4])elseif(RT_Type=="3")then
+RT_goHome()end
+end
+function RT_goHome()ChangeXla("HomeScreen")end
+function RT_OnCancel()if(RT_xmsConn~=0)then
+xal_xms_deInit(RT_xmsConn)end
+RT_goHome()end
+function DispScreen(n)DisplayScreenFromRes(n)end
+function mysplit(t,e)if e==nil then
+e="%s"end
+local n={};i=1
+xipdbg("LFT: Split: Input String val = "..t)for e in string.gmatch(t,"([^"..e.."]+)")do
+n[i]=e
+xipdbg("LFT: Individual Split String val = "..n[i])i=i+1
+end
+return n
+end
+function isempty(n)return n==nil or n==''end
+function xipGetDateStr(n)dtDetails=mysplit(n,"|")localTxnDateStr=dtDetails[1]if(dtDetails[1]=="NA")then
+localTxnDateStr=dtDetails[2]end
+return localTxnDateStr
+end
+function xipGetDateTimeStr(n)dtDetails=mysplit(n,"|")if(dtDetails[3]~=nil)or(dtDetails[3]~='')then
+timDetails=mysplit(dtDetails[3],":")end
+localTxnDateStr=dtDetails[2].." "..timDetails[1]..":"..timDetails[2]return localTxnDateStr
+end
+function DisplayLFTDetails(n)xipdbg("In Lua: Displaying Transaction detail for  "..n)if(string.sub(txnType[n],1,1)=="S")then
+txnStatus="#SUCC"elseif(string.sub(txnType[n],1,1)=="F")then
+txnStatus="#FAIL"else
+txnStatus="NA"end
+if(string.sub(txnType[n],3,-1)=="C")then
+typeCrDr="#CRDT"elseif(string.sub(txnType[n],3,-1)=="D")then
+typeCrDr="#DBT"else
+typeCrDr="NA"end
+DisplayScreenFromRes("RecentTxnsScreen",lftTxn[n],gTxnDateStr[n],ConsumerId[n],txnId[n],typeCrDr,txnStatus,"#BACK"," ","RT_OnBack"," ")end
+function GetMultipleLines(n)xipdbg("DisplayMultipleLines:Line Received : "..n)count=1
+result=""for n in n:gmatch("%w+")do
+if(string.len(result)+string.len(n)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=n
+elseif(string.len(result)>0)then
+result=result.." "..n
+else
+result=n
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end

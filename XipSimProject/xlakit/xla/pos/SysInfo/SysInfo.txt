@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str SYSINFO="System info" />
+<str XID="XID:" />
+<str MSISDN="MSISDN:" />
+<str NW="Network:" />
+<str SN="Signal:" />
+<str BAT="Batt:" />
+<str GPRS="GPRS:" />
+<str BUILD="Build:" />
+<str VER="Version:" />
+<str HW="HW:" />
+<str AUTH="Auth Till:" />
+</EN>
+<SP>
+<str SYSINFO="System info" />
+<str XID="XID:" />
+<str MSISDN="MSISDN:" />
+<str NW="Network:" />
+<str SN="Signal:" />
+<str BAT="Batt:" />
+<str GPRS="GPRS:" />
+<str BUILD="Build:" />
+<str VER="Version:" />
+<str HW="HW:" />
+<str AUTH="Auth Till:" />
+</SP>
+</language>
+</strings>
