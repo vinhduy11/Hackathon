@@ -334,7 +334,6 @@ $config['rest_key_column'] = 'key';
 | Specify the method used to limit the API calls
 |
 | Available methods are :
-| $config['rest_limits_method'] = 'IP_ADDRESS'; // Put a limit per ip address
 | $config['rest_limits_method'] = 'API_KEY'; // Put a limit per api key
 | $config['rest_limits_method'] = 'METHOD_NAME'; // Put a limit on method calls
 | $config['rest_limits_method'] = 'ROUTED_URL';  // Put a limit on the routed URL
@@ -418,7 +417,6 @@ $config['rest_logs_table'] = 'logs';
 |   CREATE TABLE `access` (
 |       `id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
 |       `key` VARCHAR(40) NOT NULL DEFAULT '',
-|       `all_access` TINYINT(1) NOT NULL DEFAULT '0',
 |       `controller` VARCHAR(50) NOT NULL DEFAULT '',
 |       `date_created` DATETIME DEFAULT NULL,
 |       `date_modified` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -530,19 +528,20 @@ $config['rest_language'] = 'english';
 | CORS Check
 |--------------------------------------------------------------------------
 |
-| Set to TRUE to enable Cross-Origin Resource Sharing (CORS). Useful if you
-| are hosting your API on a different domain from the application that
-| will access it through a browser
+| Set to true to enable Cross-Origin Resource Sharing (CORS). Useful if you
+|  are hosting your API on a different domain from the appolication that
+|  will access it through a browser.
 |
 */
-$config['check_cors'] = FALSE;
+$config['check_cors'] = false;
 
 /*
 |--------------------------------------------------------------------------
 | CORS Allowable Headers
 |--------------------------------------------------------------------------
 |
-| If using CORS checks, set the allowable headers here
+| If using CORS checks, set the allowable headers here. Add any custom headers you may
+|  be using in tyou application to the array
 |
 */
 $config['allowed_cors_headers'] = [
@@ -558,7 +557,7 @@ $config['allowed_cors_headers'] = [
 | CORS Allowable Methods
 |--------------------------------------------------------------------------
 |
-| If using CORS checks, you can set the methods you want to be allowed
+| If using CORS checks, you can set the methods you want to be allowed here.
 |
 */
 $config['allowed_cors_methods'] = [
@@ -575,21 +574,22 @@ $config['allowed_cors_methods'] = [
 | CORS Allow Any Domain
 |--------------------------------------------------------------------------
 |
-| Set to TRUE to enable Cross-Origin Resource Sharing (CORS) from any
-| source domain
+| Set to true to enable Cross-Origin Resource Sharing (CORS) from any
+|  source domain
 |
 */
-$config['allow_any_cors_domain'] = FALSE;
+$config['allow_any_cors_domain'] = false;
 
 /*
 |--------------------------------------------------------------------------
 | CORS Allowable Domains
 |--------------------------------------------------------------------------
 |
-| Used if $config['check_cors'] is set to TRUE and $config['allow_any_cors_domain']
-| is set to FALSE. Set all the allowable domains within the array
+| Used if $config['check_cors'] is set to true and $config['allow_any_cors_domain']
+|  is set to false. Set all the allowable domains within the array.
 |
 | e.g. $config['allowed_origins'] = ['http://www.example.com', 'https://spa.example.com']
 |
 */
 $config['allowed_cors_origins'] = [];
+
