@@ -1,0 +1,840 @@
+Index: src/main/resources/config_server.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/config_server.json	(revision 32763)
++++ src/main/resources/config_server.json	(revision )
+@@ -1,3 +1,5 @@
+ {
+-    "prefix": "duy"
++    "prefix": "10.10.10.187",
++    "host":"10.10.10.187",
++    "port":7777
+ }
+\ No newline at end of file
+Index: lib/install_lib.sh
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- lib/install_lib.sh	(revision 32763)
++++ lib/install_lib.sh	(revision )
+@@ -1,16 +1,16 @@
+ #!/usr/bin/env bash
+-mvn install:install-file -Dfile=ZaloPageSDK.jar -DgroupId=com.vng -DartifactId=zalosdk -Dversion=3.9 -Dpackaging=jar
+-mvn install:install-file -Dfile=mservice-security-2.0.jar -DgroupId=com.mservice -DartifactId=mservice-security -Dversion=2.0 -Dpackaging=jar
+-mvn install:install-file -Dfile=mservice-payment-token-2.0.jar -DgroupId=com.mservice -DartifactId=mservice-payment-token -Dversion=2.0 -Dpackaging=jar
++/home/manhly/Software/apache-maven-3.3.9/bin/mvn install:install-file -Dfile=ZaloPageSDK.jar -DgroupId=com.vng -DartifactId=zalosdk -Dversion=3.9 -Dpackaging=jar
++/home/manhly/Software/apache-maven-3.3.9/bin/mvn install:install-file -Dfile=mservice-security-2.0.jar -DgroupId=com.mservice -DartifactId=mservice-security -Dversion=2.0 -Dpackaging=jar
++/home/manhly/Software/apache-maven-3.3.9/bin/mvn install:install-file -Dfile=mservice-payment-token-2.0.jar -DgroupId=com.mservice -DartifactId=mservice-payment-token -Dversion=2.0 -Dpackaging=jar
+ 
+-mvn install:install-file -Dfile=ucp-11.2.0.4.jar -DgroupId=ucp -DartifactId=ucp -Dversion=1.0 -Dpackaging=jar
+-mvn install:install-file -Dfile=ojdbc-11.2.0.4.jar -DgroupId=com.oracle.ojdbc11g -DartifactId=ojdbc-11g -Dversion=1.0.7 -Dpackaging=jar
++/home/manhly/Software/apache-maven-3.3.9/bin/mvn install:install-file -Dfile=ucp-11.2.0.4.jar -DgroupId=ucp -DartifactId=ucp -Dversion=1.0 -Dpackaging=jar
++#mvn install:install-file -Dfile=ojdbc-11.2.0.4.jar -DgroupId=com.oracle.ojdbc11g -DartifactId=ojdbc-11g -Dversion=1.0.7 -Dpackaging=jar
+ 
+-mvn install:install-file -Dfile=proxy_entity-1.0.jar -DgroupId=com.mservice -DartifactId=proxy_entity -Dversion=1.0 -Dpackaging=jar
+-mvn install:install-file -Dfile=utils-1.3.jar -DgroupId=mservice -DartifactId=utils -Dversion=1.3 -Dpackaging=jar
++/home/manhly/Software/apache-maven-3.3.9/bin/mvn install:install-file -Dfile=proxy_entity-1.0.jar -DgroupId=com.mservice -DartifactId=proxy_entity -Dversion=1.0 -Dpackaging=jar
++/home/manhly/Software/apache-maven-3.3.9/bin/mvn install:install-file -Dfile=utils-1.3.jar -DgroupId=mservice -DartifactId=utils -Dversion=1.3 -Dpackaging=jar
+ 
+-mvn install:install-file -Dfile=md5-1.0.jar -DgroupId=md5 -DartifactId=md5 -Dversion=1.0 -Dpackaging=jar
+-mvn install:install-file -Dfile=soapin-1.0.jar -DgroupId=mservice -DartifactId=soapin -Dversion=1.0 -Dpackaging=jar
++/home/manhly/Software/apache-maven-3.3.9/bin/mvn install:install-file -Dfile=md5-1.0.jar -DgroupId=md5 -DartifactId=md5 -Dversion=1.0 -Dpackaging=jar
++/home/manhly/Software/apache-maven-3.3.9/bin/mvn install:install-file -Dfile=soapin-1.0.jar -DgroupId=mservice -DartifactId=soapin -Dversion=1.0 -Dpackaging=jar
+ 
+ 
+ 
+Index: src/main/resources/verticle.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/verticle.json	(revision 32763)
++++ src/main/resources/verticle.json	(revision )
+@@ -742,10 +742,35 @@
+       "instances": 1
+     },
+     {
++      "name": "ClaimCodePromotionVerticle",
++      "block": false,
++      // if true => worker, false -> normal
++      "address": "com.mservice.momo.data.codeclaim.ClaimCodePromotionVerticle",
++      //optional adress of this verticle
++      "thread": true,
++      //true => multiThread
++      "isModule": false,
++      "posModule": 0,
++      "instances": 1
++    },
++    {
+       "name": "PromotionServerVerticle",
+       "block": false,
+       // if true => worker, false -> normal
+       "address": "com.mservice.momo.vertx.promotion_server.PromotionServerVerticle",
++      //optional adress of this verticle
++      "thread": true,
++      //true => multiThread
++      "isModule": false,
++      "posModule": 0,
++      "instances": 1,
++      "isDeployed": false
++    },
++    {
++      "name": "CheckFecredit",
++      "block": false,
++      // if true => worker, false -> normal
++      "address": "com.mservice.momo.data.codeclaim.CheckFecredit",
+       //optional adress of this verticle
+       "thread": true,
+       //true => multiThread
+Index: src/main/resources/cluster.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/cluster.xml	(revision 32763)
++++ src/main/resources/cluster.xml	(revision )
+@@ -31,7 +31,7 @@
+                 <multicast-group>224.2.2.3</multicast-group>
+                 <multicast-port>54327</multicast-port>
+             </multicast>
+-            <tcp-ip enabled="true">
++            <tcp-ip enabled="false">
+                 <!--<interface>172.16.18.198</interface>-->
+                 <!--<interface>10.10.10.40</interface>-->
+                 <!--<interface>172.16.43.14</interface>-->
+Index: src/main/resources/webadmin/html/ErrorCodeManagement.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/webadmin/html/ErrorCodeManagement.html	(revision )
++++ src/main/resources/webadmin/html/ErrorCodeManagement.html	(revision )
+@@ -0,0 +1,179 @@
++<!DOCTYPE html>
++<html>
++<head>
++    <title>Service category</title>
++    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
++    <link href="/css/mask.css" rel="stylesheet" type="text/css"/>
++    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
++    <script src="/js/jquery.1.9.js"></script>
++
++    <script type="text/javascript" src="/js/mask.js"></script>
++    <link rel="stylesheet" href="/css/jquery.datetimepicker.css" type="text/css"/>
++    <script src="/js/jquery.datetimepicker.js"></script>
++    <script src="/js/myjs.js"></script>
++
++
++</head>
++<body>
++
++<div>
++    <h2>Error Code Management</h2>
++    <div class="clear"></div>
++    <hr />
++    <table id="table">
++
++    </table>
++    <hr />
++</div>
++<hr />
++<table>
++    <tr>
++        <td>Error Code : </td>
++        <td><input type="text" id="error_code" name="error_code"/></td>
++    </tr>
++    <tr>
++        <td>Description:</td>
++        <td><input type="text" id="description" name="description"/></td>
++    </tr>
++
++
++    <tr>
++        <td></td>
++        <td>
++            <button id="btnClear">Clear</button>
++            <button id="btnSave">Save</button>
++        </td>
++    </tr>
++</table>
++
++<script type="text/javascript">
++
++    function clearTable() {
++        var head = "<tr>";
++        head += "<th>Action</th>";
++        head += "<th>Error Code</th>";
++        head += "<th>Description</th>";
++        head +="</tr>";
++        $("#table").html(head);
++    }
++
++    function addItem(item) {
++        var row;
++        var editButton = "<button id='edit_" + item.error_code + "'>Edit</button>";
++        var delButton = "<button id='del_" + item.error_code + "'>Del</button>";
++        row = "<tr id='r_" + item.error_code + "'>";
++        row += "<td> " + editButton  +" </td>";
++        row += "<td> " + item.error_code + " </td>";
++        row += "<td> " + item.description + " </td>";
++        row += "</tr>";
++
++        $("#table").append(row);
++//        $("#del_" + item.error_code).click(function () {
++//            $.ajax({
++//                url: "/ErrCode/del?error_code="+item.error_code,
++//                type: "GET",
++//                enctype: "multipart/form-data",
++//                data: {
++//                    error_code:$(item.error_code).val(),
++//                },
++//                success: function (result) {
++//                    var error = result.error;
++//                    if (error == 0) {
++//                        alert("Thành công.");
++//                        loadPage()
++//                    }
++//                    else
++//                        alert(result.error_code);
++//                },
++//                error: function () {
++//                    alert('Có lỗi kết nối xảy ra');
++//                }
++//            });
++//        });
++//
++        $("#edit_" + item.error_code).click(function () {
++            setFormValues(item);
++        });
++    }
++
++
++
++    function setFormValues(item) {
++        $("#error_code").val(item.error_code);
++        $("#description").val(item.description);
++    }
++    function loadPage() {
++        clearTable();
++        var mUrl = "/ErrCode/getall";
++        $.getJSON(mUrl).done(function (data) {
++            $.each(data, function (i, item) {
++                addItem(item);
++            });
++        });
++    }
++    function resetVal(){
++        $("#error_code").val("");
++        $("#description").val("");
++    }
++    $(document).ready(function () {
++        loadPage();
++
++        $("#btnSave").click(function () {
++            $.ajax({
++                url: "/ErrCode/upsert",
++                type: "GET",
++                enctype: "multipart/form-data",
++                data: {
++                    error_code:$("#error_code").val(),
++                    description:$("#description").val(),
++                },
++                success: function (result) {
++                    var error = result.error;
++                    if (error == 0) {
++                        alert("Thành công.");
++                        loadPage()
++                    }
++                    else
++                        alert(result.description);
++                }
++
++            });
++        });
++
++    });
++    $('#btnReload').click(function () {
++        reload();
++    });
++    $('#btnClear').click(function () {
++        resetVal();
++    });
++
++    function reload(){
++        $.ajax({
++            url: "/servicecate/reload",
++            type: "GET",
++            success: function (string) {
++                $('#mydiv').unmask();
++                var error = string["error"];
++                if (error == 0) {
++                    alert("Thành công.");
++                }
++                else if (error == -1) {
++                    alert("Bạn phải đăng nhập.");
++                    $.session.clear();
++                    window.parent.location.href = "../html/login.html";
++                }
++                else
++                    alert("Không thành công. Error code = " + error);
++            },
++            error: function () {
++                $('#mydiv').unmask();
++                alert('Có lỗi kết nối xảy ra');
++            }
++        });
++
++
++    }
++</script>
++</body>
++</html>
+\ No newline at end of file
+Index: src/main/java/com/mservice/momo/data/ErrorCodeDb.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/mservice/momo/data/ErrorCodeDb.java	(revision )
++++ src/main/java/com/mservice/momo/data/ErrorCodeDb.java	(revision )
+@@ -0,0 +1,148 @@
++
++package com.mservice.momo.data;
++
++import com.mservice.momo.data.model.MongoKeyWords;
++import com.mservice.momo.data.model.colName;
++import com.mservice.momo.vertx.AppConstant;
++import org.vertx.java.core.Handler;
++import org.vertx.java.core.Vertx;
++import org.vertx.java.core.eventbus.EventBus;
++import org.vertx.java.core.eventbus.Message;
++import org.vertx.java.core.json.JsonArray;
++import org.vertx.java.core.json.JsonObject;
++import org.vertx.java.core.logging.Logger;
++import java.util.ArrayList;
++
++
++/**
++ * Created by manhly on 25/07/2014.
++ */
++public class ErrorCodeDb {
++    private Vertx vertx;
++    EventBus eventBus;
++    Logger logger;
++
++
++    public ErrorCodeDb(EventBus eb, Logger logger){
++        this.eventBus=eb;
++        this.logger = logger;
++    }
++    public static class Obj {
++        public String errorCode = "";
++        public String description = "";
++        public Obj() {}
++
++        /***
++         *
++         * @param jo
++         */
++        public Obj(JsonObject jo){
++            errorCode = jo.getString(colName.ErrorCodeMgtCols.ERROR_CODE,"");
++            description = jo.getString(colName.ErrorCodeMgtCols.DESCRIPTION,"");
++
++        }
++
++        public JsonObject toJsonObject(){
++            JsonObject json = new JsonObject();
++            json.putString(colName.ErrorCodeMgtCols.ERROR_CODE,errorCode);
++            json.putString(colName.ErrorCodeMgtCols.DESCRIPTION, description);
++            return json;
++        }
++
++        public boolean isInvalid(){
++            return true;
++        }
++    }
++
++
++    public  void upsertError(Obj ob, final Handler<Boolean> callback){
++
++        //new object
++        JsonObject newJsonObj = ob.toJsonObject();
++        //newJsonObj.removeField(colName.ErrorCodeMgtCols.ERROR_CODE);
++
++        JsonObject query    = new JsonObject();
++        query.putString(MongoKeyWords.ACTION, MongoKeyWords.UPDATE);
++        query.putString(MongoKeyWords.COLLECTION, colName.ErrorCodeMgtCols.TABLE);
++
++        JsonObject match   = new JsonObject();
++        match.putString(colName.ErrorCodeMgtCols.ERROR_CODE, ob.errorCode);
++        query.putObject(MongoKeyWords.CRITERIA, match);
++
++        //fields set
++        JsonObject fieldsSet = new JsonObject();
++        fieldsSet.putObject(MongoKeyWords.SET_$, newJsonObj);
++        query.putObject(MongoKeyWords.OBJ_NEW, newJsonObj);
++
++        //set
++        query.putBoolean(MongoKeyWords.UPSERT, true);
++
++        eventBus.send(AppConstant.MongoVerticle_ADDRESS, query, new Handler<Message<JsonObject>>() {
++
++            @Override
++            public void handle(Message<JsonObject> jsonObjectMessage) {
++                JsonObject obj = jsonObjectMessage.body();
++
++                if (obj.getString(MongoKeyWords.STATUS, "ko").equalsIgnoreCase("ok")) {
++                    callback.handle(true);
++                } else {
++                    callback.handle(false);
++                }
++            }
++        });
++    }
++    public void getAll(final Handler<ArrayList<ErrorCodeDb.Obj>> callback){
++
++        JsonObject query = new JsonObject();
++
++        query.putString(MongoKeyWords.ACTION, MongoKeyWords.FIND);
++        query.putString(MongoKeyWords.COLLECTION, colName.ErrorCodeMgtCols.TABLE);
++
++        JsonObject sort = new JsonObject();
++        sort.putNumber(colName.ErrorCodeMgtCols.ERROR_CODE, 1);
++
++        query.putObject(MongoKeyWords.SORT,sort);
++
++        query.putNumber(MongoKeyWords.BATCH_SIZE,10000);
++        eventBus.send(AppConstant.MongoVerticle_ADDRESS, query, new Handler<Message<JsonObject>>() {
++            @Override
++            public void handle(Message<JsonObject> jom) {
++
++                ArrayList<ErrorCodeDb.Obj> arrayList = new ArrayList<>();
++                if(jom.body().getString(MongoKeyWords.STATUS).equals("ok")){
++                    JsonArray array = jom.body().getArray(MongoKeyWords.RESULT_ARRAY, null);
++                    if(array !=null && array.size() >0){
++                        for (Object o : array){
++                            arrayList.add( new ErrorCodeDb.Obj((JsonObject)o));
++                        }
++                    }
++                }
++                callback.handle(arrayList);
++            }
++        });
++    }
++
++    public void removeObj(String error_code, final Handler<Boolean> callback) {
++
++        JsonObject query = new JsonObject();
++        JsonObject match = new JsonObject();
++
++        query.putString(MongoKeyWords.ACTION, MongoKeyWords.DELETE);
++        query.putString(MongoKeyWords.COLLECTION, colName.ErrorCodeMgtCols.TABLE);
++
++        match.putString(colName.ErrorCodeMgtCols.ERROR_CODE, error_code);
++
++        query.putObject(MongoKeyWords.MATCHER, match);
++
++        vertx.eventBus().send(AppConstant.MongoVerticle_ADDRESS, query, new Handler<Message<JsonObject>>() {
++            @Override
++            public void handle(Message<JsonObject> result) {
++                int count = result.body().getInteger("number", 0);
++                callback.handle(count > 0);
++            }
++        });
++    }
++
++
++
++}
+Index: src/main/resources/webadmin/html/nav.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/webadmin/html/nav.html	(revision 32763)
++++ src/main/resources/webadmin/html/nav.html	(revision )
+@@ -12,6 +12,8 @@
+     <li><a href="transaction.html" target="main">Transaction Action</a></li>
+     <li><a href="adjust.html" target="main">Adjust Action</a></li>
+     <li><a href="../html/tranerrorconf.html" target="main">Tran Error Config</a></li>
++    <li><a href="ErrorCodeManagement.html" target="main">Error Code Management</a></li>
++    <li><a href="CheckCreateDate.html" target="main">Kiểm Tra Ngày Mở Ví </a></li>
+     <li><a href="../html/promotionconf.html" target="main">Promotion Config</a></li>
+     <li><a href="../html/emailpopup.html" target="main">Thêm danh sách popup email</a></li>
+     <li><a href="../html/servicecat/servicecategory.html" target="main">Category Config</a></li>
+Index: src/main/java/com/mservice/momo/web/internal/webadmin/controller/ErrorCodeController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/mservice/momo/web/internal/webadmin/controller/ErrorCodeController.java	(revision )
++++ src/main/java/com/mservice/momo/web/internal/webadmin/controller/ErrorCodeController.java	(revision )
+@@ -0,0 +1,138 @@
++
++package com.mservice.momo.web.internal.webadmin.controller;
++
++import com.mservice.momo.data.ErrorCodeDb;
++import com.mservice.momo.data.ServiceCategory;
++import com.mservice.momo.data.TranErrConfDb;
++import com.mservice.momo.data.m2mpromotion.MerchantPromosDb;
++import com.mservice.momo.data.model.MongoKeyWords;
++import com.mservice.momo.data.model.colName;
++import com.mservice.momo.util.DataUtil;
++import com.mservice.momo.vertx.AppConstant;
++import com.mservice.momo.vertx.processor.Common;
++import com.mservice.momo.web.HttpRequestContext;
++import com.mservice.momo.web.internal.webadmin.handler.Action;
++import org.vertx.java.core.Handler;
++import org.vertx.java.core.MultiMap;
++import org.vertx.java.core.Vertx;
++import org.vertx.java.core.eventbus.EventBus;
++import org.vertx.java.core.eventbus.Message;
++import org.vertx.java.core.json.JsonArray;
++import org.vertx.java.core.json.JsonObject;
++import org.vertx.java.core.logging.Logger;
++import org.vertx.java.platform.Container;
++import java.util.ArrayList;
++import java.util.ArrayList;
++
++public class ErrorCodeController {
++    private Vertx vertx;
++    private EventBus eventBus;
++    private Logger logger;
++    private Container container;
++    private ErrorCodeDb errorCodeDb;
++
++//    public ErrorCodeController(Vertx vertx, Container container) {
++//        this.vertx = vertx;
++//        logger = container.logger();
++//        errorCodeDb = new ErrorCodeDb(vertx.eventBus(), logger);
++//    }
++    public ErrorCodeController(final Vertx vertx, final Container container, JsonObject globalConfig) {
++        this.vertx = vertx;
++        this.container = container;
++        errorCodeDb = new ErrorCodeDb(vertx.eventBus(),container.logger());
++
++    }
++
++    @Action(path = "/ErrCode/upsert")
++    public void upSert(HttpRequestContext context, final Handler<Object> callback) {
++        context.getRequest();
++        MultiMap params = context.getRequest().params();
++
++
++        final JsonObject joReply = new JsonObject();
++
++        String error_code = params.get(colName.ErrorCodeMgtCols.ERROR_CODE);
++        String description = params.get(colName.ErrorCodeMgtCols.DESCRIPTION);
++
++
++        if("".equalsIgnoreCase(error_code)){
++            joReply.putNumber("error",1);
++            joReply.putString("desc","Vui lòng nhập nhập error code ");
++            callback.handle(joReply);
++            return;
++        }
++
++        ErrorCodeDb.Obj obj = new ErrorCodeDb.Obj();
++        obj.errorCode = error_code;
++        obj.description = description;
++
++
++
++        errorCodeDb.upsertError(obj, new Handler<Boolean>() {
++            @Override
++            public void handle(Boolean aBoolean) {
++                if(aBoolean){
++                    joReply.putNumber("error",0);
++                    joReply.putString("desc","");
++                    callback.handle(joReply);
++
++                    //todo will do later if need
++                    Common.ServiceReq serviceReq = new Common.ServiceReq();
++                    serviceReq.Command =Common.ServiceReq.COMMAND.UPDATE_SERVICE_CATEGORY;
++                    vertx.eventBus().publish(AppConstant.ConfigVerticleService_Update, serviceReq.toJSON());
++
++                }else{
++                    joReply.putNumber("error",1);
++                    joReply.putString("desc","Không thành công");
++                    callback.handle(joReply);
++                }
++            }
++        });
++    }
++
++
++    @Action(path = "/ErrCode/getall")
++    public void getAll(HttpRequestContext context, final Handler<Object> callback) {
++        errorCodeDb.getAll(new Handler<ArrayList<ErrorCodeDb.Obj>> () {
++            @Override
++            public void handle(ArrayList<ErrorCodeDb.Obj> obj) {
++
++                JsonArray jsonArray = new JsonArray();
++                for (int i=0;i< obj.size();i++){
++                    jsonArray.add(obj.get(i).toJsonObject());
++                }
++                callback.handle(jsonArray);
++            }
++        });
++    }
++
++    @Action(path = "/ErrCode/del")
++    public void delete(HttpRequestContext context, final Handler<JsonObject> callback) {
++        MultiMap params = context.getRequest().params();
++        final Common.BuildLog log = new Common.BuildLog(logger);
++        log.add("function", "delete service");
++        final JsonObject result = new JsonObject();
++        final String error_code = params.get(colName.ErrorCodeMgtCols.ERROR_CODE);
++        log.add("error_code ", error_code);
++        errorCodeDb.removeObj(error_code, new Handler<Boolean>() {
++            @Override
++            public void handle(Boolean aBoolean) {
++                if (aBoolean == false) {
++                    log.add("desc", "delete failed");
++                    result.putNumber("error", 1);
++                    result.putString("desc", "delete failed");
++                } else {
++                    log.add("desc", "delete success");
++                    result.putNumber("error", 0);
++                    result.putString("desc", "");
++                }
++                log.writeLog();
++                callback.handle(result);
++                return;
++            }
++        });
++    }
++
++
++
++}
+Index: src/main/java/com/mservice/momo/data/model/colName.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/mservice/momo/data/model/colName.java	(revision 32763)
++++ src/main/java/com/mservice/momo/data/model/colName.java	(revision )
+@@ -2228,4 +2228,37 @@
+         public static String TIME = "time";
+         public static String TABLE = "PromotionCountTrackingDb";
+     }
++
++        public static  class FeCreditPromotionCols {
++            public static String PROMOTION_NAME = "promotion_name";
++            public static String PHONE_NUMBER = "phone_number";
++            public static String DIV_NO = "div_no";
++            public static String PREFIX = "prefix";
++            public static String NUMBER_OF_GIFT = "number_of_gift";
++            public static String GIFT_LIST = "gift_list"; // format: aaa:10000;bbb:20000
++            public static String GIFT_TIME = "gift_time";
++            public static String MOMO_MONEY = "momo_money";
++            public static String MONEY_TIME = "money_time";
++            public static String NOTI_TITLE = "notiTitle";
++            public static String NOTI_BODY = "notiBody";
++            public static String TRANS_BODY = "transBody";
++            public static String PARTNER_NAME = "partnerName";
++            public static String SERVICE_ID = "serviceId";
++            public static String AGENT = "agent";
++            public static String GET_BACK_MONEY = "get_back_money";
++            public static String NOTI_ROLLBACK_TITLE = "notiRollbackTitle";
++            public static String NOTI_ROLLBACK_BODY = "notiRollbackBody";
++            public static String TRANS_ROLLBACK_BODY = "transRollbackBody";
++            public static String ACTIVE_PROMO = "active";
++            public static String GROUP = "group";
++            public static String TABLE = "FeCreditPromotionDb";
++        }
++        public static class ErrorCodeMgtCols{
++            public static String ERROR_CODE = "error_code";
++            public static String DESCRIPTION = "description";
++            public static String TABLE = "ErrorCodeMgtDb";
++
++        }
++
++
+ }
+Index: src/main/java/com/mservice/momo/web/internal/webadmin/verticle/WebAdminVerticle.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/mservice/momo/web/internal/webadmin/verticle/WebAdminVerticle.java	(revision 32763)
++++ src/main/java/com/mservice/momo/web/internal/webadmin/verticle/WebAdminVerticle.java	(revision )
+@@ -73,6 +73,8 @@
+         controllerMapper.addController(new WebAdminControllerExtend(vertx, container, STATIC_FILE_DIRECTORY));
+         controllerMapper.addController(new ControllerCloud(vertx,container,STATIC_FILE_DIRECTORY));
+         controllerMapper.addController(new TranErrorController(vertx, container));
++        controllerMapper.addController(new ErrorCodeController(vertx, container,globalConfig));
++        controllerMapper.addController(new CheckCreateDateController(vertx, container,globalConfig));
+         controllerMapper.addController(new PromotionController(vertx, container));
+         controllerMapper.addController(new ServicePartnerController(vertx, container));
+         controllerMapper.addController(new HomeController(vertx, container));
+Index: src/main/java/com/mservice/momo/web/internal/webadmin/controller/CheckCreateDateController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/mservice/momo/web/internal/webadmin/controller/CheckCreateDateController.java	(revision )
++++ src/main/java/com/mservice/momo/web/internal/webadmin/controller/CheckCreateDateController.java	(revision )
+@@ -0,0 +1,80 @@
++package com.mservice.momo.web.internal.webadmin.controller;
++import com.mservice.momo.data.PhonesDb;
++import com.mservice.momo.vertx.processor.Misc;
++import com.mservice.momo.web.HttpRequestContext;
++import com.mservice.momo.web.internal.webadmin.handler.Action;
++import org.vertx.java.core.Handler;
++import org.vertx.java.core.MultiMap;
++import org.vertx.java.core.Vertx;
++import org.vertx.java.core.eventbus.EventBus;
++import org.vertx.java.core.http.HttpServerRequest;
++import org.vertx.java.core.json.JsonArray;
++import org.vertx.java.core.json.JsonObject;
++import org.vertx.java.core.logging.Logger;
++import org.vertx.java.platform.Container;
++
++/**
++ * Created by manhly on 26/07/2016.
++ */
++public class CheckCreateDateController {
++    private Vertx vertx;
++    private EventBus eventBus;
++    private Logger logger;
++    private Container container;
++    private PhonesDb phonesDb;
++
++    public CheckCreateDateController(final Vertx vertx, final Container container, JsonObject globalConfig) {
++        this.vertx = vertx;
++        this.container = container;
++        phonesDb = new PhonesDb(vertx.eventBus(),container.logger());
++
++    }
++    private void response(HttpServerRequest request, String strResult) {
++        request.response().setChunked(true);
++
++        request.response().putHeader("Status", "200 OK");
++        request.response().putHeader("Server", "localhost");
++        request.response().putHeader("Content-Type", "text/plain ; charset=utf-8");
++        request.response().putHeader("Access-Control-Allow-Origin", "*");
++
++        request.response().write(strResult);
++        request.response().end();
++    }
++    @Action(path = "/getCreateByNumber")
++    public void getCreateByNumber(HttpRequestContext context, final Handler<JsonObject> callback) {
++        final HttpServerRequest request = context.getRequest();
++        MultiMap params = request.params();
++        final JsonObject joReply = new JsonObject();
++        final JsonObject jo = new JsonObject();
++        final String number1 = params.get("number");
++        if("".equalsIgnoreCase(number1)){
++            joReply.putNumber("error",1);
++            joReply.putString("desc","Vui lòng nhập nhập SDT !");
++            callback.handle(joReply);
++            return;
++        }
++        int number =  Integer.parseInt(number1);
++        phonesDb.getPhoneObjInfo(number, new Handler<PhonesDb.Obj>()  {
++            @Override
++            public void handle(PhonesDb.Obj obj) {
++                String create_date="";
++                JsonArray array = new JsonArray();
++                if (obj != null ) {
++
++
++                        JsonObject jo = obj.toJsonObject();
++                        array.add(jo);
++                    Long create_date1 = obj.createdDate;
++                    create_date = Misc.dateVNFormatWithTime(create_date1);
++
++                }
++                response(request,create_date);
++                return;
++
++
++            }
++
++
++        });
++    }
++}
+Index: src/main/resources/webadmin/html/CheckCreateDate.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/webadmin/html/CheckCreateDate.html	(revision )
++++ src/main/resources/webadmin/html/CheckCreateDate.html	(revision )
+@@ -0,0 +1,69 @@
++<!DOCTYPE html>
++<html>
++<head>
++    <title>Kiểm tra ngày mở ví </title>
++    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
++    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
++    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
++    <script src="../js/jquery.1.9.js"></script>
++    <script type="text/javascript" src="../js/mask.js"></script>
++    <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css"/>
++    <script src="../js/jquery.datetimepicker.js"></script>
++</head>
++<body>
++<div>
++    <h2>Lấy thông tin của số điện thoại</h2>
++</div>
++<table>
++    <tr>
++        <td>Nhập số điện thoại:</td>
++        <td><input type="text" id="number"/></td>
++    </tr>
++    <tr>
++        <td>Ngày Mở Ví:</td>
++        <td><input type="text" id="create_date" value = "" readonly/></td>
++    </tr>
++    <tr>
++        <td></td>
++        <td>
++            <button id="btnSearch">Search</button>
++        </td>
++    </tr>
++</table>
++<table id="table">
++</table>
++<hr/>
++
++
++<script type="text/javascript">
++
++    $(document).ready(function () {
++        $("#btnSearch").click(function () {
++            $("#create_date").val("");
++            if($("#number").val()==""||$("#number").val()==null){
++                alert("Chưa nhập SDT");
++                return;
++            }
++            $.ajax({
++                url: "/getCreateByNumber",
++                type: "GET",
++                data: {
++                    number:$("#number").val()
++                },
++                success: function (data) {
++                    var create_date = data;
++
++                        $("#create_date").val(create_date);
++
++                },
++                error: function () {
++                    $('#mydiv').unmask();
++                    alert('Có lỗi kết nối xảy rsa');
++                }
++            });
++        });
++
++    });
++</script>
++</body>
++</html>
+\ No newline at end of file

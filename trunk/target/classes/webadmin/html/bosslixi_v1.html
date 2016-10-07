@@ -1,0 +1,229 @@
+<html>
+<head>
+    <title>Lì xì nhân viên</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/jquery.1.9.js"></script>
+    <script src="/js/session.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script type="text/javascript" src="/js/mask.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/css/jquery-ui.css" type="text/css"/>
+
+    <style type="text/css">
+        table, th, td {
+        border: none;
+        }
+    </style>
+</head>
+<body>
+<div id="mydiv">
+
+    <h2>Lì xì nhân viên.</h2>
+    <table id="inputform">
+        <tr>
+            <td>Select file:</td>
+            <td>
+                <form id="form" name="form">
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="file" id="file" name="file">
+                                <input type="hidden" id="hfile" name="hfile">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </td>
+
+            <td>
+                <input style="width: 100px; font-size:16px; padding: 3px" type="button" value="Upload Data"
+                       id="buttonTS"/>
+            </td>
+
+        </tr>
+        <tr>
+            <td>Tài khoản trả:</td>
+            <td><input type="text" id="agent"/></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="password" id="password"/></td>
+        </tr>
+        <tr>
+            <td>Code:</td>
+            <td><input type="text" id="code"/></td>
+        </tr>
+    </table>
+    <div id="responseDiv"></div>
+
+    <table id="tbresult">
+
+    </table>
+
+</div>
+
+<script type="text/javascript">
+
+    function clearTable() {
+        var head = "<tr>";
+        head += "<th>Number</th>";
+        head += "<th>Ten nguoi duoc li xi</th>";
+        head += "<th>TID giao dịch</th>";
+        head += "<th>Tiền lì xì</th>";
+        head += "<th>Thời gian lì xì</th>";
+        head += "<th>Tiêu đề</th>";
+        head += "<th>Lời chúc</th>";
+        head += "<th>Error </th>";
+        head += "<th>Error Description </th>";
+        head +="</tr>";
+        $("#tbresult").html(head);
+
+    }
+
+    function addItem(item) {
+
+        var row;
+        if(item.error !="" && item.error != "0"){
+            row = "<tr style='color:red'>";
+        }else{
+            row = "<tr>";
+        }
+        row += "<td> " + item.phone_number + " </td>";
+        row += "<td> " + item.name + " </td>";
+        row += "<td> " + item.tranId + " </td>";
+        row += "<td> " + item.amount + " </td>";
+        row += "<td> " + item.time + " </td>";
+        row += "<td> " + item.title + " </td>";
+        row += "<td> " + item.body + " </td>";
+        row += "<td> " + item.error + " </td>";
+        row += "<td> " + item.desc + " </td>";
+        row += "</tr>";
+
+        $("#tbresult").append(row);
+    }
+
+    $(document).ready(function () {
+
+         $('#buttonTS').click(function () {
+            if ($.session.get("id") == null) {
+                alert("Bạn phải đăng nhập.");
+                $.session.clear();
+                window.parent.location.href = "../html/login.html";
+            }
+            else {
+
+                if( ($("#hfile").val()==="") ){
+                    alert("select a file to send out");
+                    return;
+                }
+
+                if($("#hfile").val()!= ""){
+                    var result = confirm("Bạn chắc chắn lì xì theo danh sách trong file: "+$("#hfile").val()+" ?");
+                    if (result == true) {
+                        send();
+                    }
+                }
+            }
+        });
+
+        $("#file").change(function(){
+            $("#hfile").val(this.value);
+            var oData = new FormData(document.forms.namedItem("form"));
+            $.ajax({
+                type : "POST",
+                url : "/uploadLiXiFile",
+                data : oData,
+                processData : false,
+                contentType : false,
+                success : function(res) {
+                    alert(res.desc);
+                },
+                error : function(xhr, ajaxOptions, thrownError) {
+                    alert("Network error")
+                }
+            });
+        });
+
+    });
+
+    function send() {
+
+        $('#mydiv').mask("Đang trả thưởng, đừng tắt máy... Xin cám ơn");
+        $.ajax({
+            url: "/readLixiFile",
+            type: "GET",
+            data: {
+                hFile:$("#hfile").val(),
+                agent:$("#agent").val(),
+                code:$("#code").val(),
+                password:$("#password").val()
+            },
+
+            success: function (array) {
+                if(array != null && array.length > 0)
+                {
+                    checkGiftArray(array, 0, 5, array.length);
+                }
+            },
+            error: function () {
+                $('#mydiv').unmask();
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+    function checkGiftArray(array, start, end, length)
+    {
+        if(end > length)
+        {
+            end = length
+        }
+        var tmp_array = [];
+        for(i = start; i < end; i++)
+        {
+            tmp_array.push(array[i]);
+        }
+        sendGift(tmp_array, array, start, end, length);
+    }
+
+    function sendGift(tmp_array, main_array, start, end, length) {
+
+        $('#mydiv').mask("Đang chạy " + Math.round(start * 100/ length) + "%");
+        var data_array = tmp_array;
+        $.ajax({
+            url: "/payLixiForEmployee",
+            type: "POST",
+            data: {
+                arrjson:JSON.stringify(data_array)
+            },
+            processData : true,
+            success: function (array) {
+                if(end < length)
+                {
+                    checkGiftArray(main_array, end, end + 10, length)
+                }
+                else
+                {
+                    $('#mydiv').unmask();
+                    if(array != null && array.length > 0){
+                    clearTable();
+                    for(i=0;i<array.length;i++){
+                        addItem(array[i]);
+                        }
+                    }
+                    $("#hfile").val("");
+                }
+            },
+            error: function () {
+                $('#mydiv').unmask();
+                alert('Có lỗi kết nối 123 xảy ra');
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

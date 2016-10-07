@@ -1,0 +1,260 @@
+<html>
+<head>
+    <title>Zalo send message</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/jquery.1.9.js"></script>
+    <script src="/js/session.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script type="text/javascript" src="/js/mask.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/css/jquery-ui.css" type="text/css"/>
+
+    <style type="text/css">
+        table, th, td {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div id="mydiv">
+
+    <h2>Zalo send message</h2>
+    <div id="mydiv1">
+        <table id="inputform">
+            <tr>
+                <td>Select file:</td>
+                <td>
+                    <form id="form" name="form">
+                        <table>
+                            <tr>
+                                <td>
+                                    <input type="file" id="file" name="file">
+                                    <input type="hidden" id="hfile" name="hfile">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </td>
+                <td>
+                    <input style="font-size:16px; padding: 3px" type="button" value="Upload Data" id="buttonTS"/>
+                </td>
+                <td>
+                    <input style=" font-size:16px; padding: 3px" type="button" value="Save to mongo" id="btnMongo"/>
+                    <input style="font-size:16px; padding: 3px" type="button" value="Save to mongo Repeat"
+                           id="btnMongoRepeat"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="responseDiv"></div>
+
+    <div id="tableabc"></div>
+    <div class="clear"></div>
+
+    <div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        $('#buttonCache').click(function () {
+            if ($.session.get("id") == null) {
+                alert("Bạn phải đăng nhập.");
+                $.session.clear();
+                window.parent.location.href = "../html/login.html";
+            }
+            else {
+                var result = confirm("Bạn chắc chắn xóa hết dữ liệu để bắn noti cho các số trước không ????");
+                if (result == true) {
+                    refreshData();
+                }
+            }
+        });
+
+        $('#buttonTS').click(function () {
+            if ($.session.get("id") == null) {
+                alert("Bạn phải đăng nhập.");
+                $.session.clear();
+                window.parent.location.href = "../html/login.html";
+            }
+            else {
+
+                if (($("#hfile").val() === "")) {
+                    alert("select a file to send out");
+                    return;
+                }
+
+                if ($("#hfile").val() != "") {
+                    var result = confirm("Bạn chắc chắn trả thưởng theo danh sách trong file: " + $("#hfile").val() + " ?");
+                    if (result == true) {
+                        send();
+                    }
+                }
+            }
+        });
+
+        $('#btnMongo').click(function () {
+            if ($.session.get("id") == null) {
+                alert("Bạn phải đăng nhập.");
+                $.session.clear();
+                window.parent.location.href = "../html/login.html";
+            }
+            else {
+
+                if (($("#hfile").val() === "")) {
+                    alert("select a file to send out");
+                    return;
+                }
+
+                if ($("#hfile").val() != "") {
+                    var result = confirm("Bạn chắc chắn luu Mongo trong file: " + $("#hfile").val() + " ?");
+                    if (result == true) {
+                        saveMongo();
+                    }
+                }
+            }
+        });
+
+        $('#btnMongoRepeat').click(function () {
+            if ($.session.get("id") == null) {
+                alert("Bạn phải đăng nhập.");
+                $.session.clear();
+                window.parent.location.href = "../html/login.html";
+            }
+            else {
+
+                if (($("#hfile").val() === "")) {
+                    alert("select a file to send out");
+                    return;
+                }
+
+                if ($("#hfile").val() != "") {
+                    var result = confirm("Bạn chắc chắn luu Mongo trong file: " + $("#hfile").val() + " ?");
+                    if (result == true) {
+                        saveMongoRepeat();
+                    }
+                }
+            }
+        });
+
+        $("#file").change(function () {
+            $("#hfile").val(this.value);
+            var oData = new FormData(document.forms.namedItem("form"));
+            $.ajax({
+                type: "POST",
+                url: "/uploadCustomerCareDollarHeartGroupFile",
+                data: oData,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    alert(res.desc);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert("Network error")
+                }
+            });
+        });
+
+    });
+
+    function send() {
+
+        $.ajax({
+            url: "/readZaloGroupFile",
+            type: "GET",
+            data: {
+                hFile: $("#hfile").val()
+            },
+
+            success: function (array) {
+                if (array != null && array.length > 0) {
+                    checkGiftArray(array, 0, 10000, array.length);
+                }
+            },
+            error: function () {
+                $('#mydiv1').unmask();
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+    function checkGiftArray(array, start, end, length) {
+        if (end > length) {
+            end = length
+        }
+        var tmp_array = [];
+        for (i = start; i < end; i++) {
+            tmp_array.push(array[i]);
+        }
+        sendGift(tmp_array, array, start, end, length);
+    }
+
+    function sendGift(tmp_array, main_array, start, end, length) {
+
+        var data_array = tmp_array;
+        $('#tableabc').html("<p></p>");
+        $.ajax({
+            url: "/sendZaloToCustomer",
+            type: "POST",
+            data: {
+                arrjson: JSON.stringify(data_array)
+            },
+            success: function (string) {
+                table = string["table"];
+                $('#tableabc').html(string);
+            },
+            error: function () {
+                $('#mydiv1').unmask();
+                alert('Có lỗi kết nối 123 xảy ra');
+            }
+        });
+    }
+
+    function saveMongo() {
+
+        $.ajax({
+            url: "/saveMongoFromFile",
+            type: "GET",
+            data: {
+                hFile: $("#hfile").val()
+            },
+
+            success: function (string) {
+                table = string["table"];
+                $('#tableabc').html(string);
+            },
+            error: function () {
+                $('#mydiv1').unmask();
+                alert('Có lỗi kết nối xảy ra khi save mongo');
+            }
+        });
+    }
+
+    function saveMongoRepeat() {
+
+        $.ajax({
+            url: "/saveMongoFromFileRepeat",
+            type: "GET",
+            data: {
+                hFile: $("#hfile").val()
+            },
+
+            success: function (string) {
+                table = string["table"];
+                $('#tableabc').html(string);
+            },
+            error: function () {
+                $('#mydiv1').unmask();
+                alert('Có lỗi kết nối xảy ra khi save mongo');
+            }
+        });
+    }
+
+
+
+</script>
+</body>
+</html>

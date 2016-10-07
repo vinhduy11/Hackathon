@@ -1,0 +1,283 @@
+<html>
+<head>
+    <title>Fee Config Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+
+</head>
+<body>
+<div id="mydiv">
+    <h2>Fee Config Page</h2>
+
+    <div id="table"></div>
+
+    <div class="clear"></div>
+
+    <div>
+        <table>
+            <tr>
+                <th colspan="3">Edit Information</th>
+            </tr>
+            <tr>
+                <td>Bank ID</td>
+                <td><input style="border: none" type="text" id="txtbankId">
+                    <input type="hidden" id="_id">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Bank Name</td>
+                <td><input style="border: none" type="text" id="txtbankName"></td>
+            </tr>
+
+            <tr>
+                <td>Tran Type</td>
+                <td><input style="border: none" type="text" id="txttranType"></td>
+            </tr>
+
+            <tr>
+                <td>Channel</td>
+                <td><input style="border: none" type="text" id="txtchannel"></td>
+            </tr>
+
+            <tr>
+                <td>InOut City</td>
+                <td><input style="border: none" type="text" id="txtinoutCity"></td>
+            </tr>
+
+            <tr>
+                <td>Dynamic Fee</td>
+                <td><input style="border: none" type="text" id="txtdynamicFee"></td>
+            </tr>
+
+            <tr>
+                <td>Static Fee</td>
+                <td><input style="border: none" type="text" id="txtstaticFee"></td>
+            </tr>
+
+            <tr>
+                <td>Fee Type</td>
+                <td><input style="border: none" type="text" id="txtfeeType"></td>
+            </tr>
+
+            <tr>
+                <td>Min Value</td>
+                <td><input style="border: none" type="text" id="txtmimValue"></td>
+            </tr>
+
+            <tr>
+                <td>Max Value</td>
+                <td><input style="border: none" type="text" id="txtmaxValue"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" value="Create" id="btNew">
+                    <input type="button" value="Update" id="btSave" disabled>
+                    <input type="button" value="Reload" id="btReload">
+
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).on("click", "#del", function () {
+            var _id = $(this).attr("_id");
+            var result = confirm("Are you sure?");
+            if (result == true) {
+                $('#mydiv').mask("Loading...");
+                $.ajax({
+                    url: "/fee/del",
+                    type: "GET",
+                    data: {
+                        _id: _id,
+                        id: $.session.get("id"),
+                        username: $.session.get("username")
+                    },
+                    success: function (string) {
+                        $('#mydiv').unmask();
+                        var error = string["error"];
+                        if (error == 0) {
+                            alert("Thành công.");
+                            init();
+                        }
+                        else if (error == -1) {
+                            alert("Bạn phải đăng nhập.");
+                            $.session.clear();
+                            window.parent.location.href = "../html/login.html";
+                        }
+                        else
+                            alert("Không thành công. Error code = " + error);
+                    },
+                    error: function () {
+                        $('#mydiv').unmask();
+                        alert('Có lỗi kết nối xảy ra');
+                    }
+                });
+            }
+        });
+    });
+
+    $(function () {
+        $(document).on("click", "#edit", function () {
+
+            $("#btSave").prop("disabled", false);
+
+            //lay id cua dong duoc click
+            var rid = $(this).attr("val");
+            var _id = $(this).attr("_id");
+            var rowId = "td[rid=" + rid + "]";
+
+            //lay mang cac td tag
+            var tdArr = $(rowId)
+
+            //lay value tung td tag
+
+            var bankID = tdArr[0].innerHTML;
+            var bankName = tdArr[1].innerHTML;
+            var tranType = tdArr[2].innerHTML;
+            var channel = tdArr[3].innerHTML;
+            var inoutCity = tdArr[4].innerHTML;
+            var dynamicFee = tdArr[5].innerHTML;
+            var staticFee = tdArr[6].innerHTML;
+            var feeType = tdArr[7].innerHTML;
+            var minValue = tdArr[8].innerHTML;
+            var maxValue = tdArr[9].innerHTML;
+
+            $("#_id").val(_id);
+            $("#txtbankId").val(bankID);
+            $("#txtbankName").val(bankName);
+            $("#txttranType").val(tranType);
+            $("#txtchannel").val(channel);
+            $("#txtinoutCity").val(inoutCity);
+            $("#txtdynamicFee").val(dynamicFee);
+            $("#txtstaticFee").val(staticFee);
+            $("#txtfeeType").val(feeType);
+            $("#txtminValue").val(minValue);
+            $("#txtmaxValue").val(maxValue);
+
+        });
+    });
+
+
+    $('#btSave').click(function () {
+        upsert();
+    });
+    $('#btNew').click(function () {
+        $("#_id").val("");
+        upsert();
+    });
+
+    $('#btReload').click(function () {
+        reload();
+    });
+
+    $(document).ready(function () {
+        init();
+    });
+
+    function upsert() {
+        if ($.session.get("id") == null) {
+            alert("Bạn phải đăng nhập.");
+            $.session.clear();
+            window.parent.location.href = "../html/login.html";
+        } else {
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/fee/upsert",
+                type: "GET",
+                data: {
+                    _id: $("#_id").val(),
+                    bankid: $("#txtbankId").val(),
+                    bankname: $("#txtbankName").val(),
+                    trantype: $("#txttranType").val(),
+                    channel: $("#txtchannel").val(),
+                    iocity: $("#txtinoutCity").val(),
+                    dynamicfee: $("#txtdynamicFee").val(),
+                    staticfee: $("#txtstaticFee").val(),
+                    feetype: $("#txtfeeType").val(),
+                    minval: $("#txtmimValue").val(),
+                    maxval: $("#txtmaxValue").val(),
+                    id: $.session.get("id"),
+                    username: $.session.get("username")
+                },
+                success: function (string) {
+                    $('#mydiv').unmask();
+                    var error = string["error"];
+                    if (error == 0) {
+                        alert("Thành công.");
+                        $("#_id").val("");
+                        $("#txtbankId").val("");
+                        $("#txtbankName").val("");
+                        $("#txttranType").val("");
+                        $("#txtchannel").val("");
+                        $("#txtinoutCity").val("");
+                        $("#txtdynamicFee").val("");
+                        $("#txtstaticFee").val("");
+                        $("#txtfeeType").val("");
+                        $("#txtminValue").val("");
+                        $("#txtmaxValue").val("");
+                        init()
+                    }
+                    else if (error == -1) {
+                        alert("Bạn phải đăng nhập.");
+                        $.session.clear();
+                        window.parent.location.href = "../html/login.html";
+                    }
+                    else
+                        alert("Không thành công. Error code = " + error);
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        }
+    }
+
+    function init() {
+        $("#btSave").prop("disabled", true);
+        $.ajax({
+            url: "/fee/getall",
+            type: "GET",
+            data: {
+            },
+            success: function (string) {
+                table = string["table"];
+                $("#table").html(table);
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+    function reload() {
+        $.ajax({
+            url: "/fee/getall",
+            type: "GET",
+            data: {},
+            success: function (string) {
+                table = string["table"];
+                $("#table").html(table);
+                alert("Reload thành công rồi nhá!");
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra khi reload');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

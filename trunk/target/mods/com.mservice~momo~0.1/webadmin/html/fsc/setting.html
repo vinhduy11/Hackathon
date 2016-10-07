@@ -1,0 +1,115 @@
+<html>
+<head>
+    <title>FSC 2014 setting</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css" />
+    <script src="/js/jquery.1.9.js"></script>
+    <script src="/js/session.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script type="text/javascript" src="/js/mask.js"></script>
+</head>
+<body>
+<div id="mydiv">
+    <h2>FSC 2014 setting</h2>
+    <table id="inputform">
+        <tr>
+            <td>Max code:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="mcode"/></td>
+        </tr>
+
+        <tr>
+            <td>Total code:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="tcode"/></td>
+        </tr>
+
+        <tr>
+            <td>Used code:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="ucode"/></td>
+        </tr>
+
+        <tr>
+            <td>Receive account:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="racc"/></td>
+        </tr>
+
+        <tr>
+            <td>Max tickets:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="mticket"/></td>
+        </tr>
+
+        <tr>
+            <td>From date:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="fdate"/></td>
+        </tr>
+
+        <tr>
+            <td>To date:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="tdate"/></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" align="center">
+                <input type="hidden" id="id" name="id">
+                <input style="width: 100px; font-size:16px; padding: 3px" type="button" value="Save" id="buttonTS"/>
+            </td>
+        </tr>
+    </table>
+    <div id="responseDiv"></div>
+</div>
+
+<script type="text/javascript">
+    function load() {
+        $.getJSON("/fsc/getone").done(function (data) {
+            $.each(data, function (i, item) {
+
+                $("#id").val(data._id);
+                $("#mcode").val(data.mcode);
+                $("#tcode").val(data.tcode);
+                $("#ucode").val(data.ucode);
+                $("#racc").val(data.racc);
+                $("#mticket").val(data.mticket);
+                $("#fdate").val(data.fdate);
+                $("#tdate").val(data.tdate);
+
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        if ($.session.get("id")==null) {
+            alert("Bạn phải đăng nhập.");
+            $.session.clear();
+            window.parent.location.href = "../html/login.html";
+        }
+
+        load();
+
+        $('#buttonTS').click(function () {
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/fsc/upsert",
+                type: "GET",
+                data: { _id   :$("#id").val(),
+                        mcode:$("#mcode").val(),
+                        tcode:$("#tcode").val(),
+                        ucode:$("#ucode").val(),
+                        racc :$("#racc").val(),
+                        mticket:$("#mticket").val(),
+                        fdate :$("#fdate").val(),
+                        tdate :$("#tdate").val()
+                },
+                success: function (string) {
+                    $('#mydiv').unmask();
+                    alert(string);
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

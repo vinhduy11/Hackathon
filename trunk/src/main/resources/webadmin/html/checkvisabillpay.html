@@ -1,0 +1,85 @@
+<html>
+<head>
+    <title>Kiem tra thong tin thanh toan visa</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/jquery.1.9.js"></script>
+    <script src="/js/session.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script type="text/javascript" src="/js/mask.js"></script>
+    <script type="text/javascript" src="/js/myjs.js"></script>
+</head>
+<body>
+<div id="mydiv">
+    <h2>Kiem tra thong tin thanh toan visa</h2>
+
+    <div style="float:left">
+        <!--<b>Partner Code</b>: <input type="text" style="border:1px solid #778899; width:150px" name="sServiceId" id="sServiceId">-->
+        <b>Tran id</b>: <input type="text" style="border:1px solid #778899; width:150px" name="tranid"
+                                 id="tranid">
+        <b>Phone number</b>: <input type="text" style="border:1px solid #778899; width:150px" name="number"
+                               id="number">
+    </div>
+
+    <div style="float:left">
+        <!--<b>Partner Code</b>: <input type="text" style="border:1px solid #778899; width:150px" name="sServiceId" id="sServiceId">-->
+        <b>Loai the thanh toan</b>
+        <input type="text" style="border:1px solid #778899; width:150px" name="card_type"
+               id="card_type">
+        <b>Card checksum</b>
+        <input type="text" style="border:1px solid #778899; width:150px" name="card_checksum"
+               id="card_checksum">
+        <b>Tran type</b>
+        <input type="text" style="border:1px solid #778899; width:150px" name="tran_type"
+               id="tran_type">
+    </div>
+
+    <td>
+        <input style="width: 100px; font-size:16px; padding: 3px" type="button" value="Kiem tra"
+               id="btnCheck"/>
+    </td>
+
+    <div class="clear"></div>
+
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+            });
+
+    $('#btnCheck').click(function () {
+            checkinfo();
+    });
+
+    function checkinfo() {
+         $.ajax({
+            url: "/checkvisabillpayinfo",
+            type: "GET",
+            data: {
+                tranid: $("#tranid").val(),
+                number: $("#number").val()
+            },
+            success: function (string) {
+                    $('#mydiv').unmask();
+                    var error = string["error"];
+                    var card_type = string["cardtype"];
+                    var card_checksum = string["cardnumbervisa"];
+                    var tran_type = string["tranType"];
+                    if (error == 0) {
+                        alert("Thành công.");
+                        $("#card_type").val(card_type);
+                        $("#card_checksum").val(card_checksum);
+                        $("#tran_type").val(tran_type);
+                        }
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy rsa');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

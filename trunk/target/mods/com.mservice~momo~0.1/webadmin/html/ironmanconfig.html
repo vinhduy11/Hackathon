@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iron config</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <!--<script src="../js/session.js"></script>-->
+    <!--<script src="../js/cookie_OLD.js"></script>-->
+    <script type="text/javascript" src="../js/mask.js"></script>
+    <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css"/>
+    <script src="../js/jquery.datetimepicker.js"></script>
+</head>
+<body>
+
+<div>
+    <h2>Phiên Iron Man</h2>
+    <hr/>
+    <table id="table">
+
+    </table>
+    <hr/>
+</div>
+<hr/>
+<table>
+    <tr>
+        <td>Id:</td>
+        <td><input type="text" id="ironmanId"/></td>
+    </tr>
+    <tr>
+        <td>Program:</td>
+        <td><input type="text" id="program"/></td>
+    </tr>
+    <tr>
+        <td>Program number</td>
+        <td><input type="text" id="program_number"/></td>
+    </tr>
+    <tr>
+        <td>So luong nguoi trung:</td>
+        <td><input type="text" id="numerator"/></td>
+    </tr>
+    <tr>
+        <td>Tong so nguoi tham gia:</td>
+        <td><input type="text" id="denominator"/></td>
+    </tr>
+    <!--<tr>-->
+    <!--<td>Active:</td>-->
+    <!--<td><input type="checkbox" id="active"/></td>-->
+    <!--</tr>-->
+    <tr>
+        <td>Start time:</td>
+        <td><input type="text" id="startTime"/></td>
+    </tr>
+    <tr>
+        <td>End time:</td>
+        <td><input type="text" id="endTime"/></td>
+    </tr>
+
+    <tr>
+        <td>Ti le min:</td>
+        <td><input type="text" id="minRatio"/></td>
+    </tr>
+
+    <tr>
+        <td>Ti le max:</td>
+        <td><input type="text" id="maxRatio"/></td>
+    </tr>
+
+    <tr>
+        <td>Khong ap dung ti le:</td>
+        <td><input style="width: 20px; height: 20px" type="checkbox" id="chkNotRatio"></td>
+    </tr>
+
+    <tr>
+        <td>So nguoi trung lien tiep:</td>
+        <td><input type="text" id="givenman"/></td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td>
+            <button id="btnClear">Clear</button>
+            <button id="btnSave">Save</button>
+            <button id="btnRefresh">Refresh</button>
+        </td>
+    </tr>
+</table>
+
+
+<script type="text/javascript">
+
+    function clearTable() {
+        var head = "<tr>";
+        head += "<th></th>";
+        head += "<th>Program</th>";
+        head += "<th>Program number</th>";
+        head += "<th>So nguoi trung</th>";
+        head += "<th>Tong so nguoi tham gia</th>";
+        head += "<th>Start time</th>";
+        head += "<th>End time</th>";
+        head += "<th>Ti le min</th>";
+        head += "<th>Ti le max</th>";
+        head += "<th>Ap dung ti le</th>";
+        head += "<th>So nguoi trung lien tiep</th>";
+        head += "<th>So nguoi trung</th>";
+        head += "<th>So nguoi moi tham gia</th>";
+        head += "<th></th>";
+        head += "</tr>";
+        $("#table").html(head);
+    }
+
+    function addItem(item) {
+        var row;
+        var startTime = new Date(item.start_time);
+        var endTime = new Date(item.end_time);
+
+        var editButton = "<button id='edit_" + item._id + "'>Edit</button>";
+
+        row = "<tr id='r_" + item._id + "'>";
+        row += "<td> " + editButton + " </td>";
+        row += "<td> " + item.program + " </td>";
+        row += "<td> " + item._id + " </td>";
+        row += "<td> " + item.numerator + " </td>";
+        row += "<td> " + item.denominator + " </td>";
+        row += "<td> " + startTime.toLocaleString() + " </td>";
+        row += "<td> " + endTime.toLocaleString() + " </td>";
+        row += "<td> " + item.min_ratio + " </td>";
+        row += "<td> " + item.max_ratio + " </td>";
+        row += "<td> " + item.not_ratio_flag + " </td>";
+        row += "<td> " + item.number_of_bonus_gave_man + " </td>";
+        row += "<td> " + item.number_of_bonus_man + " </td>";
+        row += "<td> " + item.number_of_new_comer + " </td>";
+        row += "</tr>";
+        $("#table").append(row);
+
+        $("#edit_" + item._id).click(function () {
+            setFormValues(item);
+        });
+
+    }
+
+    function setFormValues(item) {
+        $("#program").val(item.program);
+        $("#program_number").val(item._id);
+        $("#numerator").val(item.numerator);
+        $("#denominator").val(item.denominator);
+        $("#startTime").val(new Date(item.start_time).toLocaleString());
+        $("#endTime").val(new Date(item.end_time).toLocaleString());
+        $("#minRatio").val(item.min_ratio);
+        $("#maxRatio").val(item.max_ratio);
+        $("#chkNotRatio").val(item.not_ratio_flag);
+        $("#givenman").val(item.number_of_bonus_gave_man);
+    }
+
+    function loadPage() {
+        clearTable();
+        var mUrl = "/service/ironman/getAll";
+        $.getJSON(mUrl).done(function (data) {
+            $.each(data, function (i, item) {
+                addItem(item);
+            });
+        });
+    }
+    $(document).ready(function () {
+        loadPage();
+
+        $("#startTime").datetimepicker({
+            format: 'm/d/Y, h:i:s A'
+        });
+        $("#endTime").datetimepicker({
+            format: 'm/d/Y, h:i:s A'
+        });
+
+        $("#btnSave").click(function () {
+            var startTime = Date.parse($("#startTime").val());
+            var endTime = Date.parse($("#endTime").val());
+
+            $.ajax({
+                url: "/service/ironman/update",
+                type: "GET",
+                enctype: "multipart/form-data",
+                data: {
+                    ironmanId: $("#ironmanId").val(),
+                    program : $("#program").val(),
+                    program_number: $("#program_number").val(),
+                    numerator: $("#numerator").val(),
+                    denominator: $("#denominator").val(),
+                    start_time: startTime,
+                    end_time: endTime,
+                    minRatio: $("#minRatio").val(),
+                    maxRatio: $("#maxRatio").val(),
+                    chkNotRatio :$("#chkNotRatio").is(":checked"),
+                    givenman: $("#givenman").val()
+                },
+                success: function (result) {
+                    var error = result.error;
+                    if (error == 0) {
+                        alert("Thành công.");
+                        loadPage()
+                    }
+                    else
+                        alert("desc: " + result.desc);
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+
+        $("#btnRefresh").click(function () {
+            $.ajax({
+                url: "/service/ironman/refreshconfig",
+                type: "GET",
+                enctype: "multipart/form-data",
+                data: {
+                },
+                success: function (result) {
+                    var error = result.error;
+                    if (error == 0) {
+                        alert("Thành công.");
+                        loadPage()
+                    }
+                    else
+                        alert("That bai");
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+
+    });
+
+
+</script>
+</body>
+</html>

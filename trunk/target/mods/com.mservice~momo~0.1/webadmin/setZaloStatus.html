@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>Số điện thoại</td>
+            <td><INPUT id="txtPhone" type="text" name="phone"><BR></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><INPUT id="btnCheck" type="submit" value="Thêm"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><div id="output"></div></td>
+        </tr>
+    </table>
+</body>
+
+<script>
+    $( "#btnCheck" ).click(function() {
+        var phone = $("#txtPhone").val();
+        var url = "/wc/setZaloStatus?phone=" + phone;
+        $.get( url, function( data ) {
+            $( "#output" ).html(phone + "<br/>" + data);
+            console.log(data );
+        });
+    });
+</script>
+
+</html>

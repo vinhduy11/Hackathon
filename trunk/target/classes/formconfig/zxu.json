@@ -1,0 +1,40 @@
+{
+    "zxu":[
+        {
+            "form1":{
+                    "cap":"Nạp game Zingxu",
+                    "btn":"Thực hiện",
+                    "nexfrm":1,
+                    "guide":"http://app.momo.vn:81/momo_app/html/zingxu.html",
+                    
+                    "fields":[
+                        {
+                            "fieldtype":"text",
+                            "fieldlabel":"Tên tài khoản",
+                            "key":"billid",
+                            "required":true,
+                            "line":1,
+                            "haschild":0 
+                        },{
+                            "fieldtype":"number",
+                            "fieldlabel":"Số tiền",
+                            "key":"amt",
+                            "isamt":true,
+                            "required":true,
+                            "line":1,
+                            "haschild":0 
+                        },{
+                            "fieldtype":"cash",
+                            "fieldlabel":"Nguồn tiền",
+                            "key":"cash",
+                            "required":true,
+                            "line":1,
+                            "haschild":0 
+                        }
+                    ],
+                    "data":[
+                    ]
+                }
+        }
+    ]
+}

@@ -1,0 +1,727 @@
+Index: src/main/java/com/mservice/momo/data/model/colName.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/mservice/momo/data/model/colName.java	(revision 32999)
++++ src/main/java/com/mservice/momo/data/model/colName.java	(revision )
+@@ -2193,7 +2193,6 @@
+         public static String PROMO_TYPE = "promoType";
+         public static String TABLE = "LottePromoCodeDb";
+     }
+-
+ //    {
+ //        "_id" : ObjectId("574e5005cfa44beca61ee60a"),
+ //            "phone_number" : "01225242888",
+@@ -2202,6 +2201,19 @@
+ //            "discount" : "0.2",
+ //            "receiver_number" : "0973499621"
+ //    }
++    public static class LottePromoCol{
++        public static String PHONE_NUMBER = "_id";
++        public static String REGISTER_TIME = "registerTime";
++        public static String DIVICE_ID = "divideId";
++        public static String TRAN_TYPE = "tranType";
++        public static String TRAN_ID = "tranId";
++        public static String BONUS_TIME = "bonusTime";
++        public static String TRAN_AMOUNT = "tranAmount";
++        public static String BONUS_AMOUNT = "bonusAmount";
++        public static String ERROR = "error";
++        public static String USED_GIFT = "usedGift";
++        public static String TABLE = "LottePromoDb";
++    }
+     public static class SpecialGroupCol{
+         public static String PHONE_NUMBER = "phone_number";
+         public static String GROUP_ID = "group_id";
+@@ -2228,4 +2240,37 @@
+         public static String TIME = "time";
+         public static String TABLE = "PromotionCountTrackingDb";
+     }
++
++        public static  class FeCreditPromotionCols {
++            public static String PROMOTION_NAME = "promotion_name";
++            public static String PHONE_NUMBER = "phone_number";
++            public static String DIV_NO = "div_no";
++            public static String PREFIX = "prefix";
++            public static String NUMBER_OF_GIFT = "number_of_gift";
++            public static String GIFT_LIST = "gift_list"; // format: aaa:10000;bbb:20000
++            public static String GIFT_TIME = "gift_time";
++            public static String MOMO_MONEY = "momo_money";
++            public static String MONEY_TIME = "money_time";
++            public static String NOTI_TITLE = "notiTitle";
++            public static String NOTI_BODY = "notiBody";
++            public static String TRANS_BODY = "transBody";
++            public static String PARTNER_NAME = "partnerName";
++            public static String SERVICE_ID = "serviceId";
++            public static String AGENT = "agent";
++            public static String GET_BACK_MONEY = "get_back_money";
++            public static String NOTI_ROLLBACK_TITLE = "notiRollbackTitle";
++            public static String NOTI_ROLLBACK_BODY = "notiRollbackBody";
++            public static String TRANS_ROLLBACK_BODY = "transRollbackBody";
++            public static String ACTIVE_PROMO = "active";
++            public static String GROUP = "group";
++            public static String TABLE = "FeCreditPromotionDb";
++        }
++        public static class ErrorCodeMgtCols{
++            public static String ERROR_CODE = "error_code";
++            public static String DESCRIPTION = "description";
++            public static String TABLE = "ErrorCodeMgtDb";
++
++        }
++
++
+ }
+Index: src/main/java/com/mservice/momo/vertx/MLotteVerticle.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/mservice/momo/vertx/MLotteVerticle.java	(revision )
++++ src/main/java/com/mservice/momo/vertx/MLotteVerticle.java	(revision )
+@@ -0,0 +1,363 @@
++package com.mservice.momo.vertx;
++import com.mservice.momo.data.DBFactory;
++import com.mservice.momo.data.PhonesDb;
++import com.mservice.momo.data.PromotionDb;
++import com.mservice.momo.data.TransDb;
++import com.mservice.momo.data.codeclaim.ClaimCode_AllCheckDb;
++import com.mservice.momo.data.lotte.LottePromoDb;
++import com.mservice.momo.data.model.MongoKeyWords;
++import com.mservice.momo.data.model.Promo;
++import com.mservice.momo.data.model.colName;
++import com.mservice.momo.msg.MomoProto;
++import com.mservice.momo.util.DataUtil;
++import com.mservice.momo.util.StringConstUtil;
++import com.mservice.momo.vertx.gift.GiftManager;
++import com.mservice.momo.vertx.gift.models.Gift;
++import com.mservice.momo.vertx.models.Notification;
++import com.mservice.momo.vertx.processor.Common;
++import com.mservice.momo.vertx.processor.Misc;
++import com.mservice.momo.vertx.promotion_server.MainPromotionVerticle;
++import com.mservice.momo.vertx.promotion_server.PromotionObj;
++import org.vertx.java.core.Handler;
++import org.vertx.java.core.eventbus.Message;
++import org.vertx.java.core.json.JsonArray;
++import org.vertx.java.core.json.JsonObject;
++import org.vertx.java.core.logging.Logger;
++import java.util.ArrayList;
++import java.util.Calendar;
++import java.util.List;
++import java.util.concurrent.atomic.AtomicInteger;
++
++/**
++ * Created by manhly on 01/08/2016.
++ */
++public class MLotteVerticle extends MainPromotionVerticle {
++    Logger logger;
++    JsonObject glbCfg;
++    private boolean isStoreApp;
++    private boolean remindNoti;
++    private boolean isUAT;
++    private TransDb tranDb;
++    private LottePromoDb lottePromoDb;
++    private GiftManager giftManager;
++    private ClaimCode_AllCheckDb claimCode_allCheckDb;
++
++    public void start() {
++        super.start();
++        logger = container.logger();
++        glbCfg = container.config();
++        this.tranDb = DBFactory.createTranDb(vertx, vertx.eventBus(), logger, container.config());
++        isStoreApp = glbCfg.getBoolean(StringConstUtil.IS_STORE_APP, false);
++        isUAT = glbCfg.getBoolean(StringConstUtil.IS_UAT, false);
++        remindNoti = glbCfg.getBoolean(StringConstUtil.SEND_REMIND_NOTI, false);
++        lottePromoDb = new LottePromoDb(vertx, logger);
++        //n
++        final long checkInfoDgdTime = isUAT ? 2 : 24 * 60; //
++        if (remindNoti) {
++            remind14DaysNotUsedGiftUser();
++            remind22DaysNotUsedGiftUser();
++        }
++
++        vertx.eventBus().registerHandler(AppConstant.LOTTE_PROMOTION_BUS_ADDRESS, new Handler<Message<JsonObject>>() {
++            public void handle(final Message<JsonObject> message) {
++                final Common.BuildLog log = new Common.BuildLog(logger);
++                JsonObject joReceive = message.body();
++                final PromotionObj promotionObj = new PromotionObj(joReceive);
++                log.setPhoneNumber(promotionObj.phoneNumber);
++                final PhonesDb.Obj userPhoneObj = new PhonesDb.Obj(promotionObj.joPhone);
++                if (promotionObj.tranType != MomoProto.MsgType.REGISTER_VALUE && promotionObj.tranType != MomoProto.TranHisV1.TranType.PAY_IPOS_BILL_VALUE) {
++                    //2000 ~ 2030
++                    callBack(2000, "", null, log, message, this.getClass().getSimpleName());
++                    return;
++                } else if (userPhoneObj == null) {
++                    callBack(5056, "userPhoneObj == null", null, log, message, this.getClass().getSimpleName());
++                    return;
++                } else if (userPhoneObj.isAgent) {
++                    callBack(5057, "userPhoneObj.isAgent", null, log, message, this.getClass().getSimpleName());
++                    return;
++                }
++
++                logger.info("isstore appp>>>>>>>>>>>>>" + promotionObj.isStoreApp);
++                if (promotionObj.tranType == MomoProto.MsgType.REGISTER_VALUE) {
++                    //todo execute register successfully => save info
++                    final Promo.PromoReqObj promoReqObj = new Promo.PromoReqObj();
++                    promoReqObj.COMMAND = Promo.PromoType.PROMO_GET_LIST;
++                    checkDevice(userPhoneObj.deviceInfo, userPhoneObj.phoneOs, userPhoneObj.appCode, "lotte", DataUtil.strToInt(promotionObj.phoneNumber), userPhoneObj.lastImei, true, false, this.getClass().getSimpleName(), log, new Handler<JsonObject>() {
++                        @Override
++                        public void handle(JsonObject joResult) {
++                            int err = joResult.getInteger(StringConstUtil.PromotionField.ERROR, -1);
++                            String desc = joResult.getString(StringConstUtil.PromotionField.DESCRIPTION, "");
++                            if (err != 0) {
++                                addLog("info", desc, this.getClass().getSimpleName(), log);
++                                callBack(5058, "check divice false", null, log, message, this.getClass().getSimpleName());
++                                return;
++                            }
++                            Misc.requestPromoRecord(vertx, promoReqObj, logger, new Handler<JsonObject>() {
++                                @Override
++                                public void handle(JsonObject json) {
++                                    JsonArray array = json.getArray("array", null);
++                                    long promo_start_date = 0;
++                                    long promo_end_date = 0;
++                                    long currentTime = System.currentTimeMillis();
++                                    if (array != null && array.size() > 0) {
++                                        PromotionDb.Obj promoObj = null;
++                                        for (Object o : array) {
++                                            promoObj = new PromotionDb.Obj((JsonObject) o);
++                                            if (promoObj.NAME.equalsIgnoreCase("lotte_promo")) {
++                                                promo_start_date = promoObj.DATE_FROM;
++                                                promo_end_date = promoObj.DATE_TO;
++                                                break;
++                                            }
++                                        }
++                                        logger.info(">>>>>>>>>>>>>>.." + promoObj.NAME + promo_end_date + promo_start_date);
++                                        if (currentTime >= promo_start_date && currentTime <= promo_end_date) {
++                                            //luu db
++                                            LottePromoDb.Obj lottePromotionObj = new LottePromoDb.Obj();
++                                            lottePromotionObj.phoneNumber = promotionObj.phoneNumber;
++                                            lottePromotionObj.registerTime = currentTime;
++                                            lottePromotionObj.tranType = promotionObj.tranType;
++                                            lottePromoDb.insert(lottePromotionObj, new Handler<Integer>() {
++                                                @Override
++                                                public void handle(Integer err) {
++                                                    if (err == 0) {
++                                                        addLog("info", "insert success " + promotionObj.phoneNumber, this.getClass().getSimpleName(), log);
++                                                    } else {
++                                                        addLog("info", "insert fail " + promotionObj.phoneNumber, this.getClass().getSimpleName(), log);
++                                                    }
++                                                    callBack(err, "", null, log, message, this.getClass().getSimpleName());
++                                                    return;
++                                                }
++                                            });
++                                        } else {
++                                            callBack(5057, "Ngoai thoi gian khuyen mai", null, log, message, this.getClass().getSimpleName());
++                                            return;
++                                        }
++                                    }
++                                }
++                            });
++
++                        }
++                    });
++                }//END CHECK REGISTER
++                else if (promotionObj.tranType == MomoProto.TranHisV1.TranType.PAY_IPOS_BILL_VALUE) {
++                    //todo user pay bill via lotte => execute promotion
++                    lottePromoDb.findByPhone(promotionObj.phoneNumber, new Handler<LottePromoDb.Obj>() {
++                        @Override
++                        public void handle(LottePromoDb.Obj obj) {
++                            if (obj != null) {
++                                //check xem co tra khuyen mai cho user nay chua
++                                if (obj.bonusTime == 0 || obj.bonusAmount == 0 || obj.tranId == 0) {
++                                    //Day la user dang ki trong thoi gian khuyen mai va chua nhan thuong
++                                    Promo.PromoReqObj promoReqObj = new Promo.PromoReqObj();
++                                    promoReqObj.COMMAND = Promo.PromoType.PROMO_GET_LIST;
++                                    Misc.requestPromoRecord(vertx, promoReqObj, logger, new Handler<JsonObject>() {
++                                        @Override
++                                        public void handle(JsonObject json) {
++                                            JsonArray array = json.getArray("array", null);
++                                            long minAmount = 300000;
++                                            long voucherAmount = 100000;
++                                            String agent = ""; // Tai khoang tra thuong
++                                            if (array != null && array.size() > 0) {
++                                                PromotionDb.Obj promoObj = null;
++                                                for (Object o : array) {
++                                                    promoObj = new PromotionDb.Obj((JsonObject) o);
++                                                    if (promoObj.NAME.equalsIgnoreCase("lotte_promo")) {
++                                                        agent = promoObj.ADJUST_ACCOUNT; //Tai khoang tra thuong
++                                                        voucherAmount = promoObj.PER_TRAN_VALUE;
++                                                        break;
++                                                    }
++                                                }
++                                                if ("".equalsIgnoreCase(agent)) {
++                                                    callBack(5051, "Agent is blank", null, log, message, this.getClass().getSimpleName());
++                                                    return;
++                                                }
++                                                final long finalAmount = voucherAmount;
++                                                //tra thuong
++                                                List<String> listVoucher = new ArrayList<String>() {{
++                                                    add("lotte_gift");
++                                                }};
++                                                giveVoucher(message, voucherAmount, 30, agent, promotionObj.phoneNumber, "lotte_promo", listVoucher, log, "MLotteVerticle", true, new Handler<JsonObject>() {
++                                                    @Override
++                                                    public void handle(final JsonObject joResponse) {
++                                                        int error = joResponse.getInteger(StringConstUtil.PromotionField.ERROR, -1);
++                                                        String desc = joResponse.getString(StringConstUtil.PromotionField.DESCRIPTION, "");
++                                                        final long giftTranId = joResponse.getLong(StringConstUtil.PromotionField.GIFT_TID, System.currentTimeMillis());
++                                                        //todo if success
++                                                        JsonObject joUpdate = new JsonObject();
++                                                        joUpdate.putNumber(colName.LottePromoCol.TRAN_ID, promotionObj.tranId);
++                                                        joUpdate.putNumber(colName.LottePromoCol.BONUS_AMOUNT, finalAmount);
++                                                        joUpdate.putNumber(colName.LottePromoCol.BONUS_TIME, System.currentTimeMillis());
++                                                        joUpdate.putNumber(colName.LottePromoCol.TRAN_AMOUNT, promotionObj.amount);
++                                                        joUpdate.putNumber(colName.LottePromoCol.ERROR, error);
++                                                        lottePromoDb.updatePartial(promotionObj.phoneNumber, joUpdate, new Handler<Boolean>() {
++                                                            @Override
++                                                            public void handle(Boolean event) {
++                                                                Gift gift = new Gift(joResponse.getObject(StringConstUtil.PromotionField.GIFT, new JsonObject()));
++                                                                Long temp = System.currentTimeMillis() + (1000L * 60 * 60 * 24 * 30);
++                                                                String expireVoucherDate = Misc.dateVNFormat(temp);
++                                                                String notibody = StringConstUtil.lotteNoti.BODY.replace("%s", expireVoucherDate);
++                                                                Notification notification = buildPopupGiftNotification(StringConstUtil.lotteNoti.CAPTIONNOTI, notibody, 3, 16, giftTranId, "lotte", gift, 100000, promotionObj.phoneNumber, StringConstUtil.lotteNoti.CAPTION);
++                                                                //{"screenId":16,"serviceId":"","type":3,"button_title_1":"xem chi tiet","button_title_2":"","button_title_x":true}
++                                                                //notification.type = 28;
++                                                                //notification.tranId = Long.valueOf(0);
++                                                                //notification.extra = "{\"screenId\":16,\"serviceId\":\"\",\"type\":3,\"button_title_1\":\"xem chi tiet\",\"button_title_2\":\"\",\"button_title_x\":true}";
++                                                                saveSuccessPromotionTransaction(notibody, giftTranId, 100000, promotionObj.phoneNumber, "Thẻ quà tặng LotteMart", "", "momo", notibody, "", new JsonObject());
++                                                                callBack(0, "success", notification, log, message, this.getClass().getSimpleName().toString());
++
++                                                            }
++                                                        });
++                                                    }
++                                                });
++                                            } else {
++                                                callBack(5052, "Chua cau hinh chuong trinh tra thuong", null, log, message, this.getClass().getSimpleName());
++                                            }
++                                        }
++                                    });
++                                } else {
++                                    //User da duoc nhan thuong.
++                                    callBack(0, "OK", null, log, message, this.getClass().getSimpleName());
++                                    JsonObject joUpdate = new JsonObject();
++                                    joUpdate.putBoolean(colName.LottePromoCol.USED_GIFT, true);
++                                    lottePromoDb.updatePartial(promotionObj.phoneNumber, joUpdate, new Handler<Boolean>() {
++                                        @Override
++                                        public void handle(Boolean event) {
++
++                                        }
++                                    });
++                                }
++                            } else {
++                                callBack(5050, "User khong dang ki trong thoi gian khuyen mai", null, log, message, this.getClass().getSimpleName());
++                            }
++                        }
++                    });
++                } //END CHECK IPOS
++                else {
++                    callBack(5053, "Khong ton tai tranType thoa dieu kien ", null, log, message, this.getClass().getSimpleName());
++                }
++            }
++        });
++    }
++
++    private void remind14DaysNotUsedGiftUser() {
++        Calendar calendar = Calendar.getInstance();
++        calendar.set(Calendar.HOUR_OF_DAY, 10);
++        calendar.set(Calendar.MINUTE, 0);
++        long currentTime = System.currentTimeMillis();
++        long calendarTime = calendar.getTimeInMillis();
++
++        long waitTime = calendarTime - currentTime > 0 ? calendarTime - currentTime : (calendarTime + (24 * 60 * 60 * 1000) - currentTime);
++        vertx.setTimer(waitTime, new Handler<Long>() {
++            @Override
++            public void handle(Long wait14daysTimerSet) {
++                vertx.cancelTimer(wait14daysTimerSet);
++                vertx.setPeriodic(1000L * 60 * 60 * 24, new Handler<Long>() {
++                    @Override
++                    public void handle(Long wait14daysTimerPeriodic) {
++                        JsonObject joSearch = new JsonObject();
++
++                        JsonArray jarrAnd = new JsonArray();
++
++                        JsonObject joGreaterTime = new JsonObject().putObject(colName.LottePromoCol.BONUS_TIME, new JsonObject().putNumber(MongoKeyWords.GREATER_OR_EQUAL, System.currentTimeMillis() - (1000L * 60 * 60 * 24 * 15)));
++                        JsonObject joLessTime = new JsonObject().putObject(colName.LottePromoCol.BONUS_TIME, new JsonObject().putNumber(MongoKeyWords.LESS_OR_EQUAL, System.currentTimeMillis() - (1000L * 60 * 60 * 24 * 14)));
++
++                        jarrAnd.add(joGreaterTime);
++                        jarrAnd.add(joLessTime);
++
++                        JsonObject joUsedGift = new JsonObject().putBoolean(colName.LottePromoCol.USED_GIFT, false);
++                        jarrAnd.add(joUsedGift);
++
++                        joSearch.putArray(MongoKeyWords.AND_$, jarrAnd);
++                        lottePromoDb.searchWithFilter(joSearch, new Handler<ArrayList<LottePromoDb.Obj>>() {
++                            @Override
++                            public void handle(final ArrayList<LottePromoDb.Obj> listLottePromo1) {
++                                final AtomicInteger count = new AtomicInteger(listLottePromo1.size());
++                                vertx.setPeriodic(200L, new Handler<Long>() {
++                                    @Override
++                                    public void handle(Long timer) {
++                                        int position = count.decrementAndGet();
++//                                        listLottePromo1.get(position).phoneNumber
++                                        //build noti and send
++                                        if (position < 0) {
++                                            vertx.cancelTimer(timer);
++                                            return;
++                                        }
++                                        //Build noti and send
++                                        JsonObject joNoti = new JsonObject();
++                                        Long temp = listLottePromo1.get(position).bonusTime + (1000L * 60 * 60 * 24 * 30);
++                                        String expireVoucherDate = Misc.dateVNFormat(temp);
++                                        String notibody = StringConstUtil.lotteNoti.BODY.replace("%s", expireVoucherDate);
++                                        String bodyNoti = notibody;
++                                        String titleNoti = StringConstUtil.lotteNoti.CAPTION;
++                                        sendNotiViaCloud(titleNoti, bodyNoti, listLottePromo1.get(position).phoneNumber);
++
++                                    }
++                                });
++                            }
++                        });
++                    }
++                });
++            }
++        });
++    }
++
++    private void remind22DaysNotUsedGiftUser() {
++        Calendar calendar = Calendar.getInstance();
++        calendar.set(Calendar.HOUR_OF_DAY, 10);
++        calendar.set(Calendar.MINUTE, 0);
++        long currentTime = System.currentTimeMillis();
++        long calendarTime = calendar.getTimeInMillis();
++
++        long waitTime = calendarTime - currentTime > 0 ? calendarTime - currentTime : (calendarTime + (24 * 60 * 60 * 1000) - currentTime);
++        vertx.setTimer(waitTime, new Handler<Long>() {
++            @Override
++            public void handle(Long wait22daysTimerSet) {
++                vertx.cancelTimer(wait22daysTimerSet);
++                vertx.setPeriodic(1000L * 60 * 60 * 24, new Handler<Long>() {
++                    @Override
++                    public void handle(Long wait22daysTimerPeriodic) {
++                        JsonObject joSearch = new JsonObject();
++
++                        JsonArray jarrAnd = new JsonArray();
++
++                        JsonObject joGreaterTime = new JsonObject().putObject(colName.LottePromoCol.BONUS_TIME, new JsonObject().putNumber(MongoKeyWords.GREATER_OR_EQUAL, System.currentTimeMillis() - (1000L * 60 * 60 * 24 * 23)));
++                        JsonObject joLessTime = new JsonObject().putObject(colName.LottePromoCol.BONUS_TIME, new JsonObject().putNumber(MongoKeyWords.LESS_OR_EQUAL, System.currentTimeMillis() - (1000L * 60 * 60 * 24 * 22)));
++
++                        jarrAnd.add(joGreaterTime);
++                        jarrAnd.add(joLessTime);
++
++                        JsonObject joUsedGift = new JsonObject().putBoolean(colName.LottePromoCol.USED_GIFT, false);
++                        jarrAnd.add(joUsedGift);
++
++                        joSearch.putArray(MongoKeyWords.AND_$, jarrAnd);
++                        lottePromoDb.searchWithFilter(joSearch, new Handler<ArrayList<LottePromoDb.Obj>>() {
++                            @Override
++                            public void handle(final ArrayList<LottePromoDb.Obj> listLottePromo1) {
++                                final AtomicInteger count = new AtomicInteger(listLottePromo1.size());
++                                vertx.setPeriodic(200L, new Handler<Long>() {
++                                    @Override
++                                    public void handle(Long timer) {
++                                        int position = count.decrementAndGet();
++//                                        listLottePromo1.get(position).phoneNumber
++                                        //build noti and send
++                                        if (position < 0) {
++                                            vertx.cancelTimer(timer);
++                                            return;
++                                        }
++                                        //Build noti and send
++                                        JsonObject joNoti = new JsonObject();
++                                        Long temp = listLottePromo1.get(position).bonusTime + (1000L * 60 * 60 * 24 * 30);
++                                        String expireVoucherDate = Misc.dateVNFormat(temp);
++                                        String notibody = StringConstUtil.lotteNoti.BODY22.replace("%s", expireVoucherDate);
++                                        String bodyNoti = notibody;
++                                        String titleNoti = StringConstUtil.lotteNoti.CAPTION22;
++                                        sendNotiViaCloud(titleNoti, bodyNoti, listLottePromo1.get(position).phoneNumber);
++                                    }
++                                });
++                            }
++                        });
++                    }
++                });
++            }
++        });
++    }
++}
+Index: src/main/resources/verticle.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/verticle.json	(revision 32999)
++++ src/main/resources/verticle.json	(revision )
+@@ -742,6 +742,18 @@
+       "instances": 1
+     },
+     {
++      "name": "ClaimCodePromotionVerticle",
++      "block": false,
++      // if true => worker, false -> normal
++      "address": "com.mservice.momo.data.codeclaim.ClaimCodePromotionVerticle",
++      //optional adress of this verticle
++      "thread": true,
++      //true => multiThread
++      "isModule": false,
++      "posModule": 0,
++      "instances": 1
++    },
++    {
+       "name": "PromotionServerVerticle",
+       "block": false,
+       // if true => worker, false -> normal
+@@ -752,7 +764,48 @@
+       "isModule": false,
+       "posModule": 0,
+       "instances": 1,
+-      "isDeployed": false
++      "isDeployed": true
++    },
++    {
++      "name": "MainPromotionVerticle",
++      "block": false,
++      // if true => worker, false -> normal
++      "address": "com.mservice.momo.vertx.promotion_server.MainPromotionVerticle",
++      //optional adress of this verticle
++      "thread": true,
++      //true => multiThread
++      "isModule": false,
++      "posModule": 0,
++      "instances": 1,
++      "isDeployed": true
++    },
++    {
++      "name": "MLotteVerticle",
++      "block": false,
++      // if true => worker, false -> normal
++      "address": "com.mservice.momo.vertx.MLotteVerticle",
++      //optional adress of this verticle
++      "thread": true,
++      //true => multiThread
++      "isModule": false,
++      "posModule": 0,
++      "instances": 1,
++      "isDeployed": true
+     }
++//    {
++//      "name": "CheckFecreditVerticle",
++//      "block": false,
++//      // if true => worker, false -> normal
++//      "address": "com.mservice.momo.data.codeclaim.CheckFecreditVerticle",
++//      //optional adress of this verticle
++//      "thread": true,
++//      //true => multiThread
++//      "isModule": false,
++//      "posModule": 0,
++//      "instances": 1,
++//      "isDeployed": false
++//    }
++
++
+   ]
+ }
+Index: src/main/java/com/mservice/momo/data/lotte/LottePromoDb.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/mservice/momo/data/lotte/LottePromoDb.java	(revision )
++++ src/main/java/com/mservice/momo/data/lotte/LottePromoDb.java	(revision )
+@@ -0,0 +1,178 @@
++package com.mservice.momo.data.lotte;
++
++import com.mservice.momo.data.binhtanpromotion.AcquireBinhTanUserPromotionDb;
++import com.mservice.momo.data.model.MongoKeyWords;
++import com.mservice.momo.data.model.colName;
++import com.mservice.momo.vertx.AppConstant;
++import org.vertx.java.core.Handler;
++import org.vertx.java.core.Vertx;
++import org.vertx.java.core.eventbus.Message;
++import org.vertx.java.core.json.JsonArray;
++import org.vertx.java.core.json.JsonObject;
++import org.vertx.java.core.logging.Logger;
++
++import java.util.ArrayList;
++
++/**
++ * Created by manhly on 03/08/2016.
++ */
++public class LottePromoDb {
++    private Vertx vertx;
++    private Logger logger;
++
++    public LottePromoDb(Vertx vertx, Logger logger) {
++        this.logger = logger;
++        this.vertx = vertx;
++
++    }
++    public void insert(final LottePromoDb.Obj obj, final Handler<Integer> callback) {
++
++        JsonObject query = new JsonObject();
++        query.putString(MongoKeyWords.ACTION, MongoKeyWords.INSERT)
++                .putString(MongoKeyWords.COLLECTION, colName.LottePromoCol.TABLE)
++                .putObject(MongoKeyWords.DOCUMENT, obj.toJson());
++
++
++        vertx.eventBus().send(AppConstant.MongoVerticle_ADDRESS, query, new Handler<Message<JsonObject>>() {
++            @Override
++            public void handle(Message<JsonObject> event) {
++
++                int result = 0;
++                if (!event.body().getString(MongoKeyWords.STATUS).equals("ok")) {
++
++                    JsonObject error = new JsonObject(event.body().getString("message", "{code:-1}"));
++                    result = error.getInteger("code", -1);
++                }
++                callback.handle(result);
++            }
++        });
++    }
++
++    public void findByPhone(String phoneNumber, final Handler<LottePromoDb.Obj> callback) {
++        //query
++        JsonObject query = new JsonObject();
++        query.putString(MongoKeyWords.ACTION, MongoKeyWords.FIND_ONE);
++        query.putString(MongoKeyWords.COLLECTION, colName.LottePromoCol.TABLE);
++
++        JsonObject matcher = new JsonObject();
++        matcher.putString(colName.LottePromoCol.PHONE_NUMBER, phoneNumber);
++        query.putObject(MongoKeyWords.MATCHER, matcher);
++
++        vertx.eventBus().send(AppConstant.MongoVerticle_ADDRESS, query, new Handler<Message<JsonObject>>() {
++            @Override
++            public void handle(Message<JsonObject> event) {
++                LottePromoDb.Obj obj = null;
++                JsonObject joResult = event.body().getObject(MongoKeyWords.RESULT, null);
++                if (joResult != null) {
++                    obj = new LottePromoDb.Obj(joResult);
++                }
++                callback.handle(obj);
++            }
++        });
++    }
++    public void searchWithFilter(JsonObject filter, final Handler<ArrayList<LottePromoDb.Obj>> callback) {
++
++        //query
++        JsonObject query = new JsonObject();
++        query.putString(MongoKeyWords.ACTION, MongoKeyWords.FIND);
++        query.putString(MongoKeyWords.COLLECTION, colName.LottePromoCol.TABLE);
++
++        if (filter != null && filter.getFieldNames().size() > 0) {
++            query.putObject(MongoKeyWords.MATCHER, filter);
++        }
++
++        query.putNumber(MongoKeyWords.BATCH_SIZE, 100000);
++
++        vertx.eventBus().send(AppConstant.MongoVerticle_ADDRESS, query, new Handler<Message<JsonObject>>() {
++            @Override
++            public void handle(Message<JsonObject> event) {
++
++                ArrayList<LottePromoDb.Obj> arrayList = new ArrayList<LottePromoDb.Obj>();
++
++                JsonArray joArr = event.body().getArray(MongoKeyWords.RESULT_ARRAY, null);
++                if (joArr != null && joArr.size() > 0) {
++                    for (int i = 0; i < joArr.size(); i++) {
++                        LottePromoDb.Obj obj = new LottePromoDb.Obj((JsonObject) joArr.get(i));
++                        arrayList.add(obj);
++                    }
++                }
++
++                callback.handle(arrayList);
++            }
++        });
++    }
++
++
++    public void updatePartial(String phoneNumber
++            , JsonObject joUpdate, final Handler<Boolean> callback) {
++        JsonObject query = new JsonObject();
++        query.putString(MongoKeyWords.ACTION, MongoKeyWords.UPDATE);
++        query.putString(MongoKeyWords.COLLECTION, colName.LottePromoCol.TABLE);
++        JsonObject match = new JsonObject();
++
++        //matcher
++        match.putString(colName.LottePromoCol.PHONE_NUMBER, phoneNumber);
++        query.putObject(MongoKeyWords.CRITERIA, match);
++
++
++        JsonObject fieldsSet = new JsonObject();
++        fieldsSet.putObject(MongoKeyWords.SET_$, joUpdate);
++
++        query.putObject(MongoKeyWords.OBJ_NEW, fieldsSet);
++        query.putBoolean(MongoKeyWords.UPSERT, false);
++
++        vertx.eventBus().send(AppConstant.MongoVerticle_ADDRESS, query, new Handler<Message<JsonObject>>() {
++            @Override
++            public void handle(Message<JsonObject> jsonObjectMessage) {
++                JsonObject obj = jsonObjectMessage.body();
++                boolean result = obj.getString("ok", "").equalsIgnoreCase("ok");
++                callback.handle(result);
++            }
++        });
++    }
++
++    public static class Obj {
++        public String phoneNumber = "";
++        public long registerTime = 0;
++        public int tranType = 0;
++        public long tranId = 0;
++        public long bonusTime = 0;
++        public long tranAmount = 0;
++        public long bonusAmount = 0;
++        public int error = 0;
++        public boolean usedGift = false;
++
++        public Obj() {
++        }
++
++        public Obj(JsonObject jo) {
++
++            phoneNumber = jo.getString(colName.LottePromoCol.PHONE_NUMBER, "");
++            registerTime = jo.getLong(colName.LottePromoCol.REGISTER_TIME, 0);
++            tranType = jo.getInteger(colName.LottePromoCol.TRAN_TYPE, 0);
++            tranId = jo.getLong(colName.LottePromoCol.TRAN_ID, 0);
++            bonusTime = jo.getLong(colName.LottePromoCol.BONUS_TIME, 0);
++            tranAmount = jo.getLong(colName.LottePromoCol.TRAN_AMOUNT, 0);
++            bonusAmount = jo.getLong(colName.LottePromoCol.BONUS_AMOUNT, 0);
++            error = jo.getInteger(colName.LottePromoCol.ERROR, 0);
++            usedGift = jo.getBoolean(colName.LottePromoCol.USED_GIFT, false);
++
++        }
++
++        public JsonObject toJson() {
++            JsonObject jo = new JsonObject();
++
++             jo.putString(colName.LottePromoCol.PHONE_NUMBER, phoneNumber);
++             jo.putNumber(colName.LottePromoCol.REGISTER_TIME, registerTime);
++             jo.putNumber(colName.LottePromoCol.TRAN_TYPE, tranType);
++             jo.putNumber(colName.LottePromoCol.TRAN_ID, tranId);
++             jo.putNumber(colName.LottePromoCol.BONUS_TIME, bonusTime);
++             jo.putNumber(colName.LottePromoCol.TRAN_AMOUNT, tranAmount);
++             jo.putNumber(colName.LottePromoCol.BONUS_AMOUNT, bonusAmount);
++             jo.putNumber(colName.LottePromoCol.ERROR, error);
++             jo.putBoolean(colName.LottePromoCol.USED_GIFT, usedGift);
++
++            return jo;
++        }
++    }
++}
+Index: src/main/java/com/mservice/momo/util/StringConstUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/mservice/momo/util/StringConstUtil.java	(revision 32999)
++++ src/main/java/com/mservice/momo/util/StringConstUtil.java	(revision )
+@@ -485,6 +485,13 @@
+         public static String RECEIVER_NUMBER = "receiver_number";
+         public static String TRAN_ID = "tran_id";
+     }
++    public static class lotteNoti{
++        public static String CAPTIONNOTI = "Giảm ngay 100.000 đồng khi thanh toán tại LotteMart";
++        public static String CAPTION = "Giảm ngay 100.000đ";
++        public static String BODY = "Chúc mừng bạn! Bạn sẽ được giảm ngay 100.000đ cho lần thanh toán tiếp theo bằng ví MoMo với hóa đơn từ 300.000đ tại siêu thị LotteMart Nam Sài Gòn. Thẻ quà tặng có thời hạn đến hết ngày %s";
++        public static String CAPTION22  = "Thẻ quà tặng LotteMart sắp hết hạn!";
++        public static String BODY22 = "Chỉ còn 1 tuần để được giảm 100.000đ khi thanh toán bằng ví MoMo với hóa đơn từ 300.000đ tại LotteMart Nam Sài Gòn! Thời hạn %s. Bạn cần có tiền trong ví MoMo đủ để thanh toán. Kiểm tra số tiền trong ví của bạn nhé!";
++    }
+ 
+     public static class RedirectNoti{
+         public static String CAPTION = "caption";

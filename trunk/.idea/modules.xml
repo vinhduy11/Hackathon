@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/mservice-payment-token/ipos_payment.iml" filepath="$PROJECT_DIR$/mservice-payment-token/ipos_payment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mservice-security/ipos_security.iml" filepath="$PROJECT_DIR$/mservice-security/ipos_security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/momo.iml" filepath="$PROJECT_DIR$/momo.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,70 @@
+{
+    "fimplus": [
+        {
+            "form1": {
+                "cap": "www.fimplus.vn",
+                "btn": "Thanh toán",
+                "nexfrm": 1,
+                "guide": "http://app.momo.vn:81/momo_app/html/fimplus.html?id=29012015",
+                "fields": [
+                    {
+                        "fieldtype": "number",
+                        "fieldlabel": "Nhập số tài khoản",
+                        "key": "billid",
+                        "isamt": false,
+                        "required": true,
+                        "line": 1,
+                        "haschild": 0
+                    }, {
+                        "fieldtype": "drop",
+                        "fieldlabel": "Số tiền",
+                        "key": "amt",
+                        "required": true,
+                        "line": 1,
+                        "haschild": 0
+                    }, {
+                        "fieldtype": "cash",
+                        "fieldlabel": "Nguồn tiền",
+                        "key": "cash",
+                        "required": true,
+                        "line": 1,
+                        "haschild": 0
+                    }
+                ],
+                "data": [
+                    {
+                        "linkto": "amt",
+                        "text": "50.000đ",
+                        "value": "50000",
+                        "parentid": "",
+                        "id": ""
+                    }, {
+                        "linkto": "amt",
+                        "text": "150.000đ",
+                        "value": "150000",
+                        "parentid": "",
+                        "id": ""
+                    }, {
+                        "linkto": "amt",
+                        "text": "250.000đ",
+                        "value": "250000",
+                        "parentid": "",
+                        "id": ""
+                    }, {
+                        "linkto": "amt",
+                        "text": "300.000đ",
+                        "value": "300000",
+                        "parentid": "",
+                        "id": ""
+                    }, {
+                        "linkto": "amt",
+                        "text": "500.000đ",
+                        "value": "500000",
+                        "parentid": "",
+                        "id": ""
+                    }
+                ]
+            }
+        }
+    ]
+}

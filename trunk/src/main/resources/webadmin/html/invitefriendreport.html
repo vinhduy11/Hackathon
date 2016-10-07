@@ -1,0 +1,71 @@
+<html>
+<head>
+    <title>Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css" />
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+</head>
+<body>
+<div id="mydiv">
+    <h2>Báo cáo tình trạng mã khuyến mãi chương trình giới thiều bạn bè</h2>
+    <table>
+        <tr>
+            <td>Nhập ngày</td>
+            <td>:</td>
+            <td>
+                <input style="width: 120px; font-size:16px; padding: 3px" type="text" id="txtDate"/>
+                (dd/mm/yyyy)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" ></td>
+            <td >
+                <input type ="button" value="Thực hiện" id="btnExecute">
+            </td>
+        </tr>
+    </table>
+
+    <div id="responseDiv"></div>
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    });
+
+    $('#btnExecute').click(function () {
+
+            var strDate = $("#txtDate").val();
+
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/invitefriend/report",
+                type: "GET",
+                data: {
+                    "date":strDate
+                },
+                success: function (json) {
+                    $('#mydiv').unmask();
+                    var result = "<b>Kết quả</b><br/>"
+                        result += "Tổng: " + json.total + "<br/>";
+                        result += "Chưa sử dụng: " + json.new + "<br/>";
+                        result += "Đã khuyến mãi: " + json.promoted + "<br/>";
+                        result += "Tạm khóa: " + json.locked + "<br/>";
+                        result += "Hết hạn: " + json.expired + "<br/>";
+
+                    $('#responseDiv').html(result);
+
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+
+</script>
+</body>
+</html>

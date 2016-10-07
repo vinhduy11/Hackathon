@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-neptune.css"/>
+
+    <script type="text/javascript" src="extjs/ext-all-debug.js"></script>
+</head>
+<body>
+<script type="application/javascript">
+
+    Ext.define('servicestatus', {
+    extend: 'Ext.data.Model',
+    fields: [
+            'name',
+            'desc',
+            'val'
+        ]
+    });
+
+    var store = Ext.create('Ext.data.Store', {
+        autoLoad: true,
+        autoDestroy: true,
+        model: 'servicestatus',
+        proxy: {
+            type: 'ajax',
+            url: 'service/config/getServiceStatus',
+            reader: {
+                type: 'json'
+            }
+        },
+        sorters: [{
+            property: 'common',
+            direction:'ASC'
+        }]
+    });
+
+    var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
+        clicksToEdit: 1
+    });
+
+    var grid = Ext.create('Ext.grid.Panel', {
+        store: store,
+        columns: [
+            {header: 'TÊN DỊCH VỤ',dataIndex: 'name',flex: 1},
+            {header: 'MÔ TẢ',dataIndex: 'desc',flex: 1},
+            {header: 'ĐANG CHẠY',dataIndex: 'val', width:100, xtype: 'checkcolumn'}
+        ],
+        selModel: {
+            selType: 'cellmodel'
+        },
+        width: 1000,
+        frame: false,
+        plugins: [cellEditing]
+    });
+
+    Ext.create('Ext.Viewport', {
+        layout: 'border',
+        items: [{
+        region:'north',
+        items:{
+                xtype: 'panel',
+                height:30,
+                border: false,
+                layout:'table',
+                bodyStyle: 'margin: 3px;',
+                items: [
+                    {html: '<b>TRẠNG THÁI CÁC DỊCH VỤ</b> &nbsp;&nbsp;&nbsp;',border:false},
+                    {xtype: 'button',
+                        text:'Apply',
+                        flex:1,
+                        handler:function(){
+                            var recsChanged =store.getModifiedRecords();
+                            if(recsChanged.length == 0){return;}
+
+                            var keys="";
+                            var vals ="";
+                            for(i=0;i<recsChanged.length;i++){
+                                keys+= recsChanged[i].get("name") + ";";
+                                vals+=recsChanged[i].get("val") + ";";
+                            }
+
+                            //send ajax to save changed
+                            keys = keys.substring(0,keys.length-1);
+                            vals = vals.substring(0,vals.length-1);
+
+                            alert(keys);
+                            alert(vals);
+
+                        }
+                    }
+                ]
+            }
+        },{
+            region:'center',
+            autoScroll:true,
+            items:[grid]
+        }]
+    });
+
+</script>
+</body>
+</html>

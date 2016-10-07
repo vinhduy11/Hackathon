@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>CHUYỂN TIỀN DI ĐỘNG</title>
+    <link rel="stylesheet" type="text/css" href="view.css" media="all">
+</head>
+<body id="main_body">
+
+
+<div id="form_container" style="width:90%;" >
+    <form action="" method="get" id="frmData">
+        <div id="header" style="background-color: #B0006e;padding-left:9px">
+            <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td><img src="logo2.png"></td>
+                    <td><p style="display:inline-block; color:white; font-weight:bold;">CHUYỂN TIỀN DI ĐỘNG</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="container1">
+            <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td rowspan="2">
+                        <p style="background-color: white;padding:3px; border-radius: 4px;">
+                            <img src="money.png" style="width:80px;height:80px"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p style="line-height: 5px; ">
+                            &nbsp;&nbsp;Bạn đã nhận được:
+                        </p>
+
+                        <p style="line-height: 10px;font-weight: bold;font-size: 16pt; color:#B0006e">
+                            &nbsp;${sendAmount}<strong style="font-size: 10pt">đ</strong>
+                        </p>
+                    </td>
+
+                </tr>
+
+            </table>
+        </div>
+
+        <div id="container2">
+            <strong>Từ người gửi</strong>
+            <table>
+                <tr>
+                    <td rowspan="2">
+                        <p style="color:white;background-color:  #B0006e;padding:3px;font-size: 26pt ;margin:0; width:40px; text-align:center">
+                            ${sendFirstChar}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <p style="line-height: 5px; text-transform: uppercase ">
+                            &nbsp;&nbsp;${sendName}
+                        </p>
+
+                        <p style="line-height: 10px;font-size: 9pt; ">
+                            &nbsp;&nbsp; ${sendNumber}
+                        </p>
+                    </td>
+
+                </tr>
+
+            </table>
+        </div>
+
+        <div id="container3" style="display:none">
+            <table>
+                <tr>
+                    <td rowspan="2">
+                        <p style="background-color: white;padding:3px; border-radius: 4px;">
+                            <img src="info.png" style="width:70px;height:70px"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <p style="margin-left:12px; width:90%">
+                            Theo quy định của Ngân hàng Nhà nước bạn cần cung cấp chính xác các thông tin sau để nhận tiền:
+                        </p>
+                    </td>
+
+                </tr>
+
+            </table>
+        </div>
+        <div id="divError" style="clear:both; display:none">
+            <br/>
+            <table style="background-color:#e98c38; height:5px">
+                <tr style="background-color:#e98c38 ; ">
+                    <td  style="background-color:#e98c38 ; color:white;width:100%">
+                        <p style="background-color:#e98c38 ; color:white;margin:0" id="lblError">
+                            Lỗi thông tin nhập vào
+                        </p>
+                    <td style="background-color:#e98c38 ; color:white;width:5%">
+                        <div style="background-color:#e98c38 ; color:white;text-decoration:none;font-size: 16pt;padding:0 " onclick="hideError()">&nbsp;&nbsp;&nbsp;X&nbsp;</div>
+                    </td>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="container4" style="padding-right: 15px; padding-left:5px; display: none">
+            <input id="Name" name="Name" type="text" placeholder="Họ và tên của bạn" style="width:100%; height:20px; margin-top:5px">
+            <input id="IdCard" name="IdCard" type="text" placeholder="CMND / Hộ chiếu / Bằng lái" style="width:100%; height:20px; margin-top:2px">
+            <input id="Phone" name="Phone" type="text" disabled placeholder="Só điện thoại" style="width:100%; height:20px; margin-top:2px;"value="${recvNumber}">
+            <input id="Email" name="Email" type="text" placeholder="Địa chỉ email" style="width:100%; height:20px; margin-top:2px">
+            <input type="hidden" name="2" value="${sendCode}"/>
+            <p style="color:#B0006e; width:100%; text-align:center">Một mã PIN sẽ được gửi tới số điện thoại của bạn</p>
+        </div>
+    </form>
+
+    <div id="buttondiv" class="footer">
+        <button onclick="goNextStep()" id="btnNext"
+                style="background-color: #B0006e; color:white;border-radius: 4px; width:100%; height:40px">Nhận tiền
+        </button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var step = 0;
+    function goNextStep() {
+        step++;
+        if (step >= 2) {
+            step = 2;
+        }
+        displayStep(step);
+    }
+
+    function goPrevStep() {
+        step--;
+        if (step <= 0) {
+            step = 0;
+        }
+        displayStep();
+    }
+
+    function displayStep() {
+
+        if (step == 0) {
+            document.getElementById("container1").style.display = "block";
+            document.getElementById("container2").style.display = "block";
+
+
+            document.getElementById("container3").style.display = "none";
+            document.getElementById("container4").style.display = "none";
+
+            document.getElementById("btnNext").innerHTML = "Nhận tiền ngay"
+        }
+
+        if (step == 1) {
+
+            document.getElementById("container1").style.display = "none";
+            document.getElementById("container2").style.display = "none";
+
+            document.getElementById("container3").style.display = "block";
+            document.getElementById("container4").style.display = "block";
+
+            document.getElementById("btnNext").innerHTML = "Tiếp tục"
+        }
+
+        if (step == 2) {
+            //do some check
+            var input = document.getElementById("Name");
+            var name = input.value;
+
+            if(name.trim().length == 0){
+                input.focus();
+                showError("Bạn chưa nhập tên");
+                return;
+            }
+
+            input = document.getElementById("IdCard");
+            var idCard = input.value;
+            if(idCard.trim().length == 0){
+                input.focus();
+                showError("Bạn chưa nhập CMND/Passport/...");
+                return;
+            }
+/*
+            input = document.getElementById("Email");
+            var email = input.value;
+            if(!validateEmail(email)){
+                input.focus();
+                showError("Địa chỉ email không hợp lệ");
+                return;
+            }
+*/
+            var form = document.getElementById("frmData");
+            form.submit();
+        }
+    }
+
+    function validateEmail(email) {
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+
+    function showError(errMsg){
+        document.getElementById("divError").style.display = "block";
+        document.getElementById("lblError").innerHTML = errMsg;
+    }
+
+    function hideError(){
+        document.getElementById("divError").style.display = "none";
+    }
+</script>
+</body>
+</html>

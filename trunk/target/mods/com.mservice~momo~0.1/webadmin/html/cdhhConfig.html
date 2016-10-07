@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Store Warning</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <!--<script src="../js/session.js"></script>-->
+    <!--<script src="../js/cookie_OLD.js"></script>-->
+    <script type="text/javascript" src="../js/mask.js"></script>
+    <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css"/>
+    <script src="../js/jquery.datetimepicker.js"></script>
+
+</head>
+<body>
+
+<div>
+    <h2>Cặp đôi hoàn hảo</h2>
+    <hr/>
+    <table id="table">
+
+    </table>
+    <hr/>
+</div>
+<hr/>
+<table>
+    <tr>
+        <td>Id:</td>
+        <td><input type="text" id="cdhhConfigId"/></td>
+    </tr>
+    <tr>
+        <td>Service Id:</td>
+        <td><input type="text" id="serviceId"/></td>
+    </tr>
+    <tr>
+        <td>Period name:</td>
+        <td><input type="text" id="periodName"/></td>
+    </tr>
+    <tr>
+        <td>Period collection:</td>
+        <td><input type="text" id="collName"/></td>
+    </tr>
+    <!--<tr>-->
+    <!--<td>Active:</td>-->
+    <!--<td><input type="checkbox" id="active"/></td>-->
+    <!--</tr>-->
+    <tr>
+        <td>Start time:</td>
+        <td><input type="text" id="startTime"/></td>
+    </tr>
+    <tr>
+        <td>End time:</td>
+        <td><input type="text" id="endTime"/></td>
+    </tr>
+
+    <tr>
+        <td>Code min:</td>
+        <td><input type="text" id="codeMin"/></td>
+    </tr>
+
+    <tr>
+        <td>Code max:</td>
+        <td><input type="text" id="codeMax"/></td>
+    </tr>
+
+    <tr>
+        <td>Report:</td>
+        <td><input style="width: 20px; height: 20px" type="checkbox" id="chkReport"></td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td>
+            <button id="btnClear">Clear</button>
+            <button id="btnSave">Save</button>
+        </td>
+    </tr>
+</table>
+
+
+<script type="text/javascript">
+
+    function clearTable() {
+        var head = "<tr>";
+        head += "<th></th>";
+        head += "<th>Service id</th>";
+        head += "<th>Period name</th>";
+        head += "<th>Collection name</th>";
+        head += "<th>Start time</th>";
+        head += "<th>End time</th>";
+        head += "<th>Active</th>";
+        head += "<th>Code min</th>";
+        head += "<th>Code max</th>";
+        head += "<th>Report</th>";
+        head += "<th></th>";
+        head +="</tr>";
+        $("#table").html(head);
+    }
+
+    function addItem(item) {
+        var row;
+        var startTime = new Date(item.startTime);
+        var endTime = new Date(item.endTime);
+
+        var editButton = "<button id='edit_" + item._id + "'>Edit</button>";
+        var activeCell;
+        if(item.active)
+            activeCell = "<button id='inactive_" + item._id + "'>Inactive</button>";
+        else
+            activeCell = "<button id='active_" + item._id + "'>Active</button>";
+
+        row = "<tr id='r_" + item._id + "'>";
+        row += "<td> " + editButton + " </td>";
+        row += "<td> " + item.serviceId + " </td>";
+        row += "<td> " + item.periodName + " </td>";
+        row += "<td> " + item.collName + " </td>";
+        row += "<td> " + startTime.toLocaleString() + " </td>";
+        row += "<td> " + endTime.toLocaleString() + " </td>";
+        row += "<td> " + item.active + " </td>";
+        row += "<td> " + item.minCode + " </td>";
+        row += "<td> " + item.maxCode + " </td>";
+        row += "<td> " + item.report + " </td>";
+        row += "<td> " + activeCell+ " </td>";
+        row += "</tr>";
+        $("#table").append(row);
+
+        $("#edit_" + item._id).click(function () {
+            setFormValues(item);
+        });
+        $("#active_" + item._id).click(function () {
+            setActive(item);
+        });
+        $("#inactive_" + item._id).click(function () {
+            setInactive(item);
+        });
+    }
+
+    function setInactive(item) {
+        var mUrl = "/service/cdhh/setInactive?cdhhConfigId=" + item._id;
+        $.getJSON(mUrl).done(function (data) {
+            loadPage();
+        }).fail(function() {
+            alert("Can't connect to server");
+        });
+    }
+
+    function setActive(item) {
+        var mUrl = "/service/cdhh/setActive?cdhhConfigId=" + item._id;
+        $.getJSON(mUrl).done(function (data) {
+            loadPage();
+        }).fail(function() {
+            alert("Can't connect to server");
+        });
+    }
+
+    function setFormValues(item) {
+        $("#cdhhConfigId").val(item._id);
+        $("#serviceId").val(item.serviceId);
+        $("#periodName").val(item.periodName);
+        $("#collName").val(item.collName);
+        $("#startTime").val(new Date(item.startTime).toLocaleString());
+        $("#endTime").val(new Date(item.endTime).toLocaleString());
+
+        $("#codeMin").val(item.minCode);
+        $("#codeMax").val(item.maxCode);
+        $("#chkReport").val(item.report);
+    }
+
+    function loadPage() {
+        clearTable();
+        var mUrl = "/service/cdhh/getAll";
+        $.getJSON(mUrl).done(function (data) {
+            $.each(data, function (i, item) {
+                addItem(item);
+            });
+        });
+    }
+    $(document).ready(function () {
+        loadPage();
+
+        $("#startTime").datetimepicker({
+            format: 'm/d/Y, h:i:s A'
+        });
+        $("#endTime").datetimepicker({
+            format: 'm/d/Y, h:i:s A'
+        });
+
+        $("#btnSave").click(function () {
+            var startTime = Date.parse($("#startTime").val());
+            var endTime = Date.parse($("#endTime").val());
+
+            $.ajax({
+                url: "/service/cdhh/update",
+                type: "GET",
+                enctype: "multipart/form-data",
+                data: {
+                    cdhhConfigId: $("#cdhhConfigId").val(),
+                    serviceId : $("#serviceId").val(),
+                    periodName: $("#periodName").val(),
+                    collName: $("#collName").val(),
+                    startTime: startTime,
+                    endTime: endTime,
+                    codeMin: $("#codeMin").val(),
+                    codeMax: $("#codeMax").val(),
+                    report :$("#chkReport").is(":checked")
+                },
+                success: function (result) {
+                    var error = result.error;
+                    if (error == 0) {
+                        alert("Thành công.");
+                        loadPage()
+                    }
+                    else
+                        alert("phoneList: " + result.desc);
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+    });
+
+
+</script>
+</body>
+</html>

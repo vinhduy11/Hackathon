@@ -1,0 +1,65 @@
+{
+    "homecredit":[
+        {
+            "form1":{
+                    "cap":"www.homecredit.vn",
+                    "btn":"Tiếp tục",
+                    "nexfrm":1,
+                    "guide":"http://app.momo.vn:81/momo_app/html/homecredit.html",
+
+                    "fields":[
+                        {
+                            "fieldtype":"text",
+                            "fieldlabel":"Nhập số hợp đồng",
+                            "key":"billid",
+                            "isamt": false,
+                            "required":true,
+                            "line":1,
+                            "haschild":0
+                        }
+                    ],
+                    "data":[
+                    ]
+                }
+        },
+        
+        {
+            "form2":{
+                  "cap":"www.homecredit.vn",
+                  "btn":"Thanh toán",
+                  "nexfrm":2,
+                  "guide":"",
+
+                  "fields":[
+                      { 
+                      "fieldtype": "html",
+                        "fieldlabel": "",
+                        "key": "html",
+                        "required": false,
+                        "line": 1,
+                        "haschild": 0,
+                        "readonly": false,
+                        "value": ""                     
+                      },{
+                           "fieldtype":"number",
+                            "fieldlabel":"Số tiền",
+                            "key":"amt",
+                            "isamt":true,
+                            "required":true,
+                            "line":1,
+                            "haschild":0
+                      },{
+                          "fieldtype":"cash",
+                          "fieldlabel":"",
+                          "key":"cash",
+                          "required":true,
+                          "line":1,
+                          "haschild":0
+                      }
+                  ],
+                  "data":[
+                  ]
+            }
+        }
+    ]
+}

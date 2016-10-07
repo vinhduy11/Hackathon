@@ -1,0 +1,8 @@
+Intellij -> Edit Configurations -> Application
+
+Main class: org.vertx.java.platform.impl.cli.Starter
+VM options: -Dvertx.clusterManagerFactory=org.vertx.java.spi.cluster.impl.hazelcast.HazelcastClusterManagerFactory -Dorg.vertx.logger-delegate-factory-class-name=org.vertx.java.core.logging.impl.Log4jLogDelegateFactory
+Program arguments: run com.mservice.momo.vertx.MainVerticle -cp .\target\classes -conf momo.json -cluster - cluster host 10.10.10.14
+Working directory: /home/tumegame/Documents/Project/target/classes
+Use classpath of module: momo
+JRE: 1.7

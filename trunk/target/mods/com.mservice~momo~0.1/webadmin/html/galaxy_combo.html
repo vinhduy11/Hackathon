@@ -1,0 +1,126 @@
+
+<html>
+<head>
+    <title>Momo Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css" />
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script src="../js/mask.js"></script>
+</head>
+<body>
+<div id="mydiv" style="padding-left: 16px;">
+    <h2>Kiểm tra thông tin Combo Galaxy</h2>
+    <table>
+        <tr>
+            <td>Nhập mã Combo:</td>
+            <td><input style="width: 150px; font-size:16px; padding: 3px" type="text" id="txtCode" value="MOMO"/></td>
+            <td>Nhập số điện thoại:</td>
+            <td><input style="width: 120px; font-size:16px; padding: 3px" type="text" id="txtPhone" /></td>
+        </tr>
+        <tr>
+            <td align="center" colspan="4">
+                <input style="padding: 3px; cursor:pointer;" type="button" value="Kiểm tra" id="btnCheck" />
+            </td>
+        </tr>
+    </table>
+    <br>
+    <div id="responseDiv"></div>
+    <br>
+    <input type="hidden" id="id_code"/>
+
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#txtCode").focus();
+
+        $(document).keydown(function (event) {
+             if(event.which == 13){
+                get_Galaxy();
+             }
+        });
+
+        $("#btnCheck").click(function(){
+            get_Galaxy();
+        });
+
+    });
+
+    function get_Galaxy(){
+
+        $('#responseDiv').html("");
+        var code = $("#txtCode").val();
+        if($("#txtCode").val() == "" && $("#txtPhone").val() == ""){
+            alert("Vui lòng nhập mã Combo hoặc số điện thoại cần kiểm tra");
+            $("#txtCode").focus();
+            return;
+        }
+        $('#mydiv').mask("Loading...");
+        $.ajax({
+            url: "/phim123/getGalaxyMomo",
+            type: "GET",
+            data: {
+                "promo_code":$("#txtCode").val(),
+                "promo_phone":$("#txtPhone").val(),
+
+                id: $.session.get("id"),
+                username:$.session.get("username")
+            },
+            success: function (json){
+
+                $('#mydiv').unmask();
+                var error = json["error"];
+                if(error==-1){
+                    alert("Bạn phải đăng nhập.");
+                    $.session.clear();
+                    window.parent.location.href = "../galaxy/login.html";
+                    return;
+                }
+                if(error==-2){
+                    alert(json.desc);
+                    return;
+                }
+
+                var result ="<table>";
+                if(json.code!=''){
+                    result += "<tr><th style='width: 170px'>Số điện thoại </th><td style='width: 298px'><b>0" + json._id + "</b></td></tr>";
+                    result += "<tr><th>Số hóa đơn </th><td><b>" + json.invno + "</b></td></tr>";
+                    result += "<tr><th>Ticket </th><td><b>" + json.tkcode + "</b></td></tr>";
+                    result += "<tr><th>Tên phim </th><td><b>" + json.fname + "</b></td></tr>";
+                    result += "<tr><th>Rạp </th><td><b>" + json.rap + "</b></td></tr>";
+                    result += "<tr><th>Số ghế </th><td><b>" + json.seatlst + "</b></td></tr>";
+                    result += "<tr><th>Thời gian chiếu </th><td><b>" + json.dispaytime + "</b></td></tr>";
+                    result += "<tr><th>Rạp CN</th><td><b>" + json.subrap + "</b></td></tr>";
+                    result += "<tr><th>Thời gian mua vé</th><td><b>" + json.buytime + "</b></td></tr>";
+                    result += "<tr><th>Tổng tiền vé</th><td><b>" + json.amount + "&nbsp;VND</b></td></tr>";
+                    result += "<tr><th>Combo </th><td><b>" + json.code + "</b></td></tr>";
+                    result += "<tr><th>Trạng thái </th><td><b>" + json.desc + "</b></td></tr>";
+
+                    if(json.stat != 'new'){
+                        result += "<tr><th>User cập nhật </th><td><b>" + json.uby + "</b></td></tr>";
+                        result += "<tr><th>Thời gian cập nhật </th><td><b>" + json.update_time + "</b></td></tr>";
+                    }
+                }else{
+                    result += "<tr><th style='width: 170px'>Lỗi </th><td style='width: 298px'><b>Không tìm thấy Combo này.</b></td></tr>";
+                }
+                result += "</table>";
+
+                $('#txtCode').focus();
+                $('#responseDiv').html(result);
+
+            },
+            error: function () {
+                $('#mydiv').unmask();
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

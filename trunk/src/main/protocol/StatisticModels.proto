@@ -1,0 +1,65 @@
+package com.mservice.momo.msg;
+
+enum SubActionType {
+
+    REGISTER_FROM_WEB_IN_DAY = 1;
+    REGISTER_FROM_PHONE_IN_DAY = 2;
+
+    NEW_WEB_USER_LOGIN_IN_DAY = 3;   // số người lần đầu đăng nhập trên web. (có thể sum để ra tháng)
+    NEW_PHONE_USER_LOGIN_IN_DAY = 4;   // số người lần đầu đăng nhập trên phone. (có thể sum để ra tháng)
+
+    USER_LOGIN_WEB_IN_DAY = 5;  // số người đăng nhập trên web trong ngày.
+    USER_LOGIN_PHONE_IN_DAY = 6;  // số người đăng nhập trên phone trong ngày.
+
+    WEB_USER_HAS_TRANS_IN_DAY = 7;       // số người có giao dịch trong ngày.
+    WEB_USER_HAS_TRANS_IN_MONTH = 8;     // số người có giao dịch trong tháng.
+
+    MOBILE_USER_HAS_TRANS_IN_DAY = 9;       // số người có giao dịch trong ngày.
+    MOBILE_USER_HAS_TRANS_IN_MONTH = 10;     // số người có giao dịch trong tháng.
+
+//    LOAD_WEB_HOME_PAGE_IN_DAY = 11;      // số lượt load trang home của web app. (có thể sum để ra tháng)
+
+    MAX_WEB_ONLINE_USER_IN_DAY = 12;      // thời điểm và số người online trên web lớn nhất trong ngày
+    MAX_PHONE_ONLINE_USER_IN_DAY = 13;    // thời điểm và số người online trên phone lớn nhất trong ngày
+
+    SEND_NOTI_VIA_SOCKET_IN_DAY = 14;
+    SEND_NOTI_VIA_CLOUD_IN_DAY = 15;
+
+    SEND_NOTI_LIST_VIA_SOCKET_IN_DAY = 16;
+    SEND_NOTI_LIST_VIA_CLOUD_IN_DAY = 17;
+}
+
+enum ActionType {
+    USER_REGISTER = 100;
+    USER_LOGIN = 101;
+    USER_TRANS = 102;
+    USER_ONLINE = 103;
+    USER_OFFLINE = 104;
+    SEND_NOTI_VIA_SOCKET = 105;
+    SEND_NOTI_VIA_CLOUD = 106;
+    SEND_NOTI_LIST_VIA_SOCKET = 107;
+    SEND_NOTI_LIST_VIA_CLOUD = 108;
+}
+
+message Action {
+    enum Channel{
+        WEB = 1;
+        MOBILE = 2;
+    }
+    required ActionType type = 1;
+    optional Channel channel = 2;
+    optional uint32 phoneNumber = 3;
+}
+
+
+
+message GetNumber {
+    required ActionType type = 1;
+    optional uint64 startDate = 2;
+    optional uint64 endDate = 3;
+}
+
+message GetNumberReply {
+    required ActionType type = 1;
+    optional uint64 number = 2;
+}

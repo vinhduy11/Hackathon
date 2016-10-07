@@ -1,0 +1,45 @@
+body
+{
+	background:none;
+	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+	font-size:small;
+	margin:8px 0 8px;
+	text-align:center;
+}
+
+#form_container
+{
+	margin:0 auto;
+	text-align:left;
+	width:80%;
+}
+
+#container{
+	background-color: #EEEEEE;
+	padding-left:5px;
+}
+
+#container2{
+	padding : 10px;
+	height  : 80px
+
+}
+
+#buttondiv{
+	padding-left:5px;
+	padding-right: 10px
+}
+
+.bkimg{
+	background-image: url("balance_bg.png");
+	background-repeat: no-repeat;
+	background-size: 150%;
+	color:white;
+}
+
+.footer {
+   position:absolute;
+   bottom:5;
+   width:90%;
+   height:40px;   /* Height of the footer */
+}

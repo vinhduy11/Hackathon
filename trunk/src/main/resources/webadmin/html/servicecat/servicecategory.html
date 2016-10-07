@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service category</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/jquery.1.9.js"></script>
+
+    <script type="text/javascript" src="/js/mask.js"></script>
+    <link rel="stylesheet" href="/css/jquery.datetimepicker.css" type="text/css"/>
+    <script src="/js/jquery.datetimepicker.js"></script>
+    <script src="/js/myjs.js"></script>
+
+
+</head>
+<body>
+
+<div>
+    <h2>Service category</h2>
+    <input type="button" value="Reload Cache" id="btnReload"></td>
+    <div class="clear"></div>
+    <hr />
+    <table id="table">
+
+    </table>
+    <hr />
+</div>
+<hr />
+<table>
+
+    <tr>
+        <td>Id:</td>
+        <td><input type="text" name="_id" id="_id"/></td>
+    </tr>
+    <tr>
+        <td>Period name:</td>
+        <td><input type="text" id="name" name="name"/></td>
+    </tr>
+    <tr>
+        <td>Description:</td>
+        <td><input type="text" id="desc" name="desc"/></td>
+    </tr>
+
+    <tr>
+        <td>Status :</td>
+        <td>
+            <select id="stat" name="stat" style="width: 150px; font-size:14px; padding: 3px">
+                <option value="on">On</option>
+                <option value="off">Off</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Order:</td>
+        <td><input type="text" id="order" name="order"/></td>
+    </tr>
+
+    <tr>
+        <td>Icon url:</td>
+        <td><input type="text" id="iurl" name="iurl"/></td>
+    </tr>
+
+    <tr>
+        <td>Star:</td>
+        <td><input type="text" id="star" name="star"/></td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td>
+            <button id="btnClear">Clear</button>
+            <button id="btnSave">Save</button>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+
+    function clearTable() {
+        var head = "<tr>";
+        head += "<th>*</th>";
+        head += "<th>Category ID</th>";
+        head += "<th>Name</th>";
+        head += "<th>Description</th>";
+        head += "<th>Status</th>";
+        head += "<th>Order</th>";
+        head += "<th>Icon url</th>";
+        head += "<th>Star</th>";
+        head +="</tr>";
+        $("#table").html(head);
+    }
+
+    function addItem(item) {
+        var row;
+        var editButton = "<button id='edit_" + item._id + "'>Edit</button>";
+
+        row = "<tr id='r_" + item._id + "'>";
+        row += "<td> " + editButton + " </td>";
+        row += "<td> " + item._id + " </td>";
+        row += "<td> " + item.name + " </td>";
+        row += "<td> " + item.desc + " </td>";
+        row += "<td> " + item.stat + " </td>";
+        row += "<td> " + item.ord + " </td>";
+        row += "<td> " + item.iurl + " </td>";
+        row += "<td> " + item.star + " </td>";
+        row += "</tr>";
+
+        $("#table").append(row);
+
+        $("#edit_" + item._id).click(function () {
+            setFormValues(item);
+        });
+    }
+
+    function setFormValues(item) {
+        $("#_id").val(item._id);
+        $("#name").val(item.name);
+        $("#desc").val(item.desc);
+        $("#stat").val(item.stat);
+        $("#order").val(item.ord);
+        $("#iurl").val(item.iurl);
+        $("#star").val(item.star);
+    }
+
+    function loadPage() {
+        clearTable();
+        var mUrl = "/servicecate/getAll";
+        $.getJSON(mUrl).done(function (data) {
+            $.each(data, function (i, item) {
+                addItem(item);
+            });
+        });
+    }
+    $(document).ready(function () {
+        loadPage();
+
+        $("#btnSave").click(function () {
+            $.ajax({
+                url: "/servicecate/upsert",
+                type: "GET",
+                enctype: "multipart/form-data",
+                data: {
+                    _id :$("#_id").val(),
+                    name:$("#name").val(),
+                    desc:$("#desc").val(),
+                    stat:$("#stat").val(),
+                    ord :$("#order").val(),
+                    iurl :$("#iurl").val(),
+                    star :$("#star").val()
+                },
+                success: function (result) {
+                    var error = result.error;
+                    if (error == 0) {
+                        alert("Thành công.");
+                        loadPage()
+                    }
+                    else
+                        alert(result.desc);
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+    });
+    $('#btnReload').click(function () {
+        reload();
+    });
+    function reload(){
+        $.ajax({
+            url: "/servicecate/reload",
+            type: "GET",
+            success: function (string) {
+                $('#mydiv').unmask();
+                var error = string["error"];
+                if (error == 0) {
+                    alert("Thành công.");
+                }
+                else if (error == -1) {
+                    alert("Bạn phải đăng nhập.");
+                    $.session.clear();
+                    window.parent.location.href = "../html/login.html";
+                }
+                else
+                    alert("Không thành công. Error code = " + error);
+            },
+            error: function () {
+                $('#mydiv').unmask();
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Package Config Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+    <script type="text/javascript" src="../js/myjs.js"></script>
+
+</head>
+<body>
+<div id="mydiv">
+    <h2>Service Package Config Page</h2>
+    <div style="float:left">
+        <b>Service id</b>: <input type="text" style="border:1px solid #778899; width:150px" name="sServiceId" id="sServiceId">
+        <b>Link to</b>: <input type="text" style="border:1px solid #778899; width:150px" name="slinkto" id="slinkto">
+
+        <input type="button" id="btnSearch" value="Search" >
+    </div>
+    <div class="clear"></div>
+
+    <div id="table"></div>
+
+    <div class="clear"></div>
+
+    <div>
+        <table>
+            <tr>
+                <th colspan="2">Edit Information</th>
+            </tr>
+            <tr>
+                <td>Service ID</td>
+                <td><input style="border: none" type="text" id="txtsId">
+                    <input type="hidden" id="id_ser">
+                </td>
+            </tr>
+            <tr>
+                <td>Service Name</td>
+                <td><input style="border: none" type="text" id="txtsName">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Package Type</td>
+                <td>
+                    <input style="border: none" type="text" id="txtpType">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Package Text</td>
+                <td><input style="border: none" type="text" id="txtpName"></td>
+            </tr>
+
+            <tr>
+                <td>Package Value</td>
+                <td><input style="border: none" type="text" id="txtpValue"></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td><input style="border: none" type="text" id="txtdesc"></td>
+            </tr>
+
+            <tr>
+                <td>Link to dropbox(key)</td>
+                <td><input style="border: none" type="text" id="txtlink"></td>
+            </tr>
+
+            <tr>
+                <td>Parent id</td>
+                <td>
+                    <select id="txtparentid" style="width: 150px; font-size:14px; padding: 3px" name="txtparentid">
+                    </select>
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>Order</td>
+                <td><input style="border: none" type="text" id="txtorder"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" value="Create" id="btNew">
+                    <input type="button" value="Update" id="btSave" disabled>
+
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).on("click", "#del", function () {
+            var id_ser = $(this).attr("id_ser");
+            var result = confirm("Are you sure?");
+            if (result == true) {
+                $('#mydiv').mask("Loading...");
+                $.ajax({
+                    url: "/serpackage/del",
+                    type: "GET",
+                    data: {
+                        _id : id_ser,
+                        id: $.session.get("id"),
+                        username:$.session.get("username")
+                    },
+                    success: function (string) {
+                        $('#mydiv').unmask();
+                        var error = string["error"];
+                        if (error == 0) {
+                            alert("Thành công.");
+                            init();
+                        }
+                        else if (error == -1) {
+                            alert("Bạn phải đăng nhập.");
+                            $.session.clear();
+                            window.parent.location.href = "../html/login.html";
+                        }
+                        else
+                            alert("Không thành công. Error code = " + error);
+                    },
+                    error: function () {
+                        $('#mydiv').unmask();
+                        alert('Có lỗi kết nối xảy ra');
+                    }
+                });
+            }
+        });
+    });
+
+    $(function () {
+        $(document).on("click", "#edit", function () {
+
+            $("#btSave").prop("disabled", false);
+
+            //lay id cua dong duoc click
+            var rid = $(this).attr("val");
+            var id_ser = $(this).attr("id_ser");
+            var parentid = $(this).attr("parentid");
+            var rowId = "td[rid=" + rid + "]";
+
+            //lay mang cac td tag
+            var tdArr = $(rowId)
+
+            //lay value tung td tag
+            var serviceID = tdArr[0].innerHTML;
+            var serviceName = tdArr[1].innerHTML;
+            var packageType = tdArr[2].innerHTML;
+            var packageName = tdArr[3].innerHTML;
+            var packageValue = tdArr[4].innerHTML;
+            var description = tdArr[5].innerHTML;
+            var linktodrop = tdArr[6].innerHTML;
+            var order = tdArr[8].innerHTML;
+            var sid =  serviceID;
+            loadOpt(sid,parentid);
+
+            $("#id_ser").val(id_ser);
+            $("#txtsId").val(serviceID);
+            $("#txtsName").val(serviceName);
+            $("#txtpType").val(packageType);
+            $("#txtpName").val(packageName);
+            $("#txtpValue").val(packageValue);
+            $("#txtdesc").val(description);
+            $("#txtlink").val(linktodrop);
+            $("#txtparentid").val(parentid);
+            $("#txtorder").val(order);
+
+
+        });
+    });
+
+    $('#btSave').click(function () {
+        upsert();
+    });
+    $('#btNew').click(function () {
+        $("#id_ser").val("");
+
+        var sid =  $("#sServiceId").val();
+        var linkto = $("#slinkto").val();
+        loadOpt(sid,"");
+
+        upsert();
+    });
+
+    $(document).ready(function () {
+        init();
+    });
+
+    $('#btnSearch').click(function () {
+        init();
+    });
+
+    function upsert() {
+        if ($.session.get("id") == null) {
+            alert("Bạn phải đăng nhập.");
+            $.session.clear();
+            window.parent.location.href = "../html/login.html";
+        } else {
+            $('#mydiv').mask("Loading...");
+            var parentid = $("#txtparentid").val();
+            var parentname = $("#txtparentid :selected").text();
+            if(parentid===""){
+            parentname = "";
+            }
+
+            $.ajax({
+                url: "/serpackage/upsert",
+                type: "GET",
+                data: {
+                    _id: $("#id_ser").val(),
+                    service_id: $("#txtsId").val(),
+                    service_name: $("#txtsName").val(),
+                    package_type: $("#txtpType").val(),
+                    package_name: $("#txtpName").val(),
+                    package_value: $("#txtpValue").val(),
+                    description: $("#txtdesc").val(),
+                    id: $.session.get("id"),
+                    username: $.session.get("username"),
+                    link: $("#txtlink").val(),
+                    parentid: parentid,
+                    parentname:parentname,
+                    order:$("#txtorder").val()
+                },
+                success: function (string) {
+                    $('#mydiv').unmask();
+                    var error = string["error"];
+                    if (error == 0) {
+                        alert("Thành công.");
+                        $("#id_ser").val("");
+                        $("#txtsId").val("");
+                        $("#txtsName").val("");
+                        $("#txtpType").val("");
+                        $("#txtpName").val("");
+                        $("#txtpValue").val("");
+                        $("#txtdesc").val("");
+                        $("#txtlink").val("");
+                        $("#txtorder").val("");
+
+                        init();
+                    }
+                    else if (error == -1) {
+                        alert("Bạn phải đăng nhập.");
+                        $.session.clear();
+                        window.parent.location.href = "../html/login.html";
+                    }
+                    else
+                        alert("Không thành công. Error code = " + error);
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        }
+    }
+
+    function loadOpt(sid,parentid){
+        if(sid === ""){
+            return;
+        }
+        $.ajax({
+            url: "/serpackage/getallAsArray",
+            type: "GET",
+            data: {
+                sid  :sid,
+                parentid:parentid
+            },
+            success: function (data) {
+                removeOpt("txtparentid");
+
+                addOpt("txtparentid","","No parent");
+                $.each(data, function (i, item) {
+                        var val = item._id;
+                        var text = item.package_name;
+                        addOpt("txtparentid",val,text);
+                });
+
+                if(parentid != ""){
+                    setSelected("txtparentid", parentid);
+                }
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+    function init() {
+        $("#btSave").prop("disabled", true);
+        $.ajax({
+            url: "/serpackage/getall",
+            type: "GET",
+            data: {
+                sid : $("#sServiceId").val(),
+                linkto : $("#slinkto").val()
+            },
+            success: function (string) {
+                var table = string["table"];
+                $("#table").html(table);
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

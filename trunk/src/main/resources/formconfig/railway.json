@@ -1,0 +1,63 @@
+{
+    "railway": [
+        {
+            "form1": {
+                "cap": "vr.com.vn",
+                "btn": "Tiếp tục",
+                "nexfrm": 1,
+                "guide": "http://app.momo.vn:81/momo_app/html/muavetau.html",
+                "fields": [
+                    {
+                        "fieldtype": "number",
+                        "fieldlabel": "Nhập mã thanh toán",
+                        "key": "billid",
+                        "isamt": false,
+                        "required": true,
+                        "line": 1,
+                        "haschild": 0
+                    }
+                ],
+                "data": [
+                ]
+            }
+        },
+        {
+            "form2": {
+                "cap": "vr.com.vn",
+                "btn": "Thanh toán",
+                "nexfrm": 2,
+                "guide": "",
+                "fields": [
+                    {
+                        "fieldtype": "html",
+                        "fieldlabel": "",
+                        "key": "html",
+                        "required": false,
+                        "line": 1,
+                        "haschild": 0,
+                        "readonly": false,
+                        "value": ""               
+                    }, {
+                        "fieldtype": "text",
+                        "fieldlabel": "",                  
+                        "key": "amt",
+                        "isamt": true,
+                        "required": true,
+                        "line": 1,
+                        "haschild": 0,
+                        "readonly": true
+                    }, {
+                        "fieldtype": "cash",
+                        "fieldlabel": "Nguồn tiền",
+                        "key": "cash",
+                        "required": true,
+                        "line": 1,
+                        "haschild": 0
+                    }
+                ],
+                "data": [
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,191 @@
+<html>
+<head>
+    <title>Send Notification To Cloud Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+
+</head>
+<body>
+<div id="mydiv">
+    <h2>Transaction Error Configuration Page</h2>
+
+    <div id="table"></div>
+
+    <div class="clear"></div>
+
+    <div>
+        <table>
+            <tr>
+                <th colspan="2">Edit Information</th>
+            </tr>
+            <tr>
+                <td>Error code</td>
+                <td><input type="text" id ="txtErr"></td>
+            </tr>
+
+            <tr>
+                <td>Transaction type</td>
+                <td><input type="text" id ="txtTranType"></td>
+            </tr>
+
+            <tr>
+                <td>Transaction name</td>
+                <td><input type="text" id ="txtTranName"></td>
+            </tr>
+
+            <tr>
+                <td>Description</td>
+                <td><textarea class="input" id ="txtDesc"></textarea></td>
+            </tr>
+            <tr>
+                <td>Content TranHis</td>
+                <td><textarea class="input" id ="txtCont"></textarea></td>
+            </tr>
+
+            <tr>
+                <td>Title</td>
+                <td><input type="text" id ="txtTitle"></td>
+            </tr>
+
+            <tr>
+                <td>Body Notification</td>
+                <td><textarea class="input" id ="txtBody"></textarea>
+                <input type="hidden" id = "id_err"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" value="Create" id="btNew">
+                    <input type="button" value="Update" id="btSave" disabled>
+            </tr>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $( document ).on( "click", "button", function(){
+
+            $("#btSave").prop("disabled",false);
+            //lay id cua dong duoc click
+            var rid =$(this).attr("val");
+            var id_err =$(this).attr("id_err");
+            var rowId = "td[rid=" + rid + "]";
+
+            //lay mang cac td tag
+            var tdArr = $(rowId)
+
+            //lay value tung td tag
+
+            var error = tdArr[0].innerHTML;
+            var trantype =tdArr[1].innerHTML;
+            var tranname =tdArr[2].innerHTML;
+            var description =tdArr[3].innerHTML;
+            var content =tdArr[4].innerHTML;
+            var title =tdArr[5].innerHTML;
+            var noti =tdArr[6].innerHTML;
+
+            $("#txtErr").val(error);
+            $("#txtTranType").val(trantype);
+            $("#txtTranName").val(tranname);
+            $("#txtDesc").val(description);
+            $("#txtCont").val(content);
+            $("#txtTitle").val(title);
+            $("#txtBody").val(noti);
+            $("#id_err").val(id_err);
+
+        });
+    });
+
+
+    $('#btSave').click(function () {
+        upsert();
+    });
+    $('#btNew').click(function () {
+        $("#id_err").val("");
+        upsert();
+    });
+
+    function upsert(){
+        if ($.session.get("id")==null) {
+            alert("Bạn phải đăng nhập.");
+            $.session.clear();
+            window.parent.location.href = "../html/login.html";
+        } else {
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/tranerr/upsert",
+                type: "GET",
+                data: { id_err: $("#id_err").val(),
+                    err_code: $("#txtErr").val(),
+                    tran_type: $("#txtTranType").val(),
+                    tran_name: $("#txtTranName").val(),
+                    desc: $("#txtDesc").val(),
+                    content: $("#txtCont").val(),
+                    noti_title: $("#txtTitle").val(),
+                    noti_body: $("#txtBody").val(),
+                    id: $.session.get("id"),
+                    username:$.session.get("username")
+                },
+                success: function (string) {
+                    $('#mydiv').unmask();
+                    var error = string["error"];
+                    if (error == 0) {
+                        alert("Thành công.");
+                        $("#txtErr").val("");
+                        $("#txtTranType").val("");
+                        $("#txtTranName").val("");
+                        $("#txtDesc").val("");
+                        $("#txtTitle").val("");
+                        $("#txtCont").val("");
+                        $("#txtBody").val("");
+                        $("#id_err").val("");
+                        init();
+                    }
+                    else if (error == -1) {
+                        alert("Bạn phải đăng nhập.");
+                        $.session.clear();
+                        window.parent.location.href = "../html/login.html";
+                    }
+                    else
+                        alert("Không thành công. Error code = " + error);
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+         init();
+    });
+    function init(){
+        $("#btSave").prop("disabled", true);
+        $.ajax({
+            url: "/tranerr/getall",
+            type: "GET",
+            data: {
+            },
+            success: function (string) {
+                table = string["table"];
+                $("#table").html(table);
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

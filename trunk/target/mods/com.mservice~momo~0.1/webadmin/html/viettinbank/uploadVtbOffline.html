@@ -1,0 +1,166 @@
+<html>
+<head>
+    <title>Send Notification To Cloud Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/jquery.1.9.js"></script>
+    <script src="/js/session.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script type="text/javascript" src="/js/mask.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/css/jquery-ui.css" type="text/css"/>
+
+    <style type="text/css">
+        table, th, td {
+        border: none;
+        }
+    </style>
+</head>
+<body>
+<div id="mydiv">
+
+    <h2>Trả thưởng offline Viettinbank</h2>
+    <table id="inputform">
+        <tr>
+            <td>Select file:</td>
+            <td>
+                <form id="form" name="form">
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="file" id="file" name="file">
+                                <input type="hidden" id="hfile" name="hfile">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </td>
+
+            <td >
+                <input style="width: 100px; font-size:16px; padding: 3px" type="button" value="Trả thưởng" id="buttonTS"/>
+            </td>
+
+        </tr>
+    </table>
+    <div id="responseDiv"></div>
+
+    <table id="tbresult">
+
+    </table>
+
+</div>
+
+<script type="text/javascript">
+
+    function clearTable() {
+
+        var head = "<tr>";
+        head += "<th>SDT</th>";
+        head += "<th>CMND</th>";
+        head += "<th>Name</th>";
+        head += "<th>BankName</th>";
+        head += "<th>BankCode</th>";
+        head += "<th>Error</th>";
+        head += "<th>Desc</th>";
+        head +="</tr>";
+        $("#tbresult").html(head);
+    }
+
+    function addItem(item) {
+        var row;
+        if(item.error !="" && item.error != "0"){
+            row = "<tr style='color:red'>";
+        }else{
+            row = "<tr>";
+        }
+
+        row += "<td> " + item.number + " </td>";
+        row += "<td> " + item.cmnd + " </td>";
+        row += "<td> " + item.name + " </td>";
+        row += "<td> " + item.bankname + " </td>";
+        row += "<td> " + item.bankcode + " </td>";
+        row += "<td> " + item.name + " </td>";
+        row += "<td> " + item.error + " </td>";
+        row += "<td> " + item.desc + " </td>";
+        row += "</tr>";
+        $("#tbresult").append(row);
+    }
+
+    $(document).ready(function () {
+
+        $('#buttonTS').click(function () {
+            if ($.session.get("id") == null) {
+                alert("Bạn phải đăng nhập.");
+                $.session.clear();
+                window.parent.location.href = "../html/login.html";
+            }
+            else {
+
+                if( ($("#hfile").val()==="") ){
+                    alert("select a file to send out");
+                    return;
+                }
+
+                if($("#hfile").val()!= ""){
+                    var result = confirm("Bạn chắc chắn trả thưởng theo danh sách trong file: "+$("#hfile").val()+" ?");
+                    if (result == true) {
+                        send();
+                    }
+                }
+            }
+        });
+
+        $("#file").change(function(){
+            $("#hfile").val(this.value);
+            var oData = new FormData(document.forms.namedItem("form"));
+            $.ajax({
+                type : "POST",
+                url : "/uploadFile",
+                data : oData,
+                processData : false,
+                contentType : false,
+                success : function(res) {
+                    alert(res.desc);
+                },
+                error : function(xhr, ajaxOptions, thrownError) {
+                    alert("Network error")
+                }
+            });
+        });
+
+    });
+
+    function send() {
+        $('#mydiv').mask("Loading...");
+        $.ajax({
+            url: "/readFile",
+            type: "GET",
+            data: {
+                id: $.session.get("id"),
+                username: $.session.get("username"),
+                hFile:$("#hfile").val(),
+            },
+
+            success: function (array) {
+                $('#mydiv').unmask();
+
+                if(array != null && array.length > 0){
+                    clearTable();
+                    for(i=0;i<array.length;i++){
+                        addItem(array[i]);
+                    }
+                }
+
+                $("#hfile").val("");
+            },
+            error: function () {
+                $('#mydiv').unmask();
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+    {
+    "kaspersky":[
+        {
+            "form1":{
+                "cap":"http://kaspersky.nts.com.vn",
+                "btn":"Thanh toán",
+                "nexfrm":1,
+                "guide":"",
+                "fields":[
+                    {
+					 "fieldtype":"drop",
+                        "fieldlabel":"Chọn dòng sản phẩm",
+                        "key":"gid",
+                        "required":true,
+                        "line":1,
+                        "haschild":1 
+                    },{
+                        "fieldtype":"drop",
+                        "fieldlabel":"Chọn sản phẩm",
+                        "key":"billid",
+                        "required":true,
+                        "line":1,
+                        "haschild":1                  
+                    },{
+                        "fieldtype":"drop",
+                        "fieldlabel":"Giá",
+                        "key":"amt",
+                        "required":true,
+                        "line":1,
+                        "haschild":0                  
+                    },{
+                         "fieldtype":"cash",
+                         "fieldlabel":"Nguồn tiền",
+                         "key":"cash",
+                         "required":true,
+                         "line":1,
+                         "haschild":0
+                     }
+                ],
+
+                    "data":[
+                            {
+                                "linkto":"gid",
+                                "text":"Cho PC",
+                                "value":"pc",
+                                "parentid":"",
+                                "id":"1"
+							},{
+                              "linkto":"gid",
+                                "text":"Cho Mobile",
+                                "value":"mobile",
+                                "parentid":"",
+                                "id":"2"
+							},{
+                                "linkto":"billid",
+                                "text":"Kaspersky Anti-Virus 2015 - 1PC/năm",
+                                "value":"KAV1U",
+                                "parentid":"1",
+                                "id":"3"							
+                            },{
+                                "linkto":"billid",
+                                "text":"Kaspersky Anti-Virus 2015 - 3PC/năm",
+                                "value":"KAV3U",
+                                "parentid":"1",
+                                "id":"4"
+                            },{
+                                "linkto":"billid",
+                                "text":"Kaspersky Internet Security 2015 - 1PC/năm",
+                                "value":"KIS1U",
+                                "parentid":"1",
+                                "id":"5"
+							},{
+                                "linkto":"billid",
+                                "text":"Kaspersky Internet Security 2015 - 3PC/năm",
+                                "value":"KIS3U",
+                                "parentid":"1",
+                                "id":"6"
+                            },{
+                                "linkto":"billid",
+                                "text":"Kaspersky Anti-Virus 2015 for Mac - 1PC/năm",
+                                "value":"KISMAC",
+                                "parentid":"1",
+                                "id":"7"
+                            },{
+                                "linkto":"billid",
+                                "text":"Kaspersky Internet Security – Multi Device",
+                                "value":"KISMD",
+                                "parentid":"1",
+                                "id":"8"
+                            },{
+                                "linkto":"billid",
+                                "text":"Kaspersky Internet Security for Android – 1năm/máy",
+                                "value":"KISANDROID",
+                                "parentid":"2",
+                                "id":"9"
+                            },{
+                                "linkto":"billid",
+                                "text":"Kaspersky Internet Security – Multi Device",
+                                "value":"KISMD",
+                                "parentid":"2",
+                                "id":"10"                                           
+	                        },{
+							"linkto":"amt",
+                                "text":"160.000đ    (KM 20%)",
+                                "value":"160000",
+                                "parentid":"3",
+                                "id":""                                                    
+	                        },{
+							"linkto":"amt",
+                                "text":"300.000đ    (KM 20%)",
+                                "value":"300000",
+                                "parentid":"4",
+                                "id":""                                                    
+	                        },{
+							"linkto":"amt",
+                                "text":"300.000đ    (KM 20%)",
+                                "value":"300000",
+                                "parentid":"5",
+                                "id":""                                                    
+	                        },{
+							"linkto":"amt",
+                                "text":"580.000đ    (KM 20%)",
+                                "value":"580000",
+                                "parentid":"6",
+                                "id":""  
+                            },{
+							"linkto":"amt",
+                                "text":"390.000đ    (KM 20%)",
+                                "value":"390000",
+                                "parentid":"7",
+                                "id":"" 
+                            },{
+							"linkto":"amt",
+                                "text":"660.000đ    (KM 20%)",
+                                "value":"660000",
+                                "parentid":"8",
+                                "id":"" 
+                            },{
+							"linkto":"amt",
+                                "text":"200.000đ    (KM 20%)",
+                                "value":"200000",
+                                "parentid":"9",
+                                "id":"" 
+                            },{
+							"linkto":"amt",
+                                "text":"660.000đ    (KM 20%)",
+                                "value":"660000",
+                                "parentid":"10",
+                                "id":"" 
+	                        }
+                    ]
+                }
+        }
+    ]
+}

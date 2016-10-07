@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cấu hình hạn mức sử dụng voucher theo dịch vụ </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <!--<script src="../js/session.js"></script>-->
+    <!--<script src="../js/cookie_OLD.js"></script>-->
+    <script type="text/javascript" src="../js/mask.js"></script>
+    <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css"/>
+    <script src="../js/jquery.datetimepicker.js"></script>
+</head>
+<body>
+
+<div>
+    <h2>Cấu hình hạn mức sử dụng voucher theo dịch vụ </h2>
+    <hr />
+    <table id="table">
+    </table>
+    <hr />
+</div>
+<h2>Cấu hình hạn mức sử dụng quà cho tất cả dịch vụ</h2>
+<table>
+    <tr>
+        <td>Check All:</td>
+        <td>
+            <select id="rule_all" name="rule_all" style="width: 300px; font-size:14px; padding: 3px">
+                <option value="true">Check</option>
+                <option value="false">Uncheck</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Min Amount:</td>
+        <td>
+            <input type="text" id="min_amount_all">
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <button id="btnClearAll">Clear</button>
+            <button id="btnSaveAll">Save</button>
+        </td>
+    </tr>
+</table>
+<hr />
+<h2>Cấu hình hạn mức sử dụng quà cho dịch vụ riêng lẻ</h2>
+<table>
+    <tr>
+        <td>Service Id:</td>
+        <td><input type="text" id="service_id" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+    <tr>
+        <td>Min Amount:</td>
+        <td><input type="text" id="min_amount_service" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+    <tr>
+        <td>Check rule:</td>
+        <td>
+            <select id="rule_service" name="rule_service" style="width: 300px; font-size:14px; padding: 3px">
+                <option value="true">Check</option>
+                <option value="false">Uncheck</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td>
+            <button id="btnClear">Clear</button>
+            <button id="btnSave">Save</button>
+            <button id="btnRefresh">Refresh</button>
+        </td>
+    </tr>
+</table>
+<hr />
+<script type="text/javascript">
+
+    function clearTable() {
+        var head = "<tr>";
+        head += "<th>*</th>";
+        head += "<th>Service Id</th>";
+        head += "<th>Min Amount</th>";
+        head += "<th>Check Rule</th>";
+        head += "<th>Check Rule All</th>";
+        head += "</tr>";
+        $("#table").html(head);
+    }
+
+    function addItem(item) {
+        var row;
+        var editButton;
+        if(item.has_checked_all)
+        {
+            editButton = "<button id='edit_" + item._id + "' disabled='disabled'>Edit</button>";
+        }
+        else
+        {
+            editButton = "<button id='edit_" + item._id + "'>Edit</button>";
+        }
+
+        row = "<tr id='r_" + item._id + "'>";
+        row += "<td> " + editButton + " </td>";
+        row += "<td> " + item._id + " </td>";
+        row += "<td> " + item.min_amount + " </td>";
+        if(item.has_checked)
+        {
+            row += "<td> Enabled  </td>";
+        }
+        else
+        {
+            row += "<td>Disabled</td>";
+        }
+
+        if(item.has_checked_all)
+        {
+            row += "<td> Enabled  </td>";
+        }
+        else
+        {
+            row += "<td>  Disabled  </td>";
+        }
+
+        row += "</tr>";
+
+        $("#table").append(row);
+        setTableAllValues(item.has_checked_all, item.min_amount)
+        $("#edit_" + item._id).click(function () {
+            setFormValues(item);
+        });
+    }
+
+    function setFormValues(item) {
+        $("#service_id").val(item._id);
+        $("#min_amount_service").val(item.min_amount);
+    }
+
+    function setTableAllValues(checkAll, min_amount) {
+        $("#rule_all").val(checkAll.toString());
+        if(checkAll)
+        {
+            $("#min_amount_all").val(min_amount);
+            $("#btnSave").attr('disabled', true);
+        }
+        else{
+            $("#min_amount_all").val("0");
+            $("#btnSave").attr('disabled', false);
+        }
+    }
+
+    function clearData()
+    {
+        $("#service_id").val("");
+        $("#min_amount_service").val("0");
+    }
+    function loadPage() {
+        clearTable();
+        clearData();
+        var checkAll = false;
+        var min_amount = 0;
+        var mUrl = "/getServiceGiftRule";
+        $.getJSON(mUrl).done(function (data) {
+            $.each(data, function (i, item) {
+                addItem(item);
+                checkAll = item.has_checked_all;
+                min_amount = item.min_amount
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        loadPage();
+
+        $("#btnSave").click(function () {
+         if($("#service_id").val() === "" || $("#min_amount_service").val() === "")
+         {
+             alert("Error data.");
+         }
+         else
+         {
+               $.ajax({
+                url: "/updateServiceGiftRules",
+                type: "GET",
+                enctype: "multipart/form-data",
+                data: {
+                    service_id :$("#service_id").val(),
+                    min_amount_service:$("#min_amount_service").val(),
+                    rule_service:$("#rule_service").val()
+                },
+                success: function (result) {
+                    if (result) {
+                        alert("Thành công.");
+                        loadPage();
+                    }
+                    else
+                        alert(result.desc);
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+          }
+        });
+
+        $("#btnSaveAll").click(function () {
+            if($("#min_amount_all").val() === "")
+            {
+                alert("Nhập thiếu số tiền kìa ku");
+            }
+            else
+            {
+                $.ajax({
+                url: "/updateAllServiceGiftRules",
+                type: "GET",
+                enctype: "multipart/form-data",
+                data: {
+                    rule_all :$("#rule_all").val(),
+                    min_amount_all:$("#min_amount_all").val(),
+                },
+                success: function (result) {
+                    if (result) {
+                        alert("Thành công.");
+                        loadPage();
+                    }
+                    else
+                        alert("Error");
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+
+            }
+        });
+
+        $("#btnRefresh").click(function () {
+            $.ajax({
+                url: "/reloadServiceGiftRule",
+                type: "GET",
+                enctype: "multipart/form-data",
+                data: {
+                },
+                success: function (result) {
+                    if (result) {
+                        alert("Thành công.");
+                        loadPage()
+                    }
+                    else
+                        alert("That bai");
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

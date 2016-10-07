@@ -1,0 +1,92 @@
+{
+    "promotion":[
+        {
+      "form1": {
+        "cap": "Trải nghiệm thanh toán hóa đơn",
+        "btn": "NHẬN THẺ QUÀ TẶNG",
+        "nexfrm": 1,
+        "guide": "http://app.momo.vn:81/momo_app/html/promotion.html",
+        "fields": [
+          {
+            "fieldtype": "drop",
+            "fieldlabel": "Chọn hóa đơn/dịch vụ",
+            "key": "billid",
+            "required": true,
+            "line": 1,
+            "haschild": 0
+          }
+        ],
+        "data": [
+		{
+			"linkto":"billid",
+			"text":"Vinaphone trả sau",
+			"value":"vinahcm",
+			"parentid":"",
+			"id":""
+		},{
+			"linkto":"billid",
+			"text":"VNPT Hồ Chí Minh",
+			"value":"cdhcm",
+			"parentid":"",
+			"id":""
+		},{
+			"linkto":"billid",
+			"text":"VNPT Hà Nội",
+			"value":"vthn",
+			"parentid":"",
+			"id":""
+		},{
+			"linkto":"billid",
+			"text":"Prudential Finance",
+			"value":"prudential",
+			"parentid":"",
+			"id":""
+		},{
+			"linkto":"billid",
+			"text":"Nước Chợ Lớn",
+			"value":"nuoccholon",
+			"parentid":"",
+			"id":""
+		},{
+			"linkto":"billid",
+			"text":"Nước Nhà Bè",
+			"value":"nuocnb",
+			"parentid":"",
+			"id":"" 
+		},{
+			"linkto":"billid",
+			"text":"Điện Lực HCM",
+			"value":"dien",
+			"parentid":"",
+			"id":"" 
+		},{
+			"linkto":"billid",
+			"text":"Truyền hình cáp Việt Nam",
+			"value":"vtvcab",
+			"parentid":"",
+			"id":"" 
+		},{
+			"linkto":"billid",
+			"text":"Mua vé xem phim",
+			"value":"123phim",
+			"parentid":"",
+			"id":"" 
+		},{
+			"linkto":"billid",
+			"text":"Truyền hình An Viên",
+			"value":"avg",
+			"parentid":"",
+			"id":"" 
+		},{
+			"linkto":"billid",
+			"text":"Home Credit",
+			"value":"homecredit",
+			"parentid":"",
+			"id":"" 							 
+		}
+        ]
+      }
+    }
+  ],
+    "extra":{ "billid": {"key": "Chọn hóa đơn/dịch vụ"}}
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Store Warning</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <!--<script src="../js/session.js"></script>-->
+    <!--<script src="../js/cookie_OLD.js"></script>-->
+    <script type="text/javascript" src="../js/mask.js"></script>
+    <link rel="stylesheet" href="../css/jquery-ui.css" type="text/css"/>
+    <script src="../js/jquery-ui.js"></script>
+    <style type="text/css">
+        .noborder table td th
+        {
+            border:0px solid #778899;
+            padding-left:3px;
+            padding-right:3px;
+        }
+
+    </style>
+
+
+</head>
+<body>
+
+<div>
+    <h2>Query Merchant Promo</h2>
+
+    <table border="0">
+        <tr style="border:0px ;">
+            <td style="border:0px ;text-decoration:underline;font-weight:bold;">Code(MOMO)</td>
+            <td style="border:0px ;text-decoration:underline;font-weight:bold;">Merchant agent</td>
+            <td style="border:0px ;text-decoration:underline;font-weight:bold;">Customer agent</td>
+            <td style="border:0px ;text-decoration:underline;font-weight:bold;">From date(dd/mm/yyyy)</td>
+            <td style="border:0px ;text-decoration:underline;font-weight:bold;">To date(dd/mm/yyyy)</td>
+
+            <td><button id="btnSearch">Tìm kiếm</button></td>
+        </tr>
+
+        <tr style="border:0px ;">
+            <td><input style="width:100px; border:1px solid #778899;" id="txtCode" name="txtCode" type="text"></td>
+            <td><input style="width:100px; border:1px solid #778899;" id="txtCoffeeAgent" name="txtCoffeeAgent" type="text"/></td>
+            <td><input style="width:100px; border:1px solid #778899;" id="txtCustomAgent" name="txtCustomAgent" type="text"/></td>
+            <td><input style="width:100px; border:1px solid #778899;" id="txtFromdate" name="txtFromdate" type="text"/></td>
+            <td><input style="width:100px; border:1px solid #778899;" id="txtTodate" name="txtTodate" type="text"/></td>
+            <td><button id="btnClear">Reset</button></td>
+        </tr>
+
+    </table>
+    <div class="clear"></div>
+    <table id="mTable">
+
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    var tableData;
+    var current_form_item = null;
+
+    function clearTable() {
+        $("#mTable").html("");
+        var head = "<tr>";
+        head += "<th>Code</th>";
+        head += "<th>Merchant agent</th>";
+        head += "<th>Customer agent</th>";
+        head += "<th>Value</th>";
+        head += "<th>Status</th>";
+        head += "<th>Create time</th>";
+        head += "<th>Expired time</th>";
+        head += "<th>Tran id</th>";
+        head += "<th>Last time</th>";
+        head += "<th>Error</th>";
+        head +="</tr>";
+        $("#mTable").html(head);
+    }
+
+    function addItem(item) {
+        var row;
+        row = "<tr>";
+        row += "<td> " + item._id + " </td>";
+        row += "<td> " + item.m_num + " </td>";
+        row += "<td> " + item.c_num + " </td>";
+        row += "<td> " + item.val + " </td>";
+        row += "<td> " + item.stat + " </td>";
+        row += "<td> " + item.c_time + " </td>";
+        row += "<td> " + item.e_day + " </td>";
+        row += "<td> " + item.c_tran_id + " </td>";
+        row += "<td> " + item.l_time + " </td>";
+        row += "<td> " + item.l_error + " </td>";
+        row += "</tr>";
+        $("#mTable").append(row);
+    }
+
+    $(document).ready(function () {
+        clearTable();
+        $("#txtFromdate").datepicker({ dateFormat: "dd/mm/yy" });
+        $("#txtTodate").datepicker({ dateFormat: "dd/mm/yy" });
+
+        $("#btnSearch").click(function () {
+            $.ajax({
+                url: "/service/merchant/search",
+                type: "GET",
+                data: {
+                    code:     $("#txtCode").val(),
+                    cofAgent: $("#txtCoffeeAgent").val(),
+                    cusAgent: $("#txtCustomAgent").val(),
+                    fromDate: $("#txtFromdate").val(),
+                    toDate: $("#txtTodate").val()
+                },
+                success: function (data) {
+
+                    clearTable();
+                    $.each(data, function (i, item) {
+                        addItem(item);
+                    });
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+
+        $("#btnClear").click(function () {
+            $("#txtCode").val("");
+            $("#txtCoffeeAgent").val("");
+            $("#txtCustomAgent").val("");
+            $("#txtFromdate").val("");
+            $("#txtTodate").val("");
+            $("#txtCode").focus();
+        });
+    });
+</script>
+</body>
+</html>

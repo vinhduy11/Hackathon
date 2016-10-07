@@ -1,0 +1,73 @@
+<html>
+<head>
+    <title>Service Detail Config Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+
+</head>
+<body>
+<div id="mydiv">
+    <h2>Service Detail Config Page</h2>
+
+    <div id="table"></div>
+
+    <div class="clear"></div>
+
+    <div>
+        <button id="btnRefresh">Refresh</button>
+        <button id="btn_apply">Apply</button>
+        <form id="frm_service"  action="/service/tranConfig/set" method="GET" enctype="multipart/form-data">
+            <table id="tb_service">
+            </table>
+        </form>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    function reloadTableService() {
+        var url = "/service/tranConfig/getAll";
+        $.getJSON(url).done(function (data) {
+            $("#tb_service").html("");
+            var c = "<tr> <th></th> <th>Name</th> <th>Status</th> </tr>";
+            $("#tb_service").append(c);
+            $.each( data, function( i, item ) {
+                var status = new Array();
+                status[item.status] = "selected";
+                var c;
+                c += "<tr>";
+                c += "<td>" + item.tranType + "</td>";
+                c += "<td>" + item.name + "</td>";
+                c += "<td>";
+                //item.status;
+                c += "<select name='" + item.tranType + "'>";
+                c += "<option " + status[1] + " value='1' >on</option>";
+                c += "<option " + status[2] + " value='2' >off</option>";
+                c += "</select>";
+                c += "</td>";
+                c += "</tr>";
+                $("#tb_service").append(c);
+            });
+        });
+    }
+    $(document).ready(function () {
+        reloadTableService();
+        $("#btnRefresh").click(function () {
+            reloadTableService();
+        });
+        $("#btn_apply").click(function (){
+            $("#frm_service").submit(function () {
+                reloadTableService();
+            });
+            $("#frm_service").submit();
+        });
+    });
+</script>
+</body>
+</html>

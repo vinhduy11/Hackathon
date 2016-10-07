@@ -1,0 +1,95 @@
+<html>
+<head>
+    <title>Adjust Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css" />
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+</head>
+<body>
+<div id="mydiv">
+    <h2>Cập nhật trạng thái mã khuyến mãi</h2>
+    <div>Các mã khuyến mãi cách nhau bằng dấu ";"</div>
+    <table>
+        <tr>
+            <td>Nhập Danh sách mã khuyến mãi</td>
+            <td>:</td>
+            <td>
+                <textarea id="lstCode"></textarea>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td>Cập nhật trạng thái tới</td>
+            <td>:</td>
+            <td>
+                <select style="width: 200px; font-size:16px; padding: 3px" id="sStatus" style="width: 100px; font-size:16px; padding: 3px">
+                    <option value=""> Chọn </option>
+                    <option value="0">Chưa khuyến mãi</option>
+                    <option value="1">Đã khuyến mãi</option>
+                    <option value="2">Khóa mã</option>
+                    <option value="3">Hết hạn</option>
+                </select>
+            </td>
+
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td align="center">
+                <input style="padding: 3px" type="button" value="Cập nhật" id="btnUpdate"/>
+            </td>
+        </tr>
+
+    </table>
+
+    <div id="responseDiv"></div>
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    });
+
+    $('#btnUpdate').click(function () {
+
+            var lstcode = $("#lstCode").val();
+            if(lstcode === ""){
+                alert("Vui lòng nhập mã cần kiểm tra");
+                $("#txtCode").focus();
+                return;
+            }
+
+            var status = $("#sStatus").val();
+            if(status ===""){
+                alert("Vui lòng chọn trạng thái cần cập nhật");
+                return;
+            }
+
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/invitefriend/updatestatus",
+                type: "GET",
+                data: {
+                    "lstcode":lstcode,
+                    "status":status
+                },
+                success: function (json) {
+                    $('#mydiv').unmask();
+                    var result ="";
+                    result += "Số lượng cập nhật: " + json.number + "<br/>"
+
+                    $('#responseDiv').html(result);
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+
+</script>
+</body>
+</html>

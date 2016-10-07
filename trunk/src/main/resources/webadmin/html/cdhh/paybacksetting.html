@@ -1,0 +1,154 @@
+<html>
+<head>
+    <title>Pay back setting</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css" />
+    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/jquery.1.9.js"></script>
+    <script src="/js/session.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script type="text/javascript" src="/js/mask.js"></script>
+</head>
+<body>
+<div id="mydiv">
+    <h2>CDHH Pay back setting</h2>
+    <table id="table">
+
+    </table>
+    <div class="clear"></div>
+
+    <table id="inputform">
+        <tr>
+            <td>Payback id:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="pbid"/></td>
+        </tr>
+
+        <tr>
+            <td>Payback account:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="pbacc"/></td>
+        </tr>
+
+        <tr>
+            <td>Max sms count :</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="pbmax"/></td>
+        </tr>
+
+        <tr>
+            <td>Status:</td>
+            <td>
+                <select id="stat" name="stat" style="width: 150px; font-size:16px; padding: 3px">
+                    <option>Select Status</option>
+                    <option value="on">On</option>
+                    <option value="off">Off</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Delay time (secs):</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="dtime"/></td>
+        </tr>
+
+        <tr>
+            <td>Service id:</td>
+            <td><input style="width: 200px; font-size:16px; padding: 3px" type="text" id="sid"/></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" align="center">
+                <input style="width: 100px; font-size:16px; padding: 3px" type="button" value="Submit" id="buttonTS"/>
+            </td>
+        </tr>
+    </table>
+    <div id="responseDiv"></div>
+</div>
+
+<script type="text/javascript">
+
+    function clearTable() {
+        $("#table").html("");
+        var head = "<tr>";
+        head += "<th></th>";
+        head += "<th>Payback account</th>";
+        head += "<th>Max sms count</th>";
+        head += "<th>Status</th>";
+        head += "<th>Delay time (secs)</th>";
+        head += "<th>Service id</th>";
+        head +="</tr>";
+        $("#table").html(head);
+    }
+
+    function addItem(item) {
+        var row;
+        var editButton = "<button id='edit_" + item._id + "'>Edit</button>";
+
+        row = "<tr id='r_" + item._id + "'>";
+        row += "<td> " + editButton + " </td>";
+        row += "<td> " + item.pbacc + " </td>";
+        row += "<td> " + item.pbmax + " </td>";
+        row += "<td> " + item.stat + " </td>";
+        row += "<td> " + item.dtime + " </td>";
+        row += "<td> " + item.serviceid + " </td>";
+        row += "</tr>";
+        $("#table").append(row);
+
+        $("#edit_" + item._id).click(function () {
+            setFormValues(item);
+        });
+    }
+
+    function setFormValues(item) {
+        $("#pbid").val(item._id);
+        $("#pbacc").val(item.pbacc);
+        $("#pbmax").val(item.pbmax);
+        $("#stat").val(item.stat);
+        $("#dtime").val(item.dtime);
+        $("#sid").val(item.serviceid);
+    }
+
+    function loadPage() {
+        clearTable();
+        var mUrl = "/cdhh_payback/getall";
+        $.getJSON(mUrl).done(function (data) {
+            $.each(data, function (i, item) {
+                addItem(item);
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        if ($.session.get("id")==null) {
+            alert("Bạn phải đăng nhập.");
+            $.session.clear();
+            window.parent.location.href = "../html/login.html";
+        }
+
+        loadPage();
+
+        $('#buttonTS').click(function () {
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/cdhh_payback/upsert",
+                type: "GET",
+                data: {
+                        id:$("#pbid").val(),
+                        pbacc:$("#pbacc").val(),
+                        pbmax:$("#pbmax").val(),
+                        stat:$("#stat").val(),
+                        dtime:$("#dtime").val(),
+                        sid:$("#sid").val()
+                },
+                success: function (string) {
+                    $('#mydiv').unmask();
+                    loadPage();
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-neptune.css"/>
+
+    <script type="text/javascript" src="extjs/ext-all-debug.js"></script>
+
+</head>
+<body>
+<script type="application/javascript">
+var txtUserId = Ext.create("Ext.form.field.Text", {
+    xtype: "textfield",
+    id: "txtUserId",
+    fieldLabel: "User name"
+});
+var txtPassword = Ext.create("Ext.form.field.Text", {
+    xtype: "textfield",
+    id: "txtUserPass",
+    fieldLabel: "Password",
+    inputType: "password"
+});
+
+Ext.onReady(function () {
+    Ext.create("Ext.container.Viewport", {
+        layout: "fit",
+        renderTo: Ext.getBody(),
+        items: [
+            {
+                xtype: "form",
+                title: "Momo administrator",
+                layout: {
+                    type : "vbox",
+                    pack : "center",
+                    align : "center"
+                },
+                items: [
+                    txtUserId,
+                    txtPassword,
+                    {
+                        xtype: "button",
+                        id: "loginbutton",
+                        text: "Login",
+                        listeners: {
+                            click: function() {
+                                Ext.Ajax.request({
+                                    url: "/login",
+                                    method: "get",
+                                    params: {
+                                        userId: txtUserId.getValue(),
+                                        password: txtPassword.getValue()
+                                    },
+                                    success: function(response) {
+                                        var obj = Ext.decode(response.responseText);
+                                        if(obj.error == 0) {
+                                            window.location = "index.html";
+                                        } else {
+                                            Ext.Msg.alert("Error", "UserId or password was not match!");
+                                        }
+
+                                    },
+                                    failure: function() {
+                                        Ext.Msg.alert('Error', "Can't perform request.");
+                                    }
+                                });
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<html>
+<head>
+    <title>Search Bill Pay Error</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/jquery.1.9.js"></script>
+    <script src="/js/session.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script type="text/javascript" src="/js/mask.js"></script>
+    <script type="text/javascript" src="/js/myjs.js"></script>
+</head>
+<body>
+<div id="mydiv">
+    <h2>Search Bill Pay Error</h2>
+
+    <div style="float:left">
+        <!--<b>Partner Code</b>: <input type="text" style="border:1px solid #778899; width:150px" name="sServiceId" id="sServiceId">-->
+        <b>Number</b>: <input type="text" style="border:1px solid #778899; width:150px" name="number"
+                              id="numberId">
+        <b>Group:
+            <select id="groupId" name="groupId" style="width: 150px; font-size:14px; padding: 3px">
+                <option value="">All</option>
+                <option value="mgd">Muon gio dong</option>
+                <option value="vcb">Vietcom Bank</option>
+            </select>
+        </b>
+        <input type="button" id="btnSearch" value="Search">
+    </div>
+    <div class="clear"></div>
+
+    <div id="table"></div>
+
+    <div class="clear"></div>
+
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        init();
+
+    });
+
+    $('#btnSearch').click(function () {
+            init();
+    });
+
+    function clearTable() {
+        var head = "<tr>";
+        head += "<th>ID</th>";
+        head += "<th>Number</th>";
+        head += "<th>Group </th>";
+        head += "<th>ServiceId</th>"; //Cho phep tra thuong hay khong
+        head += "<th>Error Code</th>";   // Nhom tra thuong
+        head += "<th>Error Description</th>";
+        head += "<th>Time Error</th>";
+        head +="</tr>";
+        $("#table").html(head);
+
+    }
+
+    function addItem(item) {
+        var row;
+        row = "<tr>";
+        row += "<td> " + item._id + " </td>";
+        row += "<td> " + item.number + " </td>";
+        row += "<td> " + item.group + "</td>";
+        row += "<td> " + item.servId + " </td>";
+        row += "<td> " + item.errorcode + " </td>";
+        row += "<td> " + item.errordesc + " </td>";
+        row += "<td> " + item.time + " </td>";
+        row += "</tr>";
+
+        $("#table").append(row);
+    }
+
+    function init() {
+         $.ajax({
+            url: "/searchallbillpayerror",
+            type: "GET",
+            data: {
+                number: $("#numberId").val(),
+                group: $("#groupId").val()
+            },
+            success: function (array) {
+                clearTable();
+                for(i=0;i<array.length; i++){
+                    addItem(array[i])
+                }
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy rsa');
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

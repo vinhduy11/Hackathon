@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cấu hình nhập code nhận quà</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <!--<script src="../js/session.js"></script>-->
+    <!--<script src="../js/cookie_OLD.js"></script>-->
+    <script type="text/javascript" src="../js/mask.js"></script>
+    <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css"/>
+    <script src="../js/jquery.datetimepicker.js"></script>
+</head>
+<body>
+
+<div>
+    <h2>Cấu hình nhập code nhận quà</h2>
+    <hr />
+    <table id="table">
+    </table>
+    <h1>Giá tiền => "%money"; giá trị quà => "%giftvalue"; thời hạn quà => "%endgifttime";
+        thời hạn tiền => "%endmoneytime";
+    </h1>
+    <hr />
+</div>
+<hr />
+<table>
+    <tr>
+        <td>Promotion Id:</td>
+        <td><input type="text" id="_id" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+    <tr>
+        <td>Promotion Name:</td>
+        <td><input type="text" id="promotion_name" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+    <tr>
+        <td>Group:</td>
+        <td>
+            <select id="group" name="group" style="width: 300px; font-size:14px; padding: 3px">
+                <option value="0">Không thuộc nhóm</option>
+                <option value="1">Nhóm 1 code</option>
+                <option value="2">Nhóm nhiều code</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Prefix:</td>
+        <td><input type="text" id="prefix" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+    <tr>
+        <td>Kich hoat chuong trinh:</td>
+        <td>
+            <select id="active" name="active" style="width: 300px; font-size:14px; padding: 3px">
+                <option value="true">Kich hoat</option>
+                <option value="false">Bo qua</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>So luong qua tang:</td>
+        <td><input type="text" id="number_of_gift" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+
+    <tr>
+        <td>Thong tin gia ca cua qua:</td>
+        <td><input type="text" id="gift_list" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+
+    <tr>
+        <td>Thoi gian su dung qua:</td>
+        <td><input type="text" id="gift_time" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+
+    <tr>
+        <td>Tien momo:</td>
+        <td><input type="text" id="momo_money" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+
+    <tr>
+        <td>Thoi gian su dung tien momo:</td>
+        <td><input type="text" id="money_time" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+
+    <tr>
+        <td>Kiem tra so dien thoai:</td>
+        <td>
+            <select id="check_phone" name="check_phone" style="width: 300px; font-size:14px; padding: 3px">
+                <option value="true">Kiem tra</option>
+                <option value="false">Bo qua</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Partner name:</td>
+        <td><input type="text" id="partnerName" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+
+    <tr>
+        <td>Man hinh dich vu dich:</td>
+        <td><input type="text" id="serviceId" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+
+    <tr>
+        <td>Tai khoan tra thuong:</td>
+        <td><input type="text" id="agent" style="width: 300px; font-size:14px; padding: 3px"/></td>
+    </tr>
+
+    <tr>
+        <td>Chay thu hoi tien:</td>
+        <td>
+            <select id="get_back_money" name="get_back_money" style="width: 300px; font-size:14px; padding: 3px">
+                <option value="true">Thu hoi</option>
+                <option value="false">Bo qua</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Bo qua kiem tra thiet bi:</td>
+        <td>
+            <select id="uncheckDevice" name="uncheckDevice" style="width: 300px; font-size:14px; padding: 3px">
+                <option value="false">Kiem Tra</option>
+                <option value="true">Bo qua</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Khuyen Mai MoMo:</td>
+        <td>
+            <select id="isMoMoPromotion" name="isMoMoPromotion" style="width: 300px; font-size:14px; padding: 3px">
+                <option value="false">NO</option>
+                <option value="true">YES</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Tieu de noti tang qua:</td>
+        <td><textarea maxlength="227" style="width: 600px; font-size:16px; padding: 3px" cols="150" rows="7"
+                      id="notiTitle"></textarea></td>
+    </tr>
+
+    <tr>
+        <td>Noi dung noti tang qua:</td>
+        <td><textarea maxlength="227" style="width: 600px; font-size:16px; padding: 3px" cols="150" rows="7"
+                      id="notiBody"></textarea></td>
+    </tr>
+
+    <tr>
+        <td>Noi dung lich su giao dich tang qua:</td>
+        <td><textarea maxlength="227" style="width: 600px; font-size:16px; padding: 3px" cols="150" rows="7"
+                      id="transBody"></textarea></td>
+    </tr>
+
+    <tr>
+        <td>Tieu de noti thu hoi:</td>
+        <td><textarea maxlength="227" style="width: 600px; font-size:16px; padding: 3px" cols="150" rows="7"
+                      id="notiRollbackTitle"></textarea></td>
+    </tr>
+
+    <tr>
+        <td>Noi dung noti thu hoi:</td>
+        <td><textarea maxlength="227" style="width: 600px; font-size:16px; padding: 3px" cols="150" rows="7"
+                      id="notiRollbackBody"></textarea></td>
+    </tr>
+
+    <tr>
+        <td>Noi dung lich su giao dich thu hoi:</td>
+        <td><textarea maxlength="227" style="width: 600px; font-size:16px; padding: 3px" cols="150" rows="7"
+                      id="transRollbackBody"></textarea></td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td>
+            <button id="btnClear">Clear</button>
+            <button id="btnSave">Save</button>
+            <button id="btnRefresh">Refresh</button>
+        </td>
+    </tr>
+</table>
+<script type="text/javascript">
+
+    function clearTable() {
+        var head = "<tr>";
+        head += "<th>*</th>";
+        head += "<th>Promotion Id</th>";
+        head += "<th>Promotion Name</th>";
+        head += "<th>Group</th>";
+        head += "<th>Prefix</th>";
+        head += "<th>Kich hoat</th>";
+        head += "<th>So luong qua tang</th>";
+        head += "<th>Thong tin qua tang</th>";
+        head += "<th>Thoi han su dung qua tang</th>";
+        head += "<th>So tien momo</th>";
+        head += "<th>Thoi gian su dung tien MoMo</th>";
+        head += "<th>Kiem tra so dien thoai claim code</th>";
+        head += "<th>Partner name</th>";
+        head += "<th>Man hinh dich vu</th>";
+        head += "<th>Tai khoan tra thuong</th>";
+        head += "<th>Thu hoi tien mat</th>";
+        head += "<th>Tieu de Noti</th>";
+        head += "<th>Noi dung noti</th>";
+        head += "<th>Noi dung lich su giao dich</th>";
+        head += "<th>Tieu de noti thu hoi qua</th>";
+        head += "<th>Noi dung noti thu hoi qua</th>";
+        head += "<th>Noi dung lich su giao dich thu hoi qua</th>";
+        head += "</tr>";
+        $("#table").html(head);
+    }
+
+    function addItem(item) {
+        var row;
+        var editButton = "<button id='edit_" + item._id + "'>Edit</button>";
+
+        row = "<tr id='r_" + item._id + "'>";
+        row += "<td> " + editButton + " </td>";
+        row += "<td> " + item._id + " </td>";
+        row += "<td> " + item.promotion_name + " </td>";
+        row += "<td> " + item.group + " </td>";
+        row += "<td> " + item.prefix + " </td>";
+        row += "<td> " + item.active + " </td>";
+        row += "<td> " + item.number_of_gift + " </td>";
+        row += "<td> " + item.gift_list + " </td>";
+        row += "<td> " + item.gift_time + " </td>";
+        row += "<td> " + item.momo_money + " </td>";
+        row += "<td> " + item.money_time + " </td>";
+        row += "<td> " + item.check_phone + " </td>";
+        row += "<td> " + item.partnerName + " </td>";
+        row += "<td> " + item.serviceId + " </td>";
+        row += "<td> " + item.agent + " </td>";
+        row += "<td> " + item.get_back_money + " </td>";
+        row += "<td> " + item.uncheckDevice + " </td>";
+        row += "<td> " + item.isMoMoPromotion + " </td>";
+        row += "<td> " + item.notiTitle + " </td>";
+        row += "<td> " + item.notiBody + " </td>";
+        row += "<td> " + item.transBody + " </td>";
+        row += "<td> " + item.notiRollbackTitle + " </td>";
+        row += "<td> " + item.notiRollbackBody + " </td>";
+        row += "<td> " + item.transRollbackBody + " </td>";
+        row += "</tr>";
+
+        $("#table").append(row);
+
+        $("#edit_" + item._id).click(function () {
+            setFormValues(item);
+        });
+    }
+
+    function setFormValues(item) {
+        $("#_id").val(item._id);
+        $("#promotion_name").val(item.promotion_name);
+        $("#group").val(item.group);
+        $("#prefix").val(item.prefix);
+        $("#active").val(item.active + "");
+        $("#number_of_gift").val(item.number_of_gift);
+        $("#gift_list").val(item.gift_list);
+        $("#gift_time").val(item.gift_time);
+        $("#momo_money").val(item.momo_money);
+        $("#money_time").val(item.money_time);
+        $("#check_phone").val(item.check_phone + "");
+        $("#partnerName").val(item.partnerName);
+        $("#serviceId").val(item.serviceId);
+        $("#agent").val(item.agent);
+        $("#get_back_money").val(item.get_back_money + "");
+        $("#uncheckDevice").val(item.uncheckDevice + "");
+        $("#isMoMoPromotion").val(item.isMoMoPromotion + "");
+        $("#notiTitle").val(item.notiTitle);
+        $("#notiBody").val(item.notiBody);
+        $("#transBody").val(item.transBody);
+        $("#notiRollbackTitle").val(item.notiRollbackTitle);
+        $("#notiRollbackBody").val(item.notiRollbackBody);
+        $("#transRollbackBody").val(item.transRollbackBody);
+    }
+
+    function loadPage() {
+        clearTable();
+        var mUrl = "/getClaimCodePromotion";
+        $.getJSON(mUrl).done(function (data) {
+            $.each(data, function (i, item) {
+                addItem(item);
+            });
+        });
+    }
+    $(document).ready(function () {
+        loadPage();
+
+        $("#btnSave").click(function () {
+            $.ajax({
+                url: "/updateClaimCodePromotion",
+                type: "GET",
+                enctype: "multipart/form-data",
+                data: {
+                    _id: $("#_id").val(),
+                    promotion_name: $("#promotion_name").val(),
+                    group: $("#group").val(),
+                    prefix: $("#prefix").val(),
+                    active: $("#active").val(),
+                    number_of_gift: $("#number_of_gift").val(),
+                    gift_list: $("#gift_list").val(),
+                    gift_time: $("#gift_time").val(),
+                    momo_money: $("#momo_money").val(),
+                    money_time: $("#money_time").val(),
+                    check_phone: $("#check_phone").val(),
+                    partnerName: $("#partnerName").val(),
+                    serviceId: $("#serviceId").val(),
+                    agent: $("#agent").val(),
+                    get_back_money: $("#get_back_money").val(),
+                    uncheckDevice: $("#uncheckDevice").val(),
+                    isMoMoPromotion: $("#isMoMoPromotion").val(),
+                    notiTitle: $("#notiTitle").val(),
+                    notiBody: $("#notiBody").val(),
+                    transBody: $("#transBody").val(),
+                    notiRollbackTitle: $("#notiRollbackTitle").val(),
+                    notiRollbackBody: $("#notiRollbackBody").val(),
+                    transRollbackBody: $("#transRollbackBody").val()
+
+                },
+                success: function (result) {
+                    if (result) {
+                        alert("Thành công.");
+                        loadPage();
+                    }
+                    else
+                        alert(result.desc);
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+
+        $("#btnRefresh").click(function () {
+            $.ajax({
+                url: "/reloadClaimCodePromotion",
+                type: "GET",
+                enctype: "multipart/form-data",
+                data: {
+                },
+                success: function (result) {
+                    if (result) {
+                        alert("Thành công.");
+                        loadPage()
+                    }
+                    else
+                        alert("That bai");
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

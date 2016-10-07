@@ -1,0 +1,115 @@
+{
+  "vnidol": [
+    {
+      "form1": {
+        "cap": "www.vietnamidol.vtv.vn",
+        "btn": "Tiếp",
+        "nexfrm": 1,
+        "guide": "",
+        "fields": [
+          {
+            "fieldtype": "drop",
+            "fieldlabel": "Tên thí sinh",
+            "key": "billid",
+            "required": true,
+            "line": 1,
+            "haschild": 0
+          },
+          {
+            "fieldtype": "drop",
+            "fieldlabel": "Số lượng tin nhắn",
+            "key": "amt",
+            "required": true,
+            "line": 1,
+            "haschild": 0
+          },
+          {
+            "fieldtype": "cash",
+            "fieldlabel": "Nguồn tiền",
+            "key": "cash",
+            "required": true,
+            "line": 1,
+            "haschild": 0
+          }
+        ],
+        "data": [
+          {
+            "linkto": "billid",
+            "text": "Bùi Minh Quân",
+            "value": "01$Bùi Minh Quân",
+            "parentid": "",
+            "id": ""
+          },
+          {
+            "linkto": "billid",
+            "text": "Nguyễn Ngọc Khánh Tiên",
+            "value": "02$Nguyễn Ngọc Khánh Tiên",
+            "parentid": "",
+            "id": ""
+          },
+          {
+            "linkto": "billid",
+            "text": "Nguyễn Trọng Hiếu",
+            "value": "03$Nguyễn Trọng Hiếu",
+            "parentid": "",
+            "id": ""
+          },
+          {
+            "linkto": "billid",
+            "text": "Trần Thị Hà Nhi",
+            "value": "04$Trần Thị Hà Nhi",
+            "parentid": "",
+            "id": ""
+          },
+	   {
+            "linkto": "billid",
+            "text": "Nguyễn Ngọc Việt",
+            "value": "05$Nguyễn Ngọc Việt",
+            "parentid": "",
+            "id": ""
+          },
+    	   {
+            "linkto": "billid",
+            "text": "Phạm Nguyễn Duy",
+            "value": "06$Phạm Nguyễn Duy",
+            "parentid": "",
+            "id": ""
+          },
+	   {
+            "linkto": "billid",
+            "text": "Trần Thúy Vân Quỳnh",
+            "value": "07$Trần Thúy Vân Quỳnh",
+            "parentid": "",
+            "id": ""
+          },
+	   {
+            "linkto": "billid",
+            "text": "Nguyễn Bích Ngọc",
+            "value": "08$Nguyễn Bích Ngọc",
+            "parentid": "",
+            "id": ""
+          },
+          {
+            "linkto": "amt",
+            "text": "01 tin nhắn",
+            "value": "3000",
+            "parentid": "",
+            "id": ""
+          },{
+            "linkto": "amt",
+            "text": "02 tin nhắn",
+            "value": "6000",
+            "parentid": "",
+            "id": ""
+          },{
+            "linkto": "amt",
+            "text": "03 tin nhắn",
+            "value": "9000",
+            "parentid": "",
+            "id": ""
+          }
+        ]
+      }
+    }
+  ]
+}

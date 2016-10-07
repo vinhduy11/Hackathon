@@ -1,0 +1,1429 @@
+{
+    //Java verticle
+    "main": "com.mservice.momo.vertx.MainVerticle",
+    "auto-redeploy": true,
+    "uat": true,
+    "send_remind_noti":true,
+    "coreTimeOut": 420000,
+  "storeApp": false,
+    "active_service_fee":false,
+  "mysql_delay": 2000,
+  "db_noti_source": "mysql",
+  "db_tran_source": "mysql",
+  "db_module_info": {
+    "host": "172.16.43.14",
+    "port": 13306
+  },
+    "global-config": {
+    },
+    /*"mongo" : {
+        "host"    : "172.16.14.35",
+        "port"    : 27017,
+        "db_name" : "newmomovn_db",
+        "username"      :null,
+        "password"      :null,
+        "pool_size"     :20,
+        "auto_connect_retry": true,
+        "socket_timeout"    :60000,
+        "use_ssl"           :false,
+        "bus_address"       : "com.mservice.momo.database",
+        "111seeds": [
+                    { "host": "appmomo-3", "port": 27017 },
+                    { "host": "appmomo-4", "port": 27017 },
+                    { "host": "appmomo-4", "port": 27018 }
+	]
+    },*/
+
+    "mongo" : {
+            //"host"    : "172.16.43.32",
+
+      "host": "172.16.44.174",
+           // "host" : "localhost",
+            "port"    : 27017,
+            "db_name" :"newmomovn_db",
+            "username" :null,
+            "password" :null,
+            "pool_size" :20,
+            "auto_connect_retry":true,
+            "socket_timeout"    :60000,
+            "use_ssl"           :false,
+            "bus_address"       : "com.mservice.momo.database",
+            "111seeds": [
+                        { "host": "appmomo-3", "port": 27017 },
+                        { "host": "appmomo-4", "port": 27017 },
+                        { "host": "appmomo-4", "port": 27018 }
+            ]
+        },
+
+    "mongo_noti":{
+           // "host"    : "172.16.43.32",
+            "host": "172.16.44.174",
+            //"host" : "localhost",
+            "port"    : 27017,
+            "db_name" : "momovn_db_noti",
+            "username" :null,
+            "password" :null,
+            "pool_size" :20,
+            "auto_connect_retry":true,
+            "socket_timeout"    :60000,
+            "use_ssl"           :false,
+            "bus_address"       : "com.mservice.momo.database_notification"
+    },
+    "server" : {
+        "arr_group_cfg"   	: "19112,34112",
+        "arr_capset_cfg"  	: "509",
+        "noname_group_id"      : "34112"   ,//THEM MOI CAI NAY DE DANH CHO DIEM GIAO DICH
+        "tqt_group_id"      : "59123"   ,//THEM MOI CAI NAY DE DANH CHO DIEM GIAO DICH
+        "upper_limit_cfg" 	: "5000000" ,
+        "otp_template"    	: "%s la ma xac thuc MoMo. Hay dien day so %s vao MoMo de xac thuc tai khoan.Cam on.",
+        "app_port"        	: 8443,
+		"test_mode"	: true,
+		"send_sms"      : true,
+		"vietcombank_adjust_for_banknet" :"0987568815", //momo phone de nap tien cho khach hang khi thuc hien nap tien qua bank-net ....
+		"viettinbank_adjust_for_banknet" :"0987568815",
+		//"phones_test_list"	: "0918189999;0917018888;0964299302;0917019999;0939448124;0936945857;01263081153;01699204000;0982357345;0905455820;0988976139;0944821459;0979754034"
+		"phones_test_list"	    : "917510567;985353625;938383886;944609068;916183383;932344499;996662828;915080584;944822489;904258688;905455820;01289697646;917479486;908424174;905455828;973230030;1656032433;934114878;944819399;944705070;1254766034;917016488;938058950;906776096;90368035;906886463;917051525;909282599;0987568815;01656032433;0988975205;01674558943;0933036596;0917220953;0906648756;0917019999;0917001181;0917806456;0966543465;0917171977;0983050910;0918189999;0917018888;0964299302;0917019999;0939448124;0936945857;01263081153;01699204000;0982357345;0905455820;0988976139;0944821459;0979754034",
+		"bank_net_test_mode"    : false,
+		"session_time_out"      : 15,
+		"otp_time_out"          : 5,
+		"login_max_try"         : 9,
+		"tran_sync_prev_minutes" :5,
+		"app_ip"                 :"0.0.0.0",
+		"ref_bonus"              :1000,
+		"request_money_per_day"  :5,
+		"in_promotion"           :false, // Nam changed to false
+		"noname_tran_max_value_per_day"  :1000000,
+		"noname_max_tran_count_per_day":15,
+		"zalo_group" : "14127", // Truong setting lai group nay cho dung tren con production
+		"zalo_capset_id" : "709",
+        "zalo_upper_limit" : "100000000",
+        "momo_group" : "19112", // Truong setting lai group nay cho dung tren con production
+        "momo_capset_id" : "309",
+        "momo_upper_limit" : "20000000",
+		"otp_check_agent_source": "mis" // mongo|mis
+	},
+	"fi":{
+        "fi.pri" : "key/private.ber",
+        "fi.pub" : "key/public.ber"
+	},
+    "soap" : {
+
+        // test: http://172.16.18.50:8280/services/umarketsc?wsdl
+        // UAT: http://172.16.44.50:8280/services/umarketsc?wsdl
+        "soap_url"              : "http://172.16.43.30:8280/services/umarketsc?wsdl",
+        "soap_user_name"        :  "admin_soapin_backend",
+        "soap_password"         : "soap#access",
+        "soap_session_expire"   : 6,
+        "sys_c2c_in_account"    : "workingaccount",
+        //username admin
+        "soap.un"               : "G7zpooS8aHSuv99O9LPlItnTEqxCnbTpZ/J62LeUn++4GMGPgOyxRQDM5uNM89D3WZOueaIhDSGiZCA+6QL5kRmQ/XiK4FRvE7g1ttEFjFpVdDb7XNaKQCs37jhApFmV/rOHmqETtnlqhaONsat1DoFeTB03dwZzSRCljhqAMLU=",
+        //username password admin
+        "soap.pw"               : "p09c+WTjvBTApUIjraI6qiMXzR22ZbIHUG6OkQ3DdQcIOp9uZsvXPO21PIO4N5vyEMNqNgYafcJTzlnniQ73Y8cmp+h+L3mEa6Tk1fQyxlQaKkPZLeivhAcTMfVQFecOM2biQ35knQ0y9G26GmaRNhtzD7qn4qf+hTiYHdRKIjw=",
+
+        /*
+                // test: http://172.16.18.50:8280/services/umarketsc?wsdl
+                // UAT: http://172.16.44.50:8280/services/umarketsc?wsdl
+                "soap_url"              :"http://172.16.18.50:8280/services/umarketsc?wsdl",
+                "soap_user_name"        :"admin_soapin",
+                "soap_password"         :"soap#access",
+                "soap_session_expire"   :6,
+                "sys_c2c_in_account"    :"workingaccount",
+                //username admin
+                "soap.un"               :"G7zpooS8aHSuv99O9LPlItnTEqxCnbTpZ/J62LeUn++4GMGPgOyxRQDM5uNM89D3WZOueaIhDSGiZCA+6QL5kRmQ/XiK4FRvE7g1ttEFjFpVdDb7XNaKQCs37jhApFmV/rOHmqETtnlqhaONsat1DoFeTB03dwZzSRCljhqAMLU=",
+                //username password admin
+                "soap.pw"               :"p09c+WTjvBTApUIjraI6qiMXzR22ZbIHUG6OkQ3DdQcIOp9uZsvXPO21PIO4N5vyEMNqNgYafcJTzlnniQ73Y8cmp+h+L3mEa6Tk1fQyxlQaKkPZLeivhAcTMfVQFecOM2biQ35knQ0y9G26GmaRNhtzD7qn4qf+hTiYHdRKIjw=",
+        */
+
+        "billchk_cfg" : {
+
+        		"billerid.mobi.checkdebit.url"      : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+        		"billerid.vinahcm.checkdebit.url"   : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+
+        		"billerid.iviettel.checkdebit.url"  : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+        		"billerid.ifpt.checkdebit.url"      : "http://172.16.43.22:8080/ADSLFPTProxy/services/BillingServiceProviderSOAP",
+			//"billerid.ifpt.checkdebit.url"      : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+        		"billerid.cdhcm.checkdebit.url"     : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+        		"billerid.jetstar.checkdebit.url"   : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+        		//"billerid.dien.checkdebit.url"    : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+        		"billerid.dien.checkdebit.url"      : "http://172.16.44.20:48080/EVNHCMCProxy/services/BillingServiceProviderSOAP",
+
+        		//Cuoc ADSL viettel
+        		"billerid.vtea.checkdebit.url"      : "http://172.16.44.12:58080/VNPayProxy/services/BillingServiceProviderSOAP",
+
+                //http://172.16.44.12:58080/NuocCLProxy/services/BillingServiceProviderSOAP
+
+        		//check bill nuoc cho lon
+        		"billerid.nuochcm.checkdebit.url"   :"http://172.16.18.50:58080/NuocCLProxy/services/BillingServiceProviderSOAP",
+        		//"billerid.avg.checkdebit.url"     :"http://172.16.44.12:58080/AnVienProxy/services/BillingServiceProviderSOAP",
+        		"billerid.avg.checkdebit.url"       :"http://172.16.14.20:8181/AnVienProxy/services/BillingServiceProviderSOAP",
+
+        		"billerid.cdhn.checkdebit.url"       :"http://172.16.44.12:38082/Proxy_Onepay_VTHN/services/BillingServiceProviderSOAP"
+
+        },
+        "billpay_cfg" : {
+             "billerid.mobi.target"         : "billpaymobifone",    //mobi tra sau
+             "billerid.jetstar.target"      : "billpayonepay",      //jetstar
+             "billerid.amr.target"          : "billpayonepay",      //air mekong
+             "billerid.dien.target"         : "billpay6",           //evnhcm
+             "billerid.vco.target"          : "billpay1",           //vcoin vtc
+             "billerid.bac.target"          : "billpay2",           //bac fpt
+             "billerid.zxu.target"          : "billpay3",           //zing xu
+             "billerid.onc.target"          : "billpay4",           //oncash vdc
+             "billerid.vinahcm.target"      : "billpay6",           //vina tra sau
+             "billerid.cdhcm.target"        : "billpay7",           //cuoc adsl, vnpt
+             "billerid.ifpt.target"         : "billpay9",            //fpt adsl
+             "billerid.iviettel.target"     : "billpayviettelpost", //dien thoai viettel tra sau
+
+             //aviettel
+             "billerid.vtea.target"     : "billpayviettelpost_acc", //cuoc ADSL viettel
+
+             //bill pay nuoc cho lon
+             "billerid.nuochcm.target"  : "billpaynuoccholon_acc",    //thanh toan nuoc cho lon
+
+             "billerid.ewaygame.target"  : "105",    //thanh toan cho eway game
+
+             "billerid.filmplus.target"  : "108",    //thanh toan cho eway game
+
+             "billerid.avg.target"  : "billpayviettelpost_acc",    //thanh toan cuoc truyen hinh cap an vien
+             "billerid.cdhn.target"  : "billpay10",                //thanh toan cuoc one pay cua CDHN
+             "billerid.vivoo.target"  : "billpaymobifone"          //thanh toan cuoc one pay cua CDHN
+
+        },
+        "bank_direct" :{
+            "bank.12345.src"    : "vcb.bank",
+            "bank.102.src"      : "vtb.bank"
+        }
+    },
+    "soap_2" : {
+
+            // test: http://172.16.18.50:8280/services/umarketsc?wsdl
+            // UAT: http://172.16.44.50:8280/services/umarketsc?wsdl
+            "soap_url"              : "http://172.16.43.30:8280/services/umarketsc?wsdl",
+            "soap_user_name"        :  "admin_soapin_backend",
+            "soap_password"         : "soap#access",
+            "soap_session_expire"   : 6,
+            "sys_c2c_in_account"    : "workingaccount",
+            //username admin
+            "soap.un"               : "G7zpooS8aHSuv99O9LPlItnTEqxCnbTpZ/J62LeUn++4GMGPgOyxRQDM5uNM89D3WZOueaIhDSGiZCA+6QL5kRmQ/XiK4FRvE7g1ttEFjFpVdDb7XNaKQCs37jhApFmV/rOHmqETtnlqhaONsat1DoFeTB03dwZzSRCljhqAMLU=",
+            //username password admin
+            "soap.pw"               : "p09c+WTjvBTApUIjraI6qiMXzR22ZbIHUG6OkQ3DdQcIOp9uZsvXPO21PIO4N5vyEMNqNgYafcJTzlnniQ73Y8cmp+h+L3mEa6Tk1fQyxlQaKkPZLeivhAcTMfVQFecOM2biQ35knQ0y9G26GmaRNhtzD7qn4qf+hTiYHdRKIjw=",
+
+            /*
+                    // test: http://172.16.18.50:8280/services/umarketsc?wsdl
+                    // UAT: http://172.16.44.50:8280/services/umarketsc?wsdl
+                    "soap_url"              :"http://172.16.18.50:8280/services/umarketsc?wsdl",
+                    "soap_user_name"        :"admin_soapin",
+                    "soap_password"         :"soap#access",
+                    "soap_session_expire"   :6,
+                    "sys_c2c_in_account"    :"workingaccount",
+                    //username admin
+                    "soap.un"               :"G7zpooS8aHSuv99O9LPlItnTEqxCnbTpZ/J62LeUn++4GMGPgOyxRQDM5uNM89D3WZOueaIhDSGiZCA+6QL5kRmQ/XiK4FRvE7g1ttEFjFpVdDb7XNaKQCs37jhApFmV/rOHmqETtnlqhaONsat1DoFeTB03dwZzSRCljhqAMLU=",
+                    //username password admin
+                    "soap.pw"               :"p09c+WTjvBTApUIjraI6qiMXzR22ZbIHUG6OkQ3DdQcIOp9uZsvXPO21PIO4N5vyEMNqNgYafcJTzlnniQ73Y8cmp+h+L3mEa6Tk1fQyxlQaKkPZLeivhAcTMfVQFecOM2biQ35knQ0y9G26GmaRNhtzD7qn4qf+hTiYHdRKIjw=",
+            */
+
+            "billchk_cfg" : {
+
+            		"billerid.mobi.checkdebit.url"      : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+            		"billerid.vinahcm.checkdebit.url"   : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+
+            		"billerid.iviettel.checkdebit.url"  : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+            		"billerid.ifpt.checkdebit.url"      : "http://172.16.43.22:8080/ADSLFPTProxy/services/BillingServiceProviderSOAP",
+    			//"billerid.ifpt.checkdebit.url"      : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+            		"billerid.cdhcm.checkdebit.url"     : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+            		"billerid.jetstar.checkdebit.url"   : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+            		//"billerid.dien.checkdebit.url"    : "http://172.16.18.50:38080/MockService/services/BillingServiceProviderSOAP",
+            		"billerid.dien.checkdebit.url"      : "http://172.16.44.20:48080/EVNHCMCProxy/services/BillingServiceProviderSOAP",
+
+            		//Cuoc ADSL viettel
+            		"billerid.vtea.checkdebit.url"      : "http://172.16.44.12:58080/VNPayProxy/services/BillingServiceProviderSOAP",
+
+                    //http://172.16.44.12:58080/NuocCLProxy/services/BillingServiceProviderSOAP
+
+            		//check bill nuoc cho lon
+            		"billerid.nuochcm.checkdebit.url"   :"http://172.16.18.50:58080/NuocCLProxy/services/BillingServiceProviderSOAP",
+            		//"billerid.avg.checkdebit.url"     :"http://172.16.44.12:58080/AnVienProxy/services/BillingServiceProviderSOAP",
+            		"billerid.avg.checkdebit.url"       :"http://172.16.14.20:8181/AnVienProxy/services/BillingServiceProviderSOAP",
+
+            		"billerid.cdhn.checkdebit.url"       :"http://172.16.44.12:38082/Proxy_Onepay_VTHN/services/BillingServiceProviderSOAP"
+
+            },
+            "billpay_cfg" : {
+                 "billerid.mobi.target"         : "billpaymobifone",    //mobi tra sau
+                 "billerid.jetstar.target"      : "billpayonepay",      //jetstar
+                 "billerid.amr.target"          : "billpayonepay",      //air mekong
+                 "billerid.dien.target"         : "billpay6",           //evnhcm
+                 "billerid.vco.target"          : "billpay1",           //vcoin vtc
+                 "billerid.bac.target"          : "billpay2",           //bac fpt
+                 "billerid.zxu.target"          : "billpay3",           //zing xu
+                 "billerid.onc.target"          : "billpay4",           //oncash vdc
+                 "billerid.vinahcm.target"      : "billpay6",           //vina tra sau
+                 "billerid.cdhcm.target"        : "billpay7",           //cuoc adsl, vnpt
+                 "billerid.ifpt.target"         : "billpay9",            //fpt adsl
+                 "billerid.iviettel.target"     : "billpayviettelpost", //dien thoai viettel tra sau
+
+                 //aviettel
+                 "billerid.vtea.target"     : "billpayviettelpost_acc", //cuoc ADSL viettel
+
+                 //bill pay nuoc cho lon
+                 "billerid.nuochcm.target"  : "billpaynuoccholon_acc",    //thanh toan nuoc cho lon
+
+                 "billerid.ewaygame.target"  : "105",    //thanh toan cho eway game
+
+                 "billerid.filmplus.target"  : "108",    //thanh toan cho eway game
+
+                 "billerid.avg.target"  : "billpayviettelpost_acc",    //thanh toan cuoc truyen hinh cap an vien
+                 "billerid.cdhn.target"  : "billpay10",                //thanh toan cuoc one pay cua CDHN
+                 "billerid.vivoo.target"  : "billpaymobifone"          //thanh toan cuoc one pay cua CDHN
+
+            },
+            "bank_direct" :{
+                "bank.12345.src"    : "vcb.bank",
+                "bank.102.src"      : "vtb.bank"
+            }
+        },
+    "bank_net":{
+            "partner":{
+                //"ws.url"        :"http://sandbox.bndebit.vn/pg2705/services/DirectPayment.DirectPaymentHttpSoap12Endpoint",
+                "ws.url"          :"https://autodiscover.banknetvn.com.vn/pg2705/services/DirectPayment.DirectPaymentHttpSoap12Endpoint",
+                "merchan.code"  :"011019",
+                "country.code"  :"84",
+                "good.code"     :"84",
+                "ship.fee"      :"0",
+                "tax"           :"0",
+                "merchant.trans.key"    :"1212a411d145103d4114254454333dc6",
+                "otp.type"              :"SMS"
+            },
+             "merchant_trans_id_file" :"key/merchant_trans_id.txt",
+             "bank_support" : "970428;Nam A Bank#161087;Sai Gon Cong Thuong(SGICB)#970403;Sacombank#970430;Xang dau Petrolimex(PG Bank)#970499;Agribank#970408;Dau khi toan cau(GP Bank)#970489;Vietinbank#970459;Ngan hang TMCP An Binh(ABBank)"
+        },
+    "tran_has_point":   {
+        "bank_in"       :   1000,
+        "bank_out"      :   1000,
+        "m2c"           :   1000,
+        "m2m"           :   1000,
+        "top_up"        :   1000,
+        "top_up_game"   :   1000,
+        "pay_one_bill"  :   1000,
+        "quick_deposit" :   1000,
+        "quick_payment" :   1000,
+        "pay_one_bill_other"        :1000,
+        "transfer_money_2_place"    :1000,
+
+        "bill_pay_telephone"        :1000,  // thanh toan tien dien thoai
+        "bill_pay_ticket_airline"   :1000,  // thanh toan ve may bay
+        "bill_pay_ticket_train"     :1000,  // thanh toan ve tau lua
+        "bill_pay_insurance"        :1000,  // thanh toan bao hiem
+        "bill_pay_internet"         :1000,  // thanh toan cuoc internet
+        "bill_pay_other"            :1000,  // thanh toan khac
+        "deposit_cash_other"        :1000,  // nap tien khac
+        "buy_mobility_card"         :1000,  // mua the cao
+        "buy_game_card"             :1000,  // mua the game
+        "buy_other"                 :1000   // mua khac
+    },
+    "sms" : {
+        //"sys.sms.api" : "http://172.16.18.50:180801/ClientMark/services/Alert"
+	"sys.sms.api" : "http://172.16.43.30:18080/ClientMark/services/Alert"
+    },
+    "sms_app" :{
+        "rsa_pri_p"     :45254845169050434006569631119443453219036293123468301542922980154176211571125631493141292774884610224051998013256133207510344571565307,
+        "rsa_pri_q"     :26089313667624709930411388769299792454672650085470049725354110714591616666618283911287976322283018124401030300567873280960178505168277,
+        "rsa_pri_dP"    :12258174946076007514604331776437129889136400438344893556158639298364833724623071093676003316290821989065277152315834974132530278078449,
+        "rsa_pri_dQ"    :14309970831898094936730368983780454390163079674418906533367475134007123370232501514550084453928432069179911137441648852261707687646429,
+        "rsa_pri_qInv"  :39560940592923993952173717008920385357280975850777033456527135604936071983116408691334061595212483177749309999654111874791374329043735,
+        "rsa_pri_exp"   :47290127833319534871218740198116025128166507364820500832583547258539728996456625137026136977119425351607119113003234982714134194003859824297035310594961147176674203175418368598651449885735065337360162066531280282528708411769537180675715232570613704918151444064654473,
+        "rsa_pub_mod"   :1180667850595147564516214314805306643361770816445044252596201118736349797806010606325821691074086011149819339165292575642718557208545199460332095018177067915312344839819918898600283251174665982620229888344146511868198320005150561232136776531925370817620238595330166039,
+        "rsa_pub_exp"   :65537
+    },
+    "partner123muaRequestVerticle": {
+        "host": "zalochat-dev.123mua.vn",
+        "port": 80,
+        "urlGetOrderInfo": "/momo?api=order",
+        "urlSetOrderPay": "/momo?api=pay"
+    },
+    "commandVerticle": {
+        "active": true,
+        "otpHandler": {
+            "sendSmsMessage": true,
+            "otpSmsMessageTemplate": "Nhap day so %s vao ung dung de xac thuc tai khoan. Tin nhan nay duoc gui tu dong tu ung dung vi dien tu MoMo, xin KHONG tra loi tin nhan nay!"
+        },
+        "registerHandler": {
+            "arrGroup": "19112,34112",
+            "arrCapset": "509",
+            "upperLimit": "5000000"
+        }
+    },
+    "webAdminVerticle": {
+        "enable": true,
+        "port": 18080,
+        "hostAddress": "0.0.0.0"
+    },
+    "webServiceVerticle": {
+        "port": 28080,
+        "hostAddress": "0.0.0.0"
+    },
+    "database":{
+            //"jdbc:oracle:thin:@//172.16.15.15:1521/Lstandby" "jdbc:oracle:thin:@//172.16.18.50:1521/test",
+            "driver"    :"oracle.jdbc.pool.OracleDataSource",
+            "url"       :"jdbc:oracle:thin:@//172.16.43.50:1521/ltest.mservice.com.vn",
+            "username"  :"HTPP_ADMIN",
+            "password"  :"mservice"
+        },
+    "map" :{
+        "lng_min": 0.01,
+        "lng_max": 109.27,
+        "lat_min": 0.01,
+        "lat_max": 23.23
+    },
+    "sync_time":{
+        "tran_interval" :750, // millisecond
+        "tran_size" :3,
+        "loc_interval" :750,
+        "loc_size" : 3,
+        "last_sync_time" : 3 //months
+    },
+    "smscTcpVerticle": {
+        "host": "0.0.0.0",
+        "port": 8444
+    },
+    "userResourceVerticle": {
+        "host": "0.0.0.0",
+        "port": 8446,
+        "avatarDir": "/tmp",
+        "isAvatarStorage": true,
+        "staticResourceDir": "/tmp/static"
+    },
+    "bank_manual":{
+        "agent_adjust_manual" :"bankoutmanual",
+        "agent_adjust_manual_fee" :"bankoutmanualfee"
+    },
+    /*
+    //TEST
+    "core_connector":{
+        "server_ip":"172.16.18.50", // TEST
+        "server_port":9090,
+        "initiator_acc":"protoconfirm", // tai khoan thuc hien treo tien
+        "initiator_pin":"PP12!@pp",
+        "core_client_id" : 777777, //696969;333333;101010 account ket noi vao
+        "core_client_pass":777777
+    },
+
+*/
+    //UAT
+    "core_connector":{
+            "server_ip":"172.16.43.200",
+            "server_port":9090,
+            "initiator_acc":"protoconfirm", // tai khoan thuc hien treo tien
+            "initiator_pin":"PP12!@pp",
+      "core_client_id": 666666,
+      //164314,164316,1643160,696969,101010,333333,111111,222222,555555,666666,777777,888888,999999,0,898989,191919,164314,161910,161715,1643157,1010154,164322,1644179,969696 account ket noi vao
+      "core_client_pass": 666666
+    },
+
+    "sms_for_m2number":{
+        "sms1":"Ban nhan duoc %sd tu 0%d. Truy cap http://app.momo.vn/%s de nhan tien trong 48 gio hoac goi 0839917199 de duoc ho tro.",
+        "sms2":"Ban con 24 gio de nhan so tien %sd tu sdt %s. Truy cap http://app.momo.vn/%s de nhan tien. Hoac goi 0839917199 de duoc ho tro. Cam on.",
+        "sms3":"Ban con 12 gio de nhan so tien %sd tu sdt %s. Truy cap http://app.momo.vn/%s de nhan tien. Hoac goi 0839917199 de duoc ho tro. Cam on.",
+        "sms4":"Giao dich da huy so tien %sd se duoc tra lai cho nguoi gui. Cam on.",
+        "after1time":24, // hour
+        "after2time":36, //hour
+        "after3time":48, //hour
+        "_syc_m2number":true,
+        "m2nworkingaccount": "m2nworkingaccount"
+    },
+
+    /*"lstandby_database":{
+        //config to lstandby
+        "driver"    :"oracle.jdbc.pool.OracleDataSource",
+        "url"       :"jdbc:oracle:thin:@//172.16.43.15:1521/Lstandby",
+        "username"  :"htpp_admin",
+        "password"  :"mservice"
+    },
+    "umarket_database":{
+        //config to umarket
+        "driver"    :"oracle.jdbc.pool.OracleDataSource",
+        "url"       :"jdbc:oracle:thin:@//172.16.43.15:1521/Lstandby",
+        "username"  :"report_admin",
+        "password"  :"mservice"
+    },*/
+	"lstandby_database":{
+        //config to lstandby
+        "driver"    :"oracle.jdbc.pool.OracleDataSource",
+        "url"       :"jdbc:oracle:thin:@//172.16.43.50:1521/ltest.mservice.com.vn",
+        "username"  :"report_admin",
+        "password"  :"mservice"
+    },
+    "umarket_database":{
+        //config to umarket
+        "driver"    :"oracle.jdbc.pool.OracleDataSource",
+        "url"       :"jdbc:oracle:thin:@//172.16.43.48:1521/testha.mservice.com.vn",
+        "username"  :"soap_admin",
+        "password"  :"soappwdaccess"
+    },
+    "mobiapp_version":{
+        "android":{"code":5,"name" :"1.0.4"},
+        "ios":{"code":1,"name" :"1.4.4"},
+        "windowphone":{"code":1001,"name" :"1.0.0.1"},
+
+	//for agent
+        "agent_android":{"code":1,"name" :"1.0.0"},
+
+        "agent_ios":{"code":100,"name" :"1.0.0"},
+
+        "agent_windowphone":{"code":100,"name" :"1.0.0"}
+    },
+    "mobiweb_port":6969,
+    "allow_send_noti_cloud": true,
+
+    "zalo_adjustment_account":{
+        "account1":"account1",
+        "account2":"account2",
+        "account3":"account3"
+    },
+
+/*
+    "vng_123phim":{
+        "host" :"mapp.123phim.vn",
+    	"port" :80,
+    	"key":"BCYP16VsY8gjyVRmmc23tbDm",
+    	"urlCreateOrder":"/mservice/api/order/create/",
+    	"urlConfirmOrder":"/mservice/api/order/confirm/",
+    	"urlCancelOrder":"/mservice/api/order/cancel/",
+    	"urlCheckStatus":"/mservice/api/order/query?invoice_no=",
+    	"header_token_key" :"X-123F-Token",
+    	"header_version_key":"X-123F-Version",
+    	"header_version_value":"3",
+    	"header_content_type":"application/json",
+    	"reciever_account":"030349009601", //tai khoan nhan tien cua 123phim
+    	//cau hinh khuyen mai
+    	"promotion":{
+        	    "date_from":"2014-09-15 00:00:00",
+        	    "date_to" :"2014-10-31 23:59:59",
+        	    "min_ticket_count":2
+        },
+        "promotion_pharse2":{
+             "date_from":"2014-10-09 00:00:00",
+             "date_to" :"2014-10-31 23:59:59",
+             "max_ticket_count_promo":2,
+             "adjust_account":"0979754034",
+             "percent":10,
+             "max_time_promo":2
+        }
+    },
+*/
+
+    "vng_123phim":{
+        "host" :"mapp-dev.123phim.vn",
+        "port" :80,
+        "key":"123456",
+        "urlCreateOrder":"/mservice/api/order/create/?is_test=1",
+        "urlConfirmOrder":"/mservice/api/order/confirm/?is_test=1",
+        "urlCancelOrder":"/mservice/api/order/cancel/?is_test=1",
+        "header_token_key" :"X-123F-Token",
+        "header_version_key":"X-123F-Version",
+        "header_version_value":"3",
+        "header_content_type":"application/json",
+        "reciever_account":"123phim030349009601",
+        "test_mode": true,
+        "promotion":{
+            "date_from":"2014-09-15 00:00:00",
+            "date_to" :"2014-10-31 23:59:59",
+            "min_ticket_count":2
+        },
+        "promotion_pharse2":{
+            "date_from":"2014-10-09 00:00:00",
+            "date_to" :"2014-10-31 23:59:59",
+            "max_ticket_count_promo":2,
+            "adjust_account":"0965474124",
+            "percent":10,
+            "max_time_promo":3
+        }
+    },
+
+    "wc2014":{
+        "batch_size":10,
+        "adjust_account":"0974540385",
+        "allow_run":true
+    },
+
+    "allow_nap_rut_tan_noi":true, // bat dich vu nap rut tan noi
+    "allow_sync_data" :false, // cho phep sync du lieu
+  "allow_send_noti_cloud": true,
+  // send noti on-command
+  "allow_send_noti_cloud_admin": true,
+  // cho phep chay send noti hang loat tai admin tren server nay
+    "allow_process_promotion":true, //cho phep
+    "allow_service_config" : true,
+    "wcVerticleConfig": {
+        "enableUpdateZaloStatus": true
+    },
+    "pay123":{
+        "account": "123pay0974647677",
+        "account_visa_master":"123payvisa_master",
+        "key":"MIKEY",
+        "expire_time":5 // dang tinh theo phut
+    },
+    "allow_load_invite_code": true,
+
+    "refund":{
+        "banknet_agent":"vtb2vcb",
+        "pay123_agent_internal":"vtb2vcb",
+        "pay123_agent_credit":"vtb2vcb",
+        "date_from":"2014-09-18 00:00:00",
+        "date_to":"2014-11-30 23:59:59"
+    },
+    "max_reg_by_imei": 200000,
+
+    "remain_for_referal":{
+        "day":365,
+        "date_affected":"2014-10-01 00:00:00",
+
+        "topup":{
+            "max_value_per_month":300000,
+            "percent":0,
+            "static":0
+        },
+        "topup_game":{
+            "max_value_per_month":300000,
+            "percent":0,
+            "static":0
+        },
+        "vinahcm":{
+            "percent":0,
+            "static":0
+        },
+        "jetstar":{
+            "percent":0,
+             "static":0
+        },
+        "dien":{
+            "percent":0,
+            "static":0
+        },
+        "avg":{
+            "percent":0,
+            "static":0
+        },
+        "ifpt":{
+            "percent":0,
+            "static":0
+        },
+        "cdhcm":{
+            "percent":0,
+            "static":0
+        }
+    },
+
+    "connector_proxy_busname":{
+         "nuocnb" :{
+             "busname":"nhabeProxyVerticle",
+             "billpay" : "billpaytrendmicro"
+         },
+
+         "trendmicro" :{
+             "busname": "trendmicroProxyVerticle",
+             "billpay":"billpaytrendmicro"
+         },
+
+         "mcc" :{
+             "busname": "minhchauProxyVerticle",
+             "billpay":"billpaytrendmicro"
+         },
+
+         "epay_viettel" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "epay_mobifone" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "epay_vinafone" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "epay_vietnamobile" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "epay_beeline" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "epay_vinagame" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "epay_vtc" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "epay_oncash" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "epay_garena" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "epay_megacard" :{
+             "busname": "epayProxyVerticle",
+             "billpay":"mathe_epay"
+         },
+
+         "lacviet" :{
+             "busname": "lacvietProxyVerticle",
+             "billpay":"billpaytrendmicro"
+         },
+
+         "kaspersky" :{
+              "busname":"kasperskyProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	"qpal" :{
+              "busname":"bitcardProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+          "bkav" :{
+              "busname":"bkavProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+         "fimplus" :{
+              "busname":"fimplusProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "giatotviet" :{
+              "busname":"GTVProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	"operationsmile" :{
+              "busname":"operationsmileProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	"survey" :{
+              "busname":"surveyProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	"fptplay" :{
+              "busname":"fptplayProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+
+         //co check bill
+         "vthn" :{
+             "busname":"vthnProxyVerticle",
+             "billpay":"billpaytrendmicro"
+         },
+
+         "vivoo" :{
+              "busname":"vivooProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	"mytv" :{
+              "busname":"mytvProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	"fshare" :{
+              "busname":"fshareProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "prudential" :{
+              "busname":"prudentialProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "railway" :{
+              "busname":"railwayProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "vtvcab" :{
+              "busname":"vtvCableProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "thienhoa" :{
+              "busname":"thienhoaProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "phtwater" :{
+              "busname":"phtwaterProxyVerticle",
+              "billpay":"billpaymobifone"
+         },
+
+         "pingsky" :{
+              "busname":"pingskyProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "ongame" :{
+              "busname":"ongameProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	"ongate" :{
+              "busname":"ongateProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "homecredit" :{
+              "busname":"homecreditProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	 "msd" :{
+              "busname":"msdProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	 "dien" :{
+              "busname":"evnHCMProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	 "evnhcm" :{
+              "busname":"evnHCMProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	"adslfpt" :{
+              "busname":"adslfptProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "nuoccholon" :{
+              "busname":"nuoccholonProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	 "nuocbenthanh" :{
+              "busname":"nuocbenthanhProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+	"tdwater" :{
+              "busname":"tdwaterProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+	"finstar" :{
+                "busname":"finstarProxyVerticle",
+                "billpay":"billpaymobifone"
+        },
+	"gotit" :{
+              "busname":"gotitProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+	"phtwater" :{
+              "busname":"phtwaterProxyVerticle",
+              "billpay":"billpaymobifone"
+         },
+	"tawater" :{
+              "busname":"tawaterProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+	 "thwater" :{
+              "busname":"thwaterProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+	"vnpt_danang":{
+                "busname":"vnptdnProxyVerticle",
+                "billpay":"billpaytrendmicro"
+        },
+	 "vxugame" :{
+               "busname":"vxugameProxyVerticle",
+               "billpay":"billpaytrendmicro"
+         },
+	"vthcm" :{
+              "busname":"vthcmProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "vtv_extension" :{
+              "busname":"vtv_extensionProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	 "anvien" :{
+              "busname":"anvienProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+	 "scj" :{
+	      "busname":"SCJProxyVerticle",
+              "billpay":"billpaymobifone"
+	 },
+
+	 "cungmua" :{
+	      "busname":"cungmuaProxyVerticle",
+              "billpay":"billpaymobifone"
+	 },
+
+	"taske" :{
+	      "busname":"taskeProxyVerticle",
+              "billpay":"billpaymobifone"
+	 },
+
+	 "proxy_confirm" :{
+              "busname":"integrateVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+
+         "topup" :{
+                "busname":"gsmProxyVerticle",
+                "billpay":"billpaymobifone"
+         },
+
+         "evnmientrung" :{
+                "busname":"evnmientrungProxyVerticle",
+                "billpay":"billpaytrendmicro"
+         },
+         "hsbc" :{
+                 "busname":"hsbcProxyVerticle",
+                 "billpay":"billpaytrendmicro"
+                  },
+         "avg" :{
+               "busname":"",
+               "billpay":""
+         },
+	
+	"gocoin" :{
+               "busname":"gocoinProxyVerticle",
+               "billpay":"billpaytrendmicro"
+         },
+	"zxu" :{
+               "busname":"zxuProxyVerticle",
+               "billpay":"billpaytrendmicro"
+         },
+	"vnexpress" :{
+              "busname":"vnexpressProxyVerticle",
+              "billpay":"billpayvnexpress"
+         },
+	"defmilkdistribution" :{
+              "busname":"SCBProxyVerticle",
+              "billpay":"payment_scbvn",
+              "isNamedChecked" : true
+        },
+	"abcinsurance" :{
+              "busname":"SCBProxyVerticle",
+              "billpay":"payment_scbvn",
+              "isNamedChecked" : true
+        },
+	"vexere" :{
+              "busname":"vexereProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+	"vega" :{
+              "busname":"vegaProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+	"vxu" :{
+              "busname":"vegaProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+        "adslvnpthcm" :{
+              "busname":"adslVnptHcmProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+         "adslfpt" :{
+              "busname":"adslfptProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+	"evn_quangtri":{
+              "busname":"evncpcProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         },
+	"topupbhd":{
+              "busname":"topupBHDProxyVerticle",
+              "billpay":"billpaytrendmicro"
+         }
+
+	
+    },
+    "escape":{
+        "account":"escape",
+        "percent":0.15,
+        "threshold": 500000
+    },
+    "gift" : {
+      "g2nMessage" : "Hey, mÃÂÃÂ¬nh cÃÂÃÂ³ mÃÂ¡ÃÂ»ÃÂt mÃÂÃÂ³n quÃÂÃÂ  dÃÂÃÂ nh tÃÂ¡ÃÂºÃÂ·ng bÃÂ¡ÃÂºÃÂ¡n. NhÃÂ¡ÃÂºÃÂ­n quÃÂÃÂ  tÃÂ¡ÃÂºÃÂ·ng tÃÂ¡ÃÂºÃÂ¡i: <a href='http://app.momo.vn:8081/${token}'>http://app.momo.vn:8081/${token}</a>",
+      "link": "http://app.momo.vn:8081/${token}",
+      "rollbackChecking": false,                  // server36 only cho phep check de rollback hay khong
+      "rollbackTimer" : 15,                       // (minute) moi 15 phut check 1 lan
+      "rollbackDay" : 3,                          // (day) thoi gian rollback khi nguoi nhan khong nhan qua
+
+      // quet gui qua ra ngoai
+      "sendTimerOn": false,                       // server36 only tang qua co hen ngay gio
+      "sendTimer": 5,                            // (minute) 15 phut quet 1 lan
+
+
+      "momoAgent": "tienthua_voucher",                       // agent sÃÂ¡ÃÂºÃÂ½ nhÃÂ¡ÃÂºÃÂ­n lÃÂ¡ÃÂºÃÂ¡i tiÃÂ¡ÃÂ»ÃÂn dÃÂÃÂ° cÃÂ¡ÃÂ»ÃÂ§a Gift khi giÃÂÃÂ¡ trÃÂ¡ÃÂ»ÃÂ cÃÂ¡ÃÂ»ÃÂ§a gip khÃÂÃÂ´ng sÃÂ¡ÃÂ»ÃÂ­ dÃÂ¡ÃÂ»ÃÂ¥ng hÃÂ¡ÃÂºÃÂ¿t trong 1 giao dÃÂ¡ÃÂ»ÃÂch
+
+      //luong chay expired qua
+      "expireGiftMomo": "tienquahan_voucher",            //tai khoan chom gift cua khach hang hehehhe
+      "expiredTimerOn": true,                    //cho phep chom hay khong
+      "expiredTimer" : 2,                         //bao nhieu phut thi nghia 1 cai
+
+      //nhac su dung qua
+      "remind":{
+        "cap":"QuÃÂÃÂ  tÃÂ¡ÃÂºÃÂ·ng hÃÂ¡ÃÂºÃÂ¿t hÃÂ¡ÃÂºÃÂ¡n",
+        "body":"QuÃÂÃÂ  tÃÂ¡ÃÂºÃÂ·ng cÃÂ¡ÃÂ»ÃÂ§a bÃÂ¡ÃÂºÃÂ¡n chÃÂ¡ÃÂ»ÃÂ cÃÂÃÂ²n %s ngÃÂÃÂ y lÃÂÃÂ  hÃÂ¡ÃÂºÃÂ¿t hÃÂ¡ÃÂºÃÂ¡n sÃÂ¡ÃÂ»ÃÂ­ dÃÂ¡ÃÂ»ÃÂ¥ng. Vui lÃÂÃÂ²ng sÃÂ¡ÃÂ»ÃÂ­ dÃÂ¡ÃÂ»ÃÂ¥ng nhanh chÃÂÃÂ³ng.",
+        "scanTime":10000, // tinh phut
+        "scanOn":false, // cho phep quet hay khong
+        "period":[
+          {"7day":7},
+          {"3day":3},
+          {"1day":1}
+        ]
+      }
+    },
+    "point": {
+        "minPoint": 50000,
+        "mintAmount": 0
+    },
+
+    //config cho DGD
+    "retailer":{
+        "ftp_upload":{
+            "url":"172.16.43.22/opt/ftp/upload/", // url ftp
+            "port":21,
+            "username":"appmomo",
+            "password":"mservice"
+        },
+        "min_img":1, // so luong hinh toi thieu phai upload
+        "named_value": 10000
+    },
+
+    //chuong trinh khuyen mai dang nhan duoc
+    "chain_promtion":[
+        {
+            "program":"coffee",
+            "max_code":7
+        }
+    ],
+    "chain_coffee_group":[
+        {"user_group":"RTEDCFV", "value": "hn"}
+        ,{"user_group":"GBNHJKI", "value": "hcm"}
+        ,{"user_group":"KHGFCDM", "value": "all"}
+    ],
+
+    "capdoihoanhao":{
+        "min_code":1,
+        "max_code":7,
+        "min_val":5000,
+        "max_val":75000,
+        "max_sms_per_day":30,
+        "account":[
+            {"cdhh1":"cdhh01"},
+            {"cdhh2":"cdhh02"},
+            {"cdhh3":"cdhh03"},
+            {"cdhh4":"cdhh04"},
+            {"cdhh5":"cdhh05"},
+            {"cdhh6":"cdhh06"},
+            {"cdhh7":"cdhh07"}
+        ],
+        "couple":[
+            {"1": ""},
+            {"2": ""},
+            {"3": ""},
+            {"4": ""},
+            {"5": ""},
+            {"6": ""},
+            {"7": ""}
+        ],
+    "vote_via_core":false
+    },
+    "vote_connector":{
+                "server_ip":"172.16.44.10", // TEST
+                "server_port":9090,
+                "initiator_acc":"protoconfirm", // tai khoan tuc hien treo tien
+                "initiator_pin":"PP12!@pp",
+                "core_client_id" : 111111,
+                "core_client_pass":696969,
+                "allow": false
+    },
+    "allow_vietnam_mobile": true, // not allow send otp for vietname mobile
+    "topup_2_step": {
+        "viettel":{
+            "enable": false,
+            "busaddress":"gsmProxyVerticle"
+        },
+        "vina":{
+            "enable": false,
+            "busaddress":""
+        },
+        "mobi":{
+            "enable": false,
+            "busaddress":""
+        },
+        "evn":{
+            "enable": false,
+            "busaddress":""
+        },
+        "beeline":{
+            "enable": false,
+            "busaddress":""
+        },
+        "vietnam":{
+            "enable": false,
+            "busaddress":""
+        },
+        "sfone":{
+            "enable": false,
+            "busaddress":""
+        }
+    },
+    "allow_submit_form_verticle":true,
+    "allow_dgd_fee_verticle":true,
+
+    "galaxyVerticle": {
+  "enable": true,
+  "port": 38080,
+  "hostAddress": "0.0.0.0",
+  "account":[
+    {"user":"nguyendu01" , "pass":"nd01"},
+    {"user":"nguyendu02" , "pass":"nd02"},
+    {"user":"nguyendu03" , "pass":"nd03"},
+    {"user":"nguyendu04" , "pass":"nd04"},
+    {"user":"nguyendu05" , "pass":"nd05"},
+
+    {"user":"nguyentrai01" , "pass":"nt01"},
+    {"user":"nguyentrai02" , "pass":"nt02"},
+    {"user":"nguyentrai03" , "pass":"nt03"},
+    {"user":"nguyentrai04" , "pass":"nt04"},
+    {"user":"nguyentrai05" , "pass":"nt05"},
+
+    {"user":"kinhduongvuong01" , "pass":"kdv01"},
+    {"user":"kinhduongvuong02" , "pass":"kdv02"},
+    {"user":"kinhduongvuong03" , "pass":"kdv03"},
+    {"user":"kinhduongvuong04" , "pass":"kdv04"},
+    {"user":"kinhduongvuong05" , "pass":"kdv05"},
+
+    {"user":"tanbinh01" , "pass":"tb01"},
+    {"user":"tanbinh02" , "pass":"tb02"},
+    {"user":"tanbinh03" , "pass":"tb03"},
+    {"user":"tanbinh04" , "pass":"tb04"},
+    {"user":"tanbinh05" , "pass":"tb05"},
+
+    {"user":"quangtrung01" , "pass":"qt01"},
+    {"user":"quangtrung02" , "pass":"qt02"},
+    {"user":"quangtrung03" , "pass":"qt03"},
+    {"user":"quangtrung04" , "pass":"qt04"},
+    {"user":"quangtrung05" , "pass":"qt05"},
+
+
+    //for cat tien sa
+    {"user":"cattiensa" , "pass":"P@ssword"}
+
+  ]
+},
+
+  //config cho promotion girl cua galaxy, tren tat ca cac server
+  "galaxy":{
+    "pgcode":[
+      {"min":6100},
+      {"max":6140}
+    ],
+    "pgpromo":[
+      {"buyfilm":5000},
+      {"paybill":10000},
+      {"bankin":20000}
+    ]
+  },
+  "remix":{
+    "min_code":1,
+    "max_code":8,
+    "min_val":5000,
+    "max_val":75000,
+    "max_sms_per_day":30,
+    "account":[
+      {"remix1":"0979754034"},
+      {"remix2":"0979754034"},
+      {"remix3":"0979754034"},
+      {"remix4":"0979754034"},
+      {"remix5":"0979754034"},
+      {"remix6":"0979754034"},
+      {"remix7":"0979754034"},
+      {"remix8":"0979754034"}
+    ],
+    "vote_via_core":false
+  },
+  "buocnhayhoanvu":{
+	  "min_code":1,
+	  "max_code":8,
+	  "min_val":4000,
+	  "max_val":60000,
+	  "max_sms_per_day":37,
+	  "account":[
+	    {"bnhv1":"0979754034"},
+	    {"bnhv2":"0979754034"},
+	    {"bnhv3":"0979754034"},
+	    {"bnhv4":"0979754034"},
+	    {"bnhv5":"0979754034"},
+	    {"bnhv6":"0979754034"},
+	    {"bnhv7":"0979754034"},
+	    {"bnhv8":"0979754034"}
+	  ],
+	  "vote_via_core":false
+	},
+  "bankcashin":{
+    "vietcombankmin":10000,
+    "viettinbankmin":0
+  },
+  "cybersource":{
+      "enable":true,
+      "min_value_direct":10000,         // gia tri toi thieu chuyen ve voi giao dich nap tien truc tiep nguon visa-master
+      "min_value_redirect":10000,      // gia tri toi thieu chuyen ve voi thanh toan/chuyen tien gian tiep nguon visa-master
+      "proxyBusAddress":"cyberSourceVerticle",
+      "visa_group" : "59122", // Truong setting lai group nay cho dung tren con production
+      "visa_capset_id" : "709",
+              "visa_upper_limit" : "100000000"
+  },
+
+    "billpaypromo":{
+        "timeforgift":30,         // thoi gian su dung qua tang
+        "agent":"01000000000",            // agent tra thuong
+        "valueofgift":50000,
+	"vina_proxy_verticle":"vinaphoneProxyVerticle",
+	"timeforactive":20
+    },
+"vnidol":{
+      "min_code":1,
+      "max_code":8,
+      "min_val":3000,
+      "max_val":9000,
+      "sms_price" :3000,
+      "max_sms":3,
+      "per_type": "section",
+      "account":[
+        "0979754034",//1
+        "0979754034",//2
+        "0979754034",//3
+        "0979754034",//4
+        "0979754034",//5
+        "0979754034",//6
+        "0979754034",//7
+        "0979754034",//8
+        "0979754034"//9
+      ],
+      "vote_via_core":false
+    },
+    "visampointpromo":{
+            "agent":"01000000000",            // agent tra thuong
+            "total":30000,
+            "percent":10
+        },
+    "bank":{
+        "bank_connector_verticle":"bankVerticle",
+        "allow_bank_via_connector": "rest_ws", // soap, cluster, rest_ws
+        "ios_code":1914,
+        "android_code":41,
+        "store_ios_code":104,
+        "store_android_code":115,
+        "timer":5,
+        "restHost" :"172.16.43.22",
+        "restPort" : 19090,
+        "restPath": "/servicebank"
+    },
+
+    "cacheBillInfo":{
+        "count":3,
+        "duration":3
+    },
+
+    "shopping":{
+       "verticle":"shoppingVerticle"
+    },
+
+    "ocb_promo": {
+     "isActive" : true,
+     "bank_code" : "104",
+     "agent_point" : "01000000000",
+     "point" : 100000,
+     "agent" : "01000000000",
+     "timeforgift" : 30,
+     "valueofgift" : 50000,
+     "timeforactive" : 20,
+     "gift_type_1" : "",
+     "gift_type_2" : ""
+    },
+
+"iron_promo": {
+        "isActive" : false,
+        "time_scan_expired_gift" : 2, // minutes
+        "time_scan_mapping" : 2, // hours
+        "agent" : "01000000000",
+        "timeforgift_1" : 1,
+        "timeforgift_2" : 7,
+        "timeforgift_3" : 10,
+	    "valueofgift_1" : 50000,
+        "valueofgift" : 50000,
+        "timeforactive" : 20
+    },
+
+    "sync_store_app": {
+      "time_sync": 10,
+      "time_ios_default": 10,
+      "time_android_default": 10
+    },
+
+    "pre_promo":{
+       "start_time" : 1442422800000,
+       "end_time" : 0,
+       "isActive" : false,
+       "number_of_given_voucher":2000,
+       "number_of_random_voucher":2000,
+       "agent" : "01000000000",
+       "timeforgift" : 1,
+       "valueofgift" : 10000
+    },
+    "iron_man_plus":{
+           "isActive" : false,
+           "agent" : "01000000000",
+           "timeforgift" : 24, //day
+           "valueofgift" : 10000,
+           "time_scan_period" : 10 //Minutes
+    },
+
+    "merchant_key_manage":{
+        "test" : true,
+        "host" : "172.16.43.22",
+        "port" : 8082,
+    	"timeOut" : 180000
+    },
+    "october_promo": {
+             "isActive" : false,
+             "valueofgift" : 50000,
+             "timeforgift" : 15, //days
+             "time_scan_expired_gift" : 30, // minutes
+             "time_scan_giving_gift" : 1440, // minutes
+             "agent" : "01000000000",
+             "create_date_limit_start" : 1420045200000, // 1/1/2015
+             "create_date_limit_end" : 1443632400000, //1/10/2015
+             "lucky_number" : 2000,
+             "min_lucky_amount" : 500000,
+             "scan_expired_gift" : false,
+             "number_of_lucky_gift" : 10,
+             "list_main_number" : ["0902997364", "0946810122"]
+
+    },
+    "claim_point":{
+            "isActive" : true,
+            "agent" : "01000000000",
+            "claim_amount" : 5000
+    },
+    "roll_back_50_percent":{
+        "isActive" : false,
+        "limit_amount" : 200000,
+        "percent" : 50,
+        "visa_percent" : 20,
+        "agent" : "01000000000",
+        "vcb_start_time": 1447866000000,
+        "bank_codes" : ["104", "103"],
+        "bonus_bank_codes" : ["12345", "sbs"]
+    },
+
+    "turn_off_noti":{
+        "list_number" : [
+        ""],
+        "list_agent" : ["pointtommoney"],
+        "isActive":true
+    },
+
+    "bill_rule_management":{
+        "pay_times" : 2
+    },
+    "DGDVerticle": {
+      "port": 8083,
+      "hostAddress": "172.16.43.22",
+      "key": "Z8wh%Rj(DP",
+      "source": "mongo" // mis
+    },
+    "htpp_admin_database":{
+      "driver"    :"oracle.jdbc.pool.OracleDataSource",
+      "url"       :"jdbc:oracle:thin:@//172.16.43.50:1521/ltest.mservice.com.vn",
+      "username"  :"htpp_admin",
+      "password"  :"mservice",
+      "dcntt_group_ids" : "58123, 59124"
+    },
+    "merchant_web":{
+    "test" : true,
+    "host" : "172.16.43.22",
+    "port" : 8084,
+    "timeOut" : 180000
+  },
+  "number_of_reactive_customer_gift":{
+    	"group_prudential": 3,
+	"group_castrol" : 1,
+	"group_v30kall" : 1,
+	"group_v50knew" : 1
+  },
+  "zalo_sms":{
+    "sendByZalo": false,
+    "zaloOtpSmsMessageTemplate": "Nhập dãy số %s vào ứng dụng để xác thực tài khoản. Tin nhắn này được gửi tự động từ ứng dụng ví điện tử MoMo, xin KHÔNG trả lời tin nhắn này!",
+    "pageId":1434166579221389869,
+    "secretKey":"eU7XCet0D99mY5YZnir6",
+    "timeOut":90000
+  },
+    "zalo_promo" : {
+        "isActive": true,
+        "agent" : "01000000000",
+        "agent_cashback" : "01000000000",
+        "timeformoney": 7,
+        "valueofmoney": 10000,
+        "timeforgift" : 45,
+        "valueofgift" : 150000,
+        "scan_expired_money" : true,
+        "amount_bonus_max" : 70000,
+        "url" : "www.123.com",
+        "list_voucher" : ["dien", "123phim"]
+    },
+    "connector_notification":{
+        "is_build":true,
+        "host":"172.16.43.22",
+        "port":8088
+    },
+  "HttpPostConnectorVerticle": {
+    "isServer": true,
+    "host": "10.10.10.157",
+    "port": 20000,
+    "formEUHost": "10.10.10.157",
+    "formEUPort": 20000,
+    "formDGDHost": "10.10.10.157",
+    "formDGDPort": 20000
+  },
+  "LotteVerticle": {
+    "port": 8090,
+    "host": "172.16.43.22",
+    "agentCreditor": "payment_scbvn",
+    "serviceId": "lotte",
+	"serviceName": "Lotte Mart",
+    "mis_merchant": {
+      "host" : "172.16.23.152",
+      "port": 8080
+    },
+    "connector_merchant": {
+      "host" : "172.16.44.179",
+      "port": 8092
+    }
+  }
+}
+

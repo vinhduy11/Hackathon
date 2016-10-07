@@ -1,0 +1,169 @@
+<html>
+<head>
+    <title>Store comments</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <!--<script src="../js/session.js"></script>-->
+    <!--<script src="../js/cookie_OLD.js"></script>-->
+    <script type="text/javascript" src="../js/mask.js"></script>
+    <style type="text/css">
+        table,th,td
+        {
+            border:1px solid #778899;
+            padding-left:5px;
+            padding-right:5px;
+        }
+        table {
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th {
+            background-color: #2F4F4F;
+            color:white;
+            height:40px;
+        }
+    </style>
+</head>
+<body>
+<div id="mydiv">
+    <h2>Store comments</h2>
+
+    <div>
+        Store:<input type="text" id="f_storeId">
+        Commenter:<input type="text" id="f_commenter">
+        Status:
+        <select id="f_status">
+            <option value="all">All</option>
+            <option value="0">New</option>
+            <option value="1">Accepted</option>
+            <option value="2">Rejected</option>
+        </select>
+        <button id="btnFind">Find</button>
+    </div>
+
+    <hr/>
+
+    <div>
+        <table id="commentTable">
+            <tr>
+                <th>Status</th>
+                <th>Store</th>
+                <th>Commenter</th>
+                <th>Cmt name</th>
+                <th>rate</th>
+                <th>Post date</th>
+                <th>Content</th>
+            </tr>
+        </table>
+    </div>
+
+    <hr/>
+    <div id="btnNextPage" style="background: #126daf; color: #eff4f8; text-align: center; cursor: pointer;">
+        next
+        <br/> ⧩
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    var glb_lowestTime = 0;
+    var f_storeId = null;
+    var f_commenter = null;
+    var f_status = null;
+
+    function setRowStatus(rowName, status) {
+        var color = "#ffffff";
+        if(status==0) {
+            color = "#fcefa1";
+        }
+        $("#" + rowName).css("backgroundColor", color)
+    }
+    function addStoreComment(c) {
+
+        var date = new Date(c.modifyDate);
+
+        var row = "<tr id='r_" + c.commentId + "'>";
+
+        var statusHtml = "<select name='rStatus' id='" + c.commentId +"'>";
+        statusHtml += "<option value='0' " + ">New</option>";
+        statusHtml += "<option value='1' " + ">Accepted</option>";
+        statusHtml += "<option value='2' " + ">Rejected</option>";
+        statusHtml += "</select>";
+
+        row += "<td>" + statusHtml + "</td>";
+        row += "<td>" + c.storeId + "</td>";
+        row += "<td>" + c.commenter + "</td>";
+        row += "<td>" + c.commenterName + "</td>";
+        row += "<td>" + c.star + "</td>";
+        row += "<td>" + date.toLocaleDateString() + "</td>";
+        row += "<td>" + c.content + "</td>";
+        row += "</tr>";
+        $("#commentTable").append(row);
+
+        $("#" + c.commentId).val(c.status);
+        setRowStatus("r_" + c.commentId , c.status);
+
+        $("#" + c.commentId).on('change', function(r) {
+
+            var url = "/service/store/comment/setStatus";
+            url += "?commentId=" + c.commentId;
+            url += "&status=" + $("#" + c.commentId).val();
+            $("#" + c.commentId).css('background-color', 'yellow');
+            $.getJSON(url).done(function (data) {
+                $("#" + c.commentId).css('background-color', '#e6f1f9');
+                setRowStatus("r_" + c.commentId , $("#" + c.commentId).val());
+            }).fail(function() {
+                $("#" + c.commentId).css('background-color', '#ebcccc');
+            });
+        });
+    }
+
+    function loadCommentPage() {
+        var url = "/service/store/comment/getPage";
+        url += "?pageSize=40";
+        url += "&lowestTime=" + glb_lowestTime;
+        if (f_storeId)
+            url += "&storeId=" + f_storeId;
+        if (f_commenter)
+            url += "&commenter=" + f_commenter;
+        if (f_status)
+            url += "&status=[" + f_status + "]";
+        $.getJSON(url).done(function (data) {
+            $.each( data, function( i, item ) {
+//                console.log(item);
+                glb_lowestTime = item.modifyDate;
+                addStoreComment(item);
+            });
+        });
+
+
+    }
+
+
+
+    var sIndex = 11, offSet = 10, isPreviousEventComplete = true, isDataAvailable = true;
+
+    $(document).ready(function () {
+        $("#btnFind").click(function (a) {
+            glb_lowestTime = 0;
+            f_storeId = $("#f_storeId").val();
+            f_commenter = $("#f_commenter").val();
+            f_status = $("#f_status").val();
+            $("#commentTable").html("<tr> <th>Status</th> <th>Store</th> <th>Commenter</th> <th>Cmt name</th> <th>rate</th> <th>Post date</th> <th>Content</th> </tr>");
+            loadCommentPage();
+        });
+        loadCommentPage();
+
+        $("#btnNextPage").click(function () {
+            loadCommentPage();
+        });
+
+    });
+
+</script>
+</body>
+</html>

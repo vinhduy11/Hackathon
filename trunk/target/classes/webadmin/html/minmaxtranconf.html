@@ -1,0 +1,223 @@
+<html>
+<head>
+    <title>Service Detail Config Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+
+</head>
+<body>
+<div id="mydiv">
+    <h2>MinMaxTran Config Page</h2>
+
+    <div id="table"></div>
+
+    <div class="clear"></div>
+
+    <div>
+        <table>
+            <tr>
+                <th colspan="2">Edit Information</th>
+            </tr>
+            <tr>
+                <td>Tran Type</td>
+                <td><input style="border: none" type="text" id="txttranType">
+                    <input type="hidden" id="_id">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Tran Name</td>
+                <td><input style="border: none" type="text" id="txttranName"></td>
+            </tr>
+
+            <tr>
+                <td>Is Named</td>
+                <td><input style="width: 20px; height: 20px" type="checkbox" id="txtisNamed"></td>
+            </tr>
+
+            <tr>
+                <td>Min Value</td>
+                <td><input style="border: none" type="text" id="txtminValue"></td>
+            </tr>
+
+            <tr>
+                <td>Max Value</td>
+                <td><input style="border: none" type="text" id="txtmaxValue"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" value="Create" id="btNew">
+                    <input type="button" value="Update" id="btSave" disabled>
+
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).on("click", "#del", function () {
+            var _id = $(this).attr("_id");
+            var result = confirm("Are you sure?");
+            if (result == true) {
+                $('#mydiv').mask("Loading...");
+                $.ajax({
+                    url: "/minmaxtran/del",
+                    type: "GET",
+                    data: {
+                        _id : _id,
+                        id: $.session.get("id"),
+                        username:$.session.get("username")
+                    },
+                    success: function (string) {
+                        $('#mydiv').unmask();
+                        var error = string["error"];
+                        if (error == 0) {
+                            alert("Thành công.");
+                            init();
+                        }
+                        else if (error == -1) {
+                            alert("Bạn phải đăng nhập.");
+                            $.session.clear();
+                            window.parent.location.href = "../html/login.html";
+                        }
+                        else
+                            alert("Không thành công. Error code = " + error);
+                    },
+                    error: function () {
+                        $('#mydiv').unmask();
+                        alert('Có lỗi kết nối xảy ra');
+                    }
+                });
+            }
+        });
+    });
+
+    $(function () {
+        $(document).on("click", "#edit", function () {
+
+            $("#btSave").prop("disabled", false);
+
+            //lay id cua dong duoc click
+            var rid = $(this).attr("val");
+            var _id = $(this).attr("_id");
+            var rowId = "td[rid=" + rid + "]";
+
+            //lay mang cac td tag
+            var tdArr = $(rowId)
+
+            //lay value tung td tag
+
+            var tranName = tdArr[1].innerHTML;
+            var tranType = tdArr[0].innerHTML;
+            var isNamed = tdArr[2].firstChild.checked;
+            var minValue = tdArr[3].innerHTML;
+            var maxValue = tdArr[4].innerHTML;
+
+
+            $("#_id").val(_id);
+            $("#txttranType").val(tranType);
+            $("#txttranName").val(tranName);
+            if (isNamed) {
+                $("#txtisNamed").prop('checked', true);
+            } else {
+                $("#txtisNamed").prop('checked', false);
+            }
+
+            $("#txtminValue").val(minValue);
+            $("#txtmaxValue").val(maxValue);
+
+        });
+    });
+
+
+    $('#btSave').click(function () {
+        upsert();
+    });
+    $('#btNew').click(function () {
+        $("#_id").val("");
+        upsert();
+    });
+
+    $(document).ready(function () {
+        init();
+    });
+
+    function upsert() {
+        if ($.session.get("id") == null) {
+            alert("Bạn phải đăng nhập.");
+            $.session.clear();
+            window.parent.location.href = "../html/login.html";
+        } else {
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/minmaxtran/upsert",
+                type: "GET",
+                data: {
+                    _id: $("#_id").val(),
+                    trantype: $("#txttranType").val(),
+                    tranname: $("#txttranName").val(),
+                    isnamed: $("#txtisNamed").is(":checked"),
+                    minval: $("#txtminValue").val(),
+                    maxval: $("#txtmaxValue").val(),
+                    id: $.session.get("id"),
+                    username: $.session.get("username")
+                },
+                success: function (string) {
+                    $('#mydiv').unmask();
+                    var error = string["error"];
+                    if (error == 0) {
+                        alert("Thành công.");
+                        $("#_id").val("");
+                        $("#txttranType").val("");
+                        $("#txttranName").val("");
+                        $("#txtisA").prop('checked', false);
+                        $("#txtminValue").val("");
+                        $("#txtmaxValue").val("");
+                        init()
+                    }
+                    else if (error == -1) {
+                        alert("Bạn phải đăng nhập.");
+                        $.session.clear();
+                        window.parent.location.href = "../html/login.html";
+                    }
+                    else
+                        alert("Không thành công. Error code = " + error);
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        }
+    }
+
+    function init() {
+        $("#btSave").prop("disabled", true);
+        $.ajax({
+            url: "/minmaxtran/getall",
+            type: "GET",
+            data: {
+            },
+            success: function (string) {
+                table = string["table"];
+                $("#table").html(table);
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

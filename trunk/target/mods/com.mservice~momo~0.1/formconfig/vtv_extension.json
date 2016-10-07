@@ -1,0 +1,101 @@
+{
+	"vtv_extension": [
+		{
+			"form1": {
+				"cap": "www.vtvcab.vn",
+				"btn": "Tiếp tục",
+				"nexfrm": 1,
+				"guide": "http://app.momo.vn:81/momo_app/html/vtv_ext.html",
+				"fields": [
+					{
+						"fieldtype": "text",
+						"fieldlabel": "Nhập số thẻ",
+						"key": "billid",
+						"required": true,
+						"line": 1,
+						"haschild": 0
+					}
+				],
+				"data": [
+				]
+			}
+		},
+		{
+			"form2": {
+				"cap": "www.vtvcab.vn",
+				"btn": "Tiếp tục",
+				"nexfrm": 2,
+				"guide": "",
+				"fields": [
+					{
+						"fieldtype": "drop",
+						"fieldlabel": "Chọn dịch vụ",
+						"key": "acc",
+						"required": true,
+						"line": 1,
+						"haschild": 0
+					},{
+						"fieldtype": "drop",
+						"fieldlabel": "Chọn số tháng",
+						"key": "ht",
+						"required": true,
+						"line": 1,
+						"haschild": 0
+					},{						 
+                        "fieldtype": "html",
+						"fieldlabel": "",
+						"key": "html",
+						"required": false,
+						"line": 1,
+						"haschild": 0,
+						"readonly": false,
+						"value": ""
+					}
+				],
+				"data": [
+                    
+				]
+			}
+		},
+		{
+			"form3": {
+				"cap": "www.vtvcab.vn",
+				"btn": "Tiếp tục",
+				"nexfrm": 3,
+				"guide": "",
+				"fields": [
+					{
+                          "fieldtype":"number",
+                          "fieldlabel":"Số tiền",
+                          "key":"amt",
+                          "required":true,
+                          "readonly":true,
+                          "line":1,
+                          "haschild":0
+                    },{
+                       	 "fieldtype":"cash",
+                         "fieldlabel":"Nguồn tiền",
+                         "key":"cash",
+                         "required":true,
+                         "line":1,
+                         "haschild":0
+                     },{
+						"fieldtype": "html",
+						"fieldlabel": "",
+						"key": "html",
+						"required": false,
+						"line": 1,
+						"haschild": 0,
+						"readonly": false,
+						"value": ""
+					}
+				],
+				"data": [
+				]
+			}
+		}
+	],
+	"extra": {
+		 "billid": {"key": "Số thẻ"}  
+	}
+}

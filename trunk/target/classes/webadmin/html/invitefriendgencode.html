@@ -1,0 +1,91 @@
+<html>
+<head>
+    <title>Adjust Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css" />
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+</head>
+<body>
+<div id="mydiv">
+    <h2>Kiểm tra và tạo mã khuyến mãi cho người được giới thiệu</h2>
+    <table>
+        <tr>
+            <td>Nhập SĐT</td>
+            <td>:</td>
+            <td><input style="width: 150px; font-size:16px; padding: 3px" type="text" id="txtnumber"/></td>
+        </tr>
+
+        <tr>
+            <td>Mã giao dịch</td>
+            <td>:</td>
+            <td><input style="width: 150px; font-size:16px; padding: 3px" type="text" id="txttranid"/></td>
+        </tr>
+
+        <tr>
+            <td colspan="2"></td>
+            <td align="center">
+                <input style="padding: 3px" type="button" value="Kiểm tra" id="btnCreateCode"/>
+            </td>
+        </tr>
+
+    </table>
+
+    <div id="responseDiv"></div>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    });
+
+    $('#btnCreateCode').click(function () {
+
+            var number = $("#txtnumber").val().trim();
+            var tranid = $("#txttranid").val().trim();
+            if(number === ""){
+                alert("Vui lòng số điện thoại cần kiểm tra");
+                $("#txtnumber").focus();
+                return;
+            }
+
+            if(tranid === ""){
+                alert("Vui lòng nhập mã giao dịch");
+                return;
+            }
+
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/invitefriend/checkgencode",
+                type: "GET",
+                data: {
+                    "number":number,
+                    "tranid":tranid
+                },
+                success: function (json) {
+
+                    $('#mydiv').unmask();
+
+                    var result ="";
+                    if(json.desc !=null && json.desc != ""){
+                        result += json.desc;
+                    }
+
+                    if(json.descsender != null && json.descsender != ""){
+                        result += json.descsender;
+                    }
+
+                    $('#responseDiv').html(result);
+
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+
+</script>
+</body>
+</html>

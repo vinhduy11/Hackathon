@@ -1,0 +1,36 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+</head>
+<body>
+<!--<div >WebAdmin<span-->
+<!--style="float:right color:blue;font-weight:bold">xin chào</span></div>-->
+
+
+<div id="duinfo">
+    <span style="float: left; border:1px; font-weight:bold; font-size: 25px">Web Admin</span>
+    <span style="float: right; border:1px">xin chào, <span style="color: #0000ff" id="username"></span><button
+            id="logout">Logout
+    </button> </span>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#username").text($.session.get("username"));
+
+        $('#logout').click(function () {
+            $.session.clear();
+            window.parent.location.href = "../html/login.html";
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+{
+	"mcc": [
+		{
+			"form1": {
+				"cap": "www.mc-corp.vn",
+				"btn": "Thanh toán",
+				"nexfrm": 1,
+				"guide": "http://app.momo.vn:81/momo_app/html/minhchau.html",
+				"fields": [
+					{
+						"fieldtype": "drop",
+						"fieldlabel": "Chọn mệnh giá thẻ",
+						"key": "amt",
+						"required": true,
+						"line": 1,
+						"haschild": 0
+					}, {
+					"fieldtype": "drop",
+						"fieldlabel": "Số lượng thẻ",
+						"key": "qty",
+						"required": true,
+						"line": 1,
+						"haschild": 0
+					}, {
+						"fieldtype": "cash",
+						"fieldlabel": "Nguồn tiền",
+						"key": "cash",
+						"required": true,
+						"line": 1,
+						"haschild": 0
+					}
+				],
+				"data": [
+					{
+						},{
+                              "linkto":"amt",
+                              "text":"10.000đ    KM 10%",
+                              "value":"10000",
+                              "parentid":"",
+                              "id":""
+                          },{
+                             "linkto":"amt",
+                             "text":"20.000đ    KM 10%",
+                             "value":"20000",
+                             "parentid":"",
+                             "id":"" 
+                         },{
+                             "linkto":"amt",
+                             "text":"50.000đ    KM 10%",
+                             "value":"50000",
+                             "parentid":"",
+                             "id":"" 
+						  },{
+                             "linkto":"amt",
+                             "text":"100.000đ    KM 10%",
+                             "value":"100000",
+                             "parentid":"",
+                             "id":"" 
+						 },{
+                             "linkto":"amt",
+                             "text":"200.000đ    KM 10%",
+                             "value":"200000",
+                             "parentid":"",
+                             "id":"" 
+						 },{
+                             "linkto":"amt",
+                             "text":"500.000đ    KM 10%",
+                             "value":"500000",
+                             "parentid":"",
+                             "id":"" 
+									
+						},{
+                             "linkto":"qty",
+                             "text":"1",
+                             "value":"1",
+                             "parentid":"",
+                             "id":"" 
+						},{
+                             "linkto":"qty",
+                             "text":"2",
+                             "value":"2",
+                             "parentid":"",
+                             "id":"" 
+						},{
+                             "linkto":"qty",
+                             "text":"3",
+                             "value":"3",
+                             "parentid":"",
+                             "id":"" 
+					}
+				]
+			}
+		}
+	]
+}

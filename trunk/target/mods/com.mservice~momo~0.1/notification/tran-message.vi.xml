@@ -1,0 +1,381 @@
+﻿<resources>
+
+    <message name="TRANSFER_MONEY_TO_PLACE_SEND">
+        <noti name="SUCCESS">
+            <title>Rút tiền thành công!</title>
+            <content>Quý khách đã rút thành công số tiền %sđ.</content>
+            <sms>Chuc mung quy khach da chuyen thanh cong so tien %sd den %s(%s) luc %s. TID: %s. Xin cam on.</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Rút tiền không thành công!</title>
+            <content>Giao dịch rút số tiền %sđ của quý khách không thành công.</content>
+            <sms>Giao dich chuyen tien den %s khong thanh cong. TID: %s. Xin cam on.</sms>
+        </noti>
+    </message>
+
+    <message name="TRANSFER_MONEY_TO_PLACE_RECEIVE">
+        <noti name="SUCCESS">
+            <title>Nhận tiền thành công!</title>
+            <content>Quý khách nhận thành công số tiền %sđ từ %s(%s).</content>
+            <sms>Chuc mung quy khach da nhan thanh cong so tien %sd tu %s(%s) luc %s. TID: %s. Xin cam on.</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Nhận tiền không thành công!</title>
+            <content>Giao dịch nhận số tiền %sđ của quý khách không thành công.</content>
+            <sms>Giao dich nhan tien tu %s khong thanh cong. TID: %s. Xin cam on.</sms>
+        </noti>
+    </message>
+    <!--<content>Quý khách đã nhận được %sđ tiền hoa hồng của giao dịch nạp tiền điện thoại.</content>-->
+    <message name="BONUS">
+        <noti name="SUCCESS">
+            <title>Tiền hoa hồng!</title>
+            <content>Bạn vừa nhận được %sđ tiền hoa hồng của dịch vụ vào Tài khoản MoMo.</content>
+            <sms>Chuc mung quy khach vua nhan duoc %sd tien hoa hong cua giao dich nap tien dien thoai. Xin cam on.
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Tiền hoa hồng!</title>
+            <content>Quý khách đã nhận không thành công số tiền %sđ tiền hoa hồng của dịch vụ.</content>
+            <sms>Quy khach da nhan khong thanh cong so tien %sd tien hoa hong cua dich vu. Xin cam on.</sms>
+        </noti>
+    </message>
+
+    <message name="BONUS_DGD">
+        <noti name="SUCCESS">
+            <title>Thù lao!</title>
+            <content>Bạn vừa nhận được %sđ thù lao của dịch vụ vào Tài khoản.</content>
+            <sms>Chuc mung quy khach vua nhan duoc %sd tien thu lao cua giao dich nap tien dien thoai. Xin cam on.</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Thù lao!</title>
+            <content>Quý khách đã nhận không thành công số tiền %sđ tiền thù lao của dịch vụ.</content>
+            <sms>Quy khach da nhan khong thanh cong so tien %sd tien hoa hong cua dich vu. Xin cam on.</sms>
+        </noti>
+    </message>
+
+    <message name="BANK_NET_VERIFY_OTP">
+        <noti name="SUCCESS">
+            <title>Nạp tiền thành công!</title>
+            <content>Quý khách đã nạp thành công số tiền %sđ từ ngân hàng %s.</content>
+            <sms>Chuc mung quy khach da nap thanh cong so tien %sd tu tai khoan ngan hang %s vao tai khoan MoMo luc %s.
+                TID: %s. Xin cam on.
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Nạp tiền không thành công!</title>
+            <content>Giao dịch nạp số tiền %sđ từ ngân hàng %s của quý khách không thành công.</content>
+            <sms>Xin loi quy khach, giao dich nap so tien %sd tu tai khoan ngan hang %s vao tai khoan MoMo cua quy khach
+                khong thanh cong. TID: %s. Xin vui long thu lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="MOMO_TO_BANK_MANUAL">
+        <noti name="SUCCESS">
+            <title>Yêu cầu rút tiền thành công!</title>
+            <content>Yêu cầu rút số tiền %sđ về ngân hàng %s của quý khách đã được ghi nhận. Chúng tôi sẽ xử lý trong
+                thời gian sớm nhất.
+            </content>
+            <sms>Quy khach da yeu cau rut thanh cong so tien %sd tu tai khoan MoMo ve tai khoan ngan hang %s luc %s.
+                TID: %s. Chung toi se xu ly trong thoi gian som nhat. Xin cam on.
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Yêu cầu rút tiền không thành công!</title>
+            <content>Yêu cầu rút số tiền %sđ về ngân hàng %s của quý khách không thành công. Xin vui lòng thử lại.
+            </content>
+            <sms>Xin loi quy khach, yeu cau rut so tien %sd tu tai khoan MoMo ve tai khoan ngan hang %s cua quy khach
+                chua thanh cong. TID: %s. Xin vui long thu lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="WITHDRAW_AT_HOME">
+        <noti name="SUCCESS">
+            <title>Yêu cầu rút tiền thành công!</title>
+            <content>Yêu cầu rút số tiên %sđ của quý khách đã được ghi nhận. Chúng tôi sẽ liên hệ sau ít phút. Xin cảm
+                ơn.
+            </content>
+            <sms>Yeu cau rut so tien %sd tai %s da duoc ghi nhan. Chung toi se lien he lai sau it phut. Xin cam on.
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Yêu cầu rút tiền không thành công!</title>
+            <content>Yêu cầu rút số tiền %sđ của quý khách không thành công. Xin vui lòng thử lại.</content>
+            <sms>Yeu cau rut so tien %sd tai %s cua quy khach khong thanh cong. TID: %s. Xin vui long thu lai sau.</sms>
+        </noti>
+    </message>
+
+    <message name="DEPOSIT_AT_HOME">
+        <noti name="SUCCESS">
+            <title>Yêu cầu nạp tiền thành công!</title>
+            <content>Yêu cầu nạp số tiền %sđ của quý khách đã được ghi nhận. Chúng tôi sẽ liên hệ lại sau ít phút. Xin
+                cảm ơn.
+            </content>
+            <sms>Yeu cau nap so tien %sd tai %s cua quy khach da thanh cong. Xin cam on.</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Yêu cầu nạp tiền không thành công!</title>
+            <content>Yêu cầu nạp số tiền %sđ tại %s của quý khách không thành công. Xin vui lòng thử lại sau.</content>
+            <sms>Yeu cau nap so tien %sd tai %s cua quy khach khong thanh cong. Xin vui long thu lai sau.</sms>
+        </noti>
+    </message>
+
+    <message name="TOP_UP">
+        <noti name="SUCCESS">
+            <title>Nạp điện thoại thành công!</title>
+            <content>Quý khách đã nạp thành công số tiền %sđ cho số điện thoại %s.</content>
+            <sms>Chuc mung quy khach da nap thanh cong %sd cho so dien thoai %s luc %s. TID: %s. Xin cam on.</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Nạp điện thoại không thành công!</title>
+            <content>Giao dịch nạp số tiền %s cho số điện thoại %s của quý khách không thành công.</content>
+            <sms>Xin loi quy khach, giao dich nap tien cho so dien thoai %s khong thanh cong. TID: %s. Xin vui long thu
+                lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="TOP_UP_GAME">
+        <noti name="SUCCESS">
+            <title>Nạp game thành công!</title>
+            <content>Quý khách đã nạp thành công số tiền %sđ cho tài khoản %s, nhà cung cấp %s.</content>
+            <sms>Chuc mung quy khach da nap thanh cong %sd cho tai khoan %s, nha cung cap %s, luc %s. TID: %s. Xin cam
+                on.
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Nạp game không thành công!</title>
+            <content>Giao dịch nạp số tiền %sđ cho tài khoản %s, nhà cung cấp %s của quý khách không thành công.
+            </content>
+            <sms>Xin loi quy khach, giao dich nap tien cho tai khoan %s, nha cung cap %s, khong thanh cong. TID: %s. Xin
+                vui long thu lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="BILL_PAY_TICKET_AIRLINE">
+        <noti name="SUCCESS">
+            <title>Thanh toán thành công!</title>
+            <content>Quý khách đã thanh toán thành công số tiền %sđ cho nhà cung cấp %s, mã đặt chỗ %s.</content>
+            <sms>Chuc mung quy khach da thanh toan thanh cong so tien %sd cho ve may bay %s. TID: %s. Xin cam on!</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Thanh toán không thành công!</title>
+            <content>Giao dịch thanh toán số tiền %sđ cho vé máy bay %s, mã đặt chỗ %s của quý khách không thành công.
+            </content>
+            <sms>Xin loi quy khach, giao dich thanh toan ve may bay %s khong thanh cong. TID: %s. Xin vui long thu
+                lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="M2M_SEND">
+        <noti name="SUCCESS">
+            <title>Chuyển tiền thành công!</title>
+            <content>Quý khách đã chuyển thành công số tiền %sđ cho %s(%s).</content>t
+            <sms>Chuc mung quy khach da chuyen thanh cong so tien %sd den %s (%s) luc: %s. TID:%s. Xin cam on.</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Chuyển tiền không thành công!</title>
+            <content>Giao dịch chuyển số tiền %sđ cho %s(%s) của quý khách không thành công.</content>
+            <sms>Xin loi quy khach, giao dich chuyen tien toi %s(%s) khong thanh cong. TID: %s. Xin vui long thu lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="M2M_RECEIVE">
+        <noti name="SUCCESS">
+            <title>Nhận tiền thành công!</title>
+            <content>Quý khách đã nhận thành công số tiền %sđ từ %s(%s).</content>
+            <sms>QK da nhan %sd tu %s. Ma GD: %s. Loi nhan: %s... Vui long dang nhap Vi MoMo de xem chi tiet.</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Nhận tiền không thành công!</title>
+            <content>Quý khách đã nhận không thành công số tiền %sđ từ %s(%s).</content>
+            <sms>Xin loi quy khach, giao dich nhan so tien %sd tu %s(%s) khong thanh cong. TID: %s. Xin vui long thu
+                lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="M2C">
+        <noti name="SUCCESS">
+            <title>Chuyển tiền thành công!</title>
+            <content>Quý khách đã chuyển thành công số tiền %sđ tới số điện thoại %s.</content>
+            <sms>Chuc mung quy khach, giao dich chuyen so tien %sd den so %s da thanh cong luc %s. TID: %s. Xin cam
+                on.
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Chuyển tiền không thành công!</title>
+            <content>Giao dịch chuyển số tiền %sđ cho số điện thoại %s của quý khách không thành công. Số tiền hoàn trả:
+                %sđ.
+            </content>
+            <sms>Xin loi quy khach, giao dich chuyen so tien %sd den so dien thoai %s khong thanh cong. TID: %s. Xin vui
+                long thu lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="BANK_IN">
+        <noti name="SUCCESS">
+            <title>Nạp tiền thành công!</title>
+            <content>Quý khách đã nạp thành công số tiền %sđ qua %s.</content>
+            <sms>Chuc mung quy khach da nap thanh cong %sd tu tai khoan ngan hang %s vao tai khoan MoMo luc %s. TID: %s.
+                Xin cam on.
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Nạp tiền không thành công!</title>
+            <content>Giao dịch nạp số tiền %sđ qua %s của quý khách không thành công.</content>
+            <sms>Xin loi quy khach, giao dich nap so tien %sd tu tai khoan ngan hang %s vao tai khoan MoMo khong thanh
+                cong. TID: %s. Xin vui long thu lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="BANK_OUT">
+        <noti name="SUCCESS">
+            <title>Rút tiền thành công!</title>
+            <content>Quý khách đã rút thành công số tiền %sđ qua %s.</content>
+            <sms>Chuc mung quy khach da rut thanh cong %sd tu tai khoan MoMo sang tai khoan ngan hang %s luc %s. TID:
+                %s. Xin cam on.
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Rút tiền không thành công!</title>
+            <content>Giao dịch rút số tiền %sđ qua %s của quý khách không thành công.</content>
+            <sms>Xin loi quy khach, giao dich rut tien tu tai khoan MoMo sang tai khoan ngan hang %s chua thanh cong.
+                TID: %s. Xin vui long thu lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="PAY_ONE_BILL">
+        <noti name="SUCCESS">
+            <title>Thanh toán thành công!</title>
+            <content>Quý khách đã thanh toán thành công hóa đơn %s của nhà cung cấp %s, số tiền %sđ.</content>
+            <sms>Chuc mung quy khach da thanh toan thanh cong hoa don %s cua nha cung cap %s, so tien %sd. TID: %s. Xin
+                cam on
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Thanh toán không thành công!</title>
+            <content>Giao dịch thanh toán hóa đơn %s của nhà cung cấp %s, số tiền %sđ của quý khách không thành công.
+            </content>
+            <sms>Xin loi quy khach, giao dich thanh toan hoa don %s voi so tien %sd cua dich vu %s khong thanh cong.
+                TID: %s. Xin vui long thu lai.
+            </sms>
+        </noti>
+    </message>
+
+    <message name="PAY_ONE_BILL_SERVICE">
+        <noti name="SUCCESS">
+            <title>Thanh toán thành công!</title>
+            <content>Quý khách đã thanh toán thành công %sđ cho dịch vụ %s. Mã thanh toán: %s.</content>
+            <sms>Chuc mung quy khach da thanh toan thanh cong %sd cho dich vu %s. Ma thanh toan: %s. TID: %s. Xin cam
+                on!
+            </sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Thanh toán không thành công!</title>
+            <content>Quý khách đã thanh toán không thành công %sđ cho dịch vụ %s. Mã thanh toán: %s.</content>
+            <sms></sms>
+        </noti>
+    </message>
+
+    <message name="PHIM123">
+        <noti name="SUCCESS">
+            <title>Đặt vé xem phim thành công!</title>
+            <content>Quý khách đã đặt vé xem phim thành công. Tên phim: %s, %s</content>
+            <sms>Quy khach da dat ve xem phim thanh cong. Ten phim: %s, %s. TID: %s. Xin cam on</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Đặt vé xem phim không thành công!</title>
+            <content>Giao dịch thanh toán Vé xem phim %s, %s của quý khách không thành công. Xin quy khách vui lòng thử
+                lại sau.
+            </content>
+            <sms>Xin loi quy khach, giao dich thanh toan ve xem phim %s, %s cua quy khach khong thanh cong. TID: %s.
+            </sms>
+        </noti>
+    </message>
+
+
+    <message name="BUY_GIFT">
+        <noti name="SUCCESS">
+            <title>Mua quà thành công!</title>
+            <content>Bạn đã mua qua thành công</content>
+            <sms>Ban da mua qua tang thanh cong</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Mua quà không thành công!</title>
+            <content>Bạn đã mua qua không thành công!</content>
+            <sms>Ban da mua qua khong thanh cong!</sms>
+        </noti>
+    </message>
+    <message name="FEE">
+        <noti name="SUCCESS">
+            <title>Phí dịch vụ</title>
+            <content>Bạn đã bị trừ %sđ tiền phí dịch vụ.</content>
+        </noti>
+    </message>
+
+    <message name="SEND_GIFT">
+        <noti name="SUCCESS">
+            <title>Tặng quà thành công!</title>
+            <content>Bạn đã tặng quà thành công</content>
+            <sms>Ban da tang qua thanh cong</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Tăng quà không thành công!</title>
+            <content>Bạn đã tặng quà không thành công!</content>
+            <sms>Ban da tang khong thanh cong!</sms>
+        </noti>
+    </message>
+
+    <message name="GIFT_TO_MPOINT">
+        <noti name="SUCCESS">
+            <title>Quy đổi quà thành công!</title>
+            <content>Quy đổi quà thành tiền trong tài khoản khuyến mãi thành công!</content>
+            <sms>Quy doi qua thanh tien trong tai khoan khuyen mai thanh cong.</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Quy đổi quà không thành công!</title>
+            <content>Quy đổi quà thành tiền trong tài khoản khuyến mãi không thành công!</content>
+            <sms>Quy doi qua thanh tien trong tai khoan khuyen mai khong thanh cong!</sms>
+        </noti>
+    </message>
+
+    <!--chuyen tien tu visa master.start-->
+    <message name="VM_PROCESS_CASH_IN">
+        <noti name="SUCCESS">
+            <title>Nạp tiền thành công!</title>
+            <content>Quý khách đã nạp thành công số tiền %sđ từ thẻ %s.</content>
+            <sms>Quy khach da nap thanh cong so tien %sd tu the %s vao tai khoan MoMo luc %s. TID: %s. Xin cam on.</sms>
+        </noti>
+        <noti name="FAIL">
+            <title>Nạp tiền không thành công!</title>
+            <content>Quý khách đã nạp không thành công số tiền %sđ từ thẻ %s.</content>
+            <sms>Quy khach da nap khong thanh cong so tien %sd tu the %s vao tai khoan MoMo luc %s. TID: %s. Xin cam
+                on.
+            </sms>
+        </noti>
+    </message>
+    <!--chuyen tien tu visa master.end-->
+
+    <!--
+
+    <message name="TOP_UP">
+        <noti name="SUCCESS">
+            <title></title>
+            <content></content>
+        </noti>
+        <noti name="FAIL">
+            <title></title>
+            <content></content>
+        </noti>
+    </message>
+    -->
+
+</resources>

@@ -1,0 +1,70 @@
+{
+    "avg":[
+        {
+            "form1":{
+                    "cap":"http://truyenhinhanvien.vn",
+                    "btn":"Tiếp tục",
+                    "nexfrm":1,
+                    "guide":"http://app.momo.vn:81/momo_app/html/anvien.html",
+
+                    "fields":[
+                        {
+                            "fieldtype":"text",
+                            "fieldlabel":"Nhập mã khách hàng",
+                            "key":"billid",
+                            "required":true,
+                            "line":1,
+                            "haschild":0
+                        }
+                    ],
+                    "data":[
+                    ]
+                }
+        },
+        {
+            "form2":{
+                  "cap":"http://truyenhinhanvien.vn",
+                  "btn":"Thanh toán",
+                  "nexfrm":2,
+                  "guide":"",
+
+                  "fields":[
+                      {
+                          "fieldtype":"label",
+                          "fieldlabel":"Họ tên: %s",
+                          "key":"ht"
+                      },{
+                          "fieldtype":"label",
+                          "fieldlabel":"Địa chỉ : %s",
+                          "key":"dc"
+                      },{
+                        "fieldtype":"label",
+                        "fieldlabel":"Số điện thoại: %s",
+                        "key":"sdt"
+                      },{
+                        "fieldtype":"label",
+                        "fieldlabel":"Gói dịch vụ: %s",
+                        "key":"sn"
+                      },{
+                          "fieldtype":"drop",
+                          "fieldlabel":"Gói cước",
+                          "key":"amt",
+                          "required":true,
+                          "line":1,
+                          "haschild":0
+                      },{
+                          "fieldtype":"cash",
+                          "fieldlabel":"",
+                          "key":"cash",
+                          "required":true,
+                          "line":1,
+                          "haschild":0
+                      }
+                  ],
+                  "data":[
+
+                  ]
+            }
+        }
+    ]
+}

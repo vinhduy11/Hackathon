@@ -1,0 +1,196 @@
+<html>
+<head>
+    <title>Kiểm tra thông tin store</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/jquery.1.9.js"></script>
+    <script src="/js/session.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script type="text/javascript" src="/js/mask.js"></script>
+    <script type="text/javascript" src="/js/myjs.js"></script>
+</head>
+<body>
+<div id="mydiv">
+    <h2>Kiểm tra thông tin store</h2>
+
+    <div style="float:left">
+        <!--<b>Partner Code</b>: <input type="text" style="border:1px solid #778899; width:150px" name="sServiceId" id="sServiceId">-->
+        <!--        <b>Number</b>: <input type="text" style="border:1px solid #778899; width:150px" name="number"
+                                      id="numberId">
+                <b>Group:
+                    <select id="groupId" name="groupId" style="width: 150px; font-size:14px; padding: 3px">
+                        <option value="">All</option>
+                        <option value="mgd">Muon gio dong</option>
+                        <option value="vcb">Vietcom Bank</option>
+                    </select>
+                </b>-->
+        <b>Number</b>: <input type="text" style="border:1px solid #778899; width:150px" name="number"
+                              id="number">
+
+        <input type="button" id="btnCheck" value="Kiểm tra">
+
+        <div>
+            <table>
+                <tr>
+                    <th colspan="2">Edit Store Information</th>
+                </tr>
+                <tr>
+                    <td>Store name</td>
+                    <td><input style="overflow:hidden; width: 200px; height: 20px" type="text" id ="txtstore"></td>
+                </tr>
+                <tr>
+                    <td>Delete</td>
+                    <td>
+                        <!--<input style="border: none" type="text" id ="txtstatus">-->
+                        <select id="delete" name="delete" style="width: 150px; font-size:14px; padding: 3px">
+                            <option value="0">No data</option>
+                            <option value="1">false</option>
+                            <option value="2">true</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Waiting Register</td>
+                    <td>
+                        <select id="waitingreg" name="waitingreg" style="width: 150px; font-size:14px; padding: 3px">
+                            <option value="0">No data</option>
+                            <option value="1">false</option>
+                            <option value="2">true</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Is Setup</td>
+                    <td>
+                        <select id="issetup" name="issetup" style="width: 150px; font-size:14px; padding: 3px">
+                            <option value="0">No data</option>
+                            <option value="1">false</option>
+                            <option value="2">true</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Is Agent</td>
+                    <td>
+                        <select id="isagent" name="isagent" style="width: 150px; font-size:14px; padding: 3px">
+                            <option value="0">No data</option>
+                            <option value="1">false</option>
+                            <option value="2">true</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Status</td>
+                    <td>
+                        <select id="status" name="status" style="width: 150px; font-size:14px; padding: 3px">
+                            <option value="0">active</option>
+                            <option value="1">no active</option>
+                            <option value="2">no data</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="update" id="btnUpdate"/>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Hint: delete = false; waiting register = false; is Setup = true; is Agent = true; status = active</td>
+    </div>
+    <div class="clear"></div>
+
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+    });
+
+    $('#btnCheck').click(function () {
+            checkStoreInfo();
+    });
+
+     $('#btnUpdate').click(function () {
+            updateStoreInfo();
+    });
+
+    function updateStoreInfo() {
+         $.ajax({
+            url: "/updatestoreinfo",
+            type: "GET",
+            data: {
+                number:$("#number").val(),
+                delete:$("#delete").val(),
+                waitingreg:$("#waitingreg").val(),
+                issetup:$("#issetup").val(),
+                isagent:$("#isagent").val(),
+                status:$("#status").val()
+            },
+            success: function (string) {
+                var error = string["error"];
+                  if(error == 0)
+                  {
+                     alert('Done');
+                     checkStoreInfo();
+                  }
+                  else{
+                  alert('Update khong thanh cong');
+                  checkStoreInfo();
+                  }
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy rsa');
+            }
+        });
+    }
+
+     function checkStoreInfo() {
+         $.ajax({
+            url: "/checkstoreinfo",
+            type: "GET",
+            data: {
+                number:$("#number").val()
+            },
+            success: function (string) {
+                var error = string["error"];
+                if(error == 0)
+                {
+                var txtstores = string["storename"];
+                var deletes = string["delete"];
+                var waitingregs = string["waitingreg"];
+                var issetups = string["issetup"];
+                var isagents = string["isagent"];
+                var statuss = string["status"];
+                $("#txtstore").val(txtstores);
+                $("#delete").val(deletes);
+                $("#waitingreg").val(waitingregs);
+                $("#issetup").val(issetups);
+                $("#isagent").val(isagents);
+                $("#status").val(statuss);
+                }
+                else {
+                 alert('Thong tin so dien thoai bi loi');
+                }
+            },
+            error: function () {
+                 $('#mydiv').unmask();
+                alert('Có lỗi kết nối xảy rsa');
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<html>
+<head>
+    <title>Momo Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script src="../js/mask.js"></script>
+    <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css"/>
+    <script src="../js/jquery.datetimepicker.js"></script>
+</head>
+<body>
+<div id="duinfo" style="height:50px">
+    <span style="float: left; border:1px; font-weight:bold; font-size: 25px; padding-left:15px">Cập nhật phiên</span>
+    <span style="float: right; border:1px"> Xin chào, <span style="color: #0000ff" id="husername"></span> &nbsp;&nbsp;
+    <button
+            id="logout"> Logout
+    </button> </span>
+</div>
+<div id="mydiv" style="padding-left: 16px;">
+    <table>
+        <tr>
+            <td align="center">
+                <input style="padding: 3px; cursor:pointer;" type="button" value="Cập nhật" id="btnCheck"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="clear"></div>
+<div id="mydiv2" style="padding-left: 16px;">
+
+    <div style="float:left">
+        <div style="font-weight:bold;text-transform: uppercase;">Phiên hiện tại</div>
+        <table id="data">
+        </table>
+    </div>
+
+    <div class="clear"></div>
+    <div class="clear"></div>
+
+</div>
+
+<script type="text/javascript">
+
+    function clearTable() {
+        var head = "<tr>";
+        head += "<th>Period name</th>";
+        head += "<th>Collection name</th>";
+        head += "<th>Active</th>";
+        head += "<th>Start time</th>";
+        head += "<th>End time</th>";
+        head += "<th>Service id</th>";
+        head += "<th>Code min</th>";
+        head += "<th>Code max</th>";
+        head +="</tr>";
+        $("#data").html(head);
+
+    }
+
+    function addItem(item) {
+        var row;
+
+        if(item.active)
+        {
+        row = "<tr>";
+        row += "<td><font color='red'> " + item.periodName + "</font> </td>";
+        row += "<td><font color='red'> " + item.collName + "</font> </td>";
+        row += "<td><font color='red'> " + item.active + "</font> </td>";
+        row += "<td><font color='red'> " + item.startTime + "</font> </td>";
+        row += "<td><font color='red'> " + item.endTime + "</font> </td>";
+        row += "<td><font color='red'> " + item.serviceId + "</font> </td>";
+        row += "<td><font color='red'> " + item.minCode + "</font> </td>";
+        row += "<td><font color='red'> " + item.maxCode + "</font> </td>";
+        row += "</tr>";
+        }
+        else{
+        row = "<tr>";
+        row += "<td> " + item.periodName + " </td>";
+        row += "<td> " + item.collName + " </td>";
+        row += "<td> " + item.active + " </td>";
+        row += "<td> " + item.startTime + " </td>";
+        row += "<td> " + item.endTime + " </td>";
+        row += "<td> " + item.serviceId + " </td>";
+        row += "<td> " + item.minCode + " </td>";
+        row += "<td> " + item.maxCode + " </td>";
+        row += "</tr>";
+        }
+
+        $("#data").append(row);
+    }
+
+    function loadPage() {
+    $.ajax({
+            url: "/loadconfig/refreshdata",
+            type: "GET",
+            data: {
+            },
+            success: function (array) {
+                for(i=0;i<array.length; i++){
+                    addItem(array[i])
+                }
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy rsa');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+            clearTable();
+            loadPage();
+        $(document).keydown(function(e) {
+            //enter
+            if(e.keyCode == 13){
+                clearTable();
+                loadPage();
+            }
+        });
+
+        $("#btnCheck").click(function(){
+            clearTable();
+            loadPage();
+        });
+
+        $('#logout').click(function (){
+            $.session.clear();
+            window.parent.location.href = "login.html";
+        });
+    });
+
+
+
+
+</script>
+</body>
+</html>

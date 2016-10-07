@@ -1,0 +1,484 @@
+<html>
+<head>
+    <title>Home Service Config Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script src="../js/myjs.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+</head>
+<body>
+<div id="mydiv">
+    <h2>Home Config Page</h2>
+
+    <div style="float:left">
+        <b>Service type</b>:
+        <select name="sSerType" id="sSerType" style="width: 150px; font-size:14px; padding: 3px">
+            <option value="0">All</option>
+            <option value="1">Function</option>
+            <option value="2">Service</option>
+            <option value="3">Popup</option>
+            <option value="4">html</option>
+            <option value="5">Catelogy</option>
+        </select>
+        <b>Service</b> : <input type="text" style="border:1px solid #778899; width:150px" name="sService"
+                                id="sService">
+        <input type="button" id="btnSearch" value="Search">
+    </div>
+    <div class="clear"></div>
+    <div id="table"></div>
+
+    <div class="clear"></div>
+
+    <div>
+        <table>
+            <tr>
+                <th colspan="2">Edit Information</th>
+            </tr>
+
+            <tr>
+                <td>Service Type</td>
+                <td>
+                    <select id="txtsType" style="width: 150px; font-size:14px; padding: 3px">
+                        <option value="1">Function</option>
+                        <option value="2">Service</option>
+                        <option value="3">Popup</option>
+                        <option value="4">html</option>
+                        <option value="5">Catelogy</option>
+                    </select>
+                </td>
+                <input type="hidden" id="id_ser">
+            </tr>
+
+            <tr>
+                <td>Function</td>
+                <td>
+                    <select id="txtFunc" style=" font-size:14px; padding: 3px">
+                        <option value="0">None</option>
+                        <option value="1"> Giới thiệu bạn bè</option>
+                        <option value="2"> Nạp tiền</option>
+                        <option value="3"> Nạp Rút tiền</option>
+                        <option value="4"> Rút tiền</option>
+                        <option value="5"> Nạp điện thoại (TOPUP)</option>
+                        <option value="6"> Thanh toán hóa đơn</option>
+                        <option value="7"> Thanh toán dịch vụ</option>
+                        <option value="8"> Mua vé xem phim</option>
+                        <option value="9"> Thanh toán QR Code</option>
+                        <option value="10"> Chuyển tiền (M2M,M2N,M2C,...)</option>
+                        <option value="11"> Tìm điểm giao dịch</option>
+                        <option value="12"> Cập nhật thông tin cá nhân</option>
+                        <option value="13"> Quản lý thẻ</option>
+                        <option value="14"> Đổi mật khẩu</option>
+                        <option value="15"> Trợ giúp</option>
+                        <option value="16"> Tài khoản cá nhân (momo, mpoint, gift)</option>
+                        <option value="17"> Gửi Tặng quà</option>
+                        <option value="18"> Danh Sách Quà tăng (Voucher)</option>
+                        <option value="19"> Cài đặt</option>
+                        <option value="20"> Khuyến mãi</option>
+                        <option value="22"> Mượn tiền</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Service ID</td>
+                <td>
+                    <select name="txtServiceId" id="txtServiceId" style=" font-size:14px; padding: 3px">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Text Popup</td>
+                <td><input style="border: none" type="text" id="txtPopup"></td>
+            </tr>
+
+            <tr>
+                <td>Web URL</td>
+                <td><input style="border: none" type="text" id="txtwUrl"></td>
+            </tr>
+
+            <tr>
+                <td>Catelogy ID</td>
+                <td>
+                    <select name="sCate" id="sCate" style="font-size:14px; padding: 3px">
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Service Name</td>
+                <td><input style="border: none" type="text" id="txtsName"></td>
+            </tr>
+
+            <tr>
+                <td>Icon URL</td>
+                <td><input style="border: none" type="text" id="txtiUrl"></td>
+            </tr>
+
+            <tr>
+                <td>Icon Image</td>
+                <td><img id="imgIcon"></td>
+            </tr>
+
+            <tr>
+                <td>Status</td>
+                <td>
+                    <select id="sStatus" style="width: 150px; font-size:14px; padding: 3px">
+                        <option value="1">On</option>
+                        <option value="0">New</option>
+                        <option value="2">Hot</option>
+                        <option value="3">New_One_Time</option>
+                        <option value="4">Hot_One_Time</option>
+                        <option value="-1">Off</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Position</td>
+                <td>
+                    <select id="txtPosi" style="width: 150px; font-size:14px; padding: 3px">
+                        <option value="0">Nằm trên</option>
+                        <option value="1">Nằm dưới</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Order</td>
+                <td><input style="border: none" type="text" id="txtOrder"></td>
+            </tr>
+
+            <tr>
+                <td>Button Title</td>
+                <td><input style="border: none" type="text" id="txtbTitle"></td>
+            </tr>
+
+
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Save" id="btSave" disabled/>
+                    <input type="submit" value="Create" id="btNew">
+                    <input type="submit" value="Export json" id="btExport">
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $(document).on("click", "#edit", function () {
+
+            $("#btSave").prop("disabled", false);
+
+            //lay id cua dong duoc click
+            var rid = $(this).attr("val");
+            var id_ser = $(this).attr("id_ser");
+            var rowId = "td[rid=" + rid + "]";
+
+            //lay mang cac td tag
+            var tdArr = $(rowId)
+
+            //lay value tung td tag
+
+            var serviceType = tdArr[0].innerHTML;
+            var func = tdArr[1].innerHTML;
+            var serviceId = tdArr[2].innerHTML;
+            var textPopup = tdArr[3].innerHTML;
+            var webUrl = tdArr[4].innerHTML;
+            var cate = tdArr[5].innerHTML;
+            var serviceName = tdArr[6].innerHTML;
+            var iconUrl = tdArr[7].innerHTML;
+            var status = tdArr[8].innerHTML;
+            var position = tdArr[9].innerHTML;
+            var order = tdArr[10].innerHTML;
+            var buttonTitle = tdArr[11].innerHTML;
+
+
+            $("#id_ser").val(id_ser);
+            if (serviceType == "Function")
+                $("#txtsType").val("1");
+            else if (serviceType == "Service")
+                $("#txtsType").val("2");
+            else if (serviceType == "Popup")
+                $("#txtsType").val("3");
+            else if (serviceType == "html")
+                $("#txtsType").val("4");
+            else if (serviceType == "Catelogy")
+                $("#txtsType").val("5");
+            else
+                $("#txtsType").val("0");
+            $("#txtFunc").val(func);
+            $("#txtServiceId").val(serviceId);
+            $("#txtPopup").val(textPopup);
+            $("#txtwUrl").val(webUrl);
+            $("#sCate").val(cate);
+            $("#txtsName").val(serviceName);
+            $("#txtiUrl").val(iconUrl);
+            $("#imgIcon").attr('src', iconUrl);
+
+            if (status == "New")
+                $("#sStatus").val("0");
+            else if (status == "On")
+                $("#sStatus").val("1");
+            else if (status == "Hot")
+                $("#sStatus").val("2");
+            else if (status == "New_One_Time")
+                $("#sStatus").val("3");
+            else if (status == "Hot_One_Time")
+                $("#sStatus").val("4");
+            else
+                $("#sStatus").val("-1");
+
+            if (position == "Nằm trên")
+                $("#txtPosi").val("0");
+            else
+                $("#txtPosi").val("1");
+
+            $("#txtOrder").val(order);
+            $("#txtbTitle").val(buttonTitle);
+            $("#txtsType").focus();
+
+            /*if (isPromo === true || isPromo === "true") {
+             $("#chkIsPromo").prop('checked', true);
+             } else {
+             $("#chkIsPromo").prop('checked', false);
+             }*/
+        });
+    });
+
+    $(function () {
+        $(document).on("click", "#del", function () {
+            var id_ser = $(this).attr("id_ser");
+            var rid = $(this).attr("val");
+            var rowId = "td[rid=" + rid + "]";
+            var tdArr = $(rowId)
+            var serviceID = tdArr[0].innerHTML;
+            var result = confirm("Are you sure?");
+            if (result == true) {
+                $('#mydiv').mask("Loading...");
+                $.ajax({
+                    url: "/home/del",
+                    type: "GET",
+                    data: {
+                        _id: id_ser,
+                        id: $.session.get("id"),
+                        username: $.session.get("username")
+                    },
+                    success: function (string) {
+                        $('#mydiv').unmask();
+                        var error = string["error"];
+                        if (error == 0) {
+                            alert("Thành công.");
+                            init();
+                        }
+                        else if (error == -1) {
+                            alert("Bạn phải đăng nhập.");
+                            $.session.clear();
+                            window.parent.location.href = "../html/login.html";
+                        }
+                        else
+                            alert("Không thành công. Error code = " + error);
+                    },
+                    error: function () {
+                        $('#mydiv').unmask();
+                        alert('Có lỗi kết nối xảy ra');
+                    }
+                });
+            }
+        });
+    });
+
+    $('#btSave').click(function () {
+        upsert($("#id_ser").val());
+    });
+
+    $('#btNew').click(function () {
+        $('#mydiv').mask("Loading...");
+        upsert("");
+    });
+
+    function upsert(_id) {
+        if ($.session.get("id") == null) {
+            alert("Bạn phải đăng nhập.");
+            $.session.clear();
+            window.parent.location.href = "../html/login.html";
+        } else {
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/home/upsert",
+                type: "GET",
+                data: {
+                    _id: _id,
+                    ser_type: $("#txtsType").val(),
+                    func: $("#txtFunc").val(),
+                    ser_id: $("#txtServiceId").val(),
+                    text_popup: $("#txtPopup").val(),
+                    web_url: $("#txtwUrl").val(),
+                    catid: $("#sCate").val(),
+                    ser_name: $("#txtsName").val(),
+                    icon_url: $("#txtiUrl").val(),
+                    status: $("#sStatus").val(),
+                    position: $("#txtPosi").val(),
+                    ord: $("#txtOrder").val(),
+                    button_title: $("#txtbTitle").val(),
+                },
+                success: function (string) {
+                    $('#mydiv').unmask();
+                    var error = string["error"];
+                    if (error == 0) {
+                        alert("Thành công.");
+                        $("#id_ser").val("");
+                        $("#txtsType").val("");
+                        $("#txtFunc").val("");
+                        $("#txtServiceId").val("");
+                        $("#txtPopup").val("");
+                        $("#txtwUrl").val("");
+                        $("#sCate").val("");
+                        $("#txtsName").val("");
+                        $("#txtiUrl").val("");
+                        $("#imgIcon").attr('src', "");
+                        $("#sStatus").val("");
+                        $("#txtPosi").val("");
+                        $("#txtOrder").val("");
+                        $("#txtbTitle").val("");
+
+                        init();
+                    }
+                    else if (error == -1) {
+                        alert("Bạn phải đăng nhập.");
+                        $.session.clear();
+                        window.parent.location.href = "../html/login.html";
+                    }
+                    else
+                        alert("Không thành công. Error code = " + error);
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        }
+    }
+
+    $('#btnSearch').click(function () {
+        var serviceType = $("#sSerType").val();
+        var service = $("#sService").val();
+        $.ajax({
+            url: "/home/getServiceType",
+            type: "GET",
+            data: {
+                ser_type: serviceType,
+                ser_id: service,
+            },
+            success: function (string) {
+                table = string["table"];
+                $("#table").html(table);
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    });
+
+    $('#sSerType').change(function () {
+        var serviceType = $("#sSerType").val();
+        var service = $("#sService").val();
+        $.ajax({
+            url: "/home/getServiceType",
+            type: "GET",
+            data: {
+                ser_type: serviceType,
+                ser_id: service,
+            },
+            success: function (string) {
+                table = string["table"];
+                $("#table").html(table);
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    });
+
+    $('#txtiUrl').change(function () {
+        var url = $("#txtiUrl").val();
+        $("#imgIcon").attr('src', url);
+    });
+
+    $('#btExport').click(function () {
+        $.ajax({
+            url: "/home/getallactive",
+            type: "GET",
+            success: function (string) {
+                table = string;
+                var link = document.createElement('a');
+                link.download = "momohome.json";
+                link.href = "data:text/plain;charset=utf-8," + table;
+                link.click();
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        init();
+        loadAllService();
+        loadCategory();
+    });
+
+    function init() {
+        $("#btSave").prop("disabled", true);
+        $.ajax({
+            url: "/home/getall",
+            type: "GET",
+            success: function (string) {
+                table = string["table"];
+                $("#table").html(table);
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+    function loadAllService() {
+        var mUrl = "/service/getallserviceid";
+        $.getJSON(mUrl).done(function (data) {
+            removeOpt("txtServiceId");
+
+            addOpt("txtServiceId", "", "none");
+            $.each(data, function (i, item) {
+                addOpt("txtServiceId", item.ser_id, item.ser_id + "-" + item.ser_name);
+            });
+        });
+    }
+
+    function loadCategory() {
+        var mUrl = "/service/getallcategory";
+        $.getJSON(mUrl).done(function (data) {
+            removeOpt("sCate");
+
+            addOpt("sCate", "", "none");
+            $.each(data, function (i, item) {
+                addOpt("sCate", item._id, item._id + "-" + item.name);
+            });
+        });
+    }
+
+</script>
+</body>
+</html>

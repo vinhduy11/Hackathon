@@ -1,0 +1,8 @@
+#!/bin/bash
+export JAVA_HOME=/app/java-1.7.0
+
+nohup /app/vertx/vert.x-2.1.6/bin/vertx runzip momo-0.1-mod.zip -conf /app/etc/momo.json -cluster -cluster-host 172.16.43.14  > /app/log/momo.nohup 2>&1 &
+
+
+echo "done!"
+tail -f ../log/momo/momo.log

@@ -1,0 +1,193 @@
+<html>
+<head>
+    <title>Promotion Configuration Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="../css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery.1.9.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/mask.js"></script>
+    <link rel="stylesheet" href="../css/jquery-ui.css" type="text/css"/>
+    <script src="../js/jquery-ui.js"></script>
+    <script>
+        $(function() {
+            $("#txtFrDate").datepicker({ dateFormat: "dd/mm/yy" });
+        });
+    </script>
+    <script>
+        $(function() {
+            $("#txtToDate").datepicker({ dateFormat: "dd/mm/yy" });
+        });
+    </script>
+
+</head>
+<body>
+<div id="mydiv">
+    <h2>Alert Type Configuration Page</h2>
+
+    <div class="clear"></div>
+
+    <div id="table"></div>
+
+    <div class="clear"></div>
+
+    <div>
+        <table>
+            <tr>
+                <th colspan="2">Edit Information</th>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td><input type="text" id ="txtDesc"></td>
+            </tr>
+
+            <tr>
+                <td>Status</td>
+                <td>
+                    <select id="selStatus">
+                        <option value="1">ACTIVE</option>
+                        <option value="2">INACTIVE</option>
+                        <option value="3">DELETED</option>
+                    </select>
+                </td>
+            </tr>
+
+            <input type="hidden" id = "id_alert">
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" value="Create" id="btNew">
+                    <input type="button" value="Update" id="btSave" disabled></td>
+            </tr>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    function clearTable() {
+        var head = "<tr>";
+        head += "<th></th>";
+        head += "<th>Description</th>";
+        head += "<th>Status</th>";
+        head +="</tr>";
+        $("#table").html(head);
+    }
+    function addItem(i,item) {
+        var row;
+        row = "<tr id='" + item._id + "'>";
+        row += "<td> " + "<button id_alert='" + item._id +"' val="+i+">Edit</button>" + "</td>";
+        row += "<td rid="+i+"> " + item.desc + " </td>";
+        row += "<td rid="+i+"> " + item.status + " </td>";
+        row += "</tr>";
+        $("#table").append(row);
+    }
+
+    $(function () {
+
+        $( document ).on( "click", "button", function(){
+
+            $("#btSave").prop("disabled",false);
+            $('#btNew').prop("disabled", true);
+
+            //lay id cua dong duoc click
+            var rid =$(this).attr("val");
+            var id_alert =$(this).attr("id_alert");
+            var rowId = "td[rid=" + rid + "]";
+
+            //lay mang cac td tag
+            var tdArr = $(rowId)
+
+            //lay value tung td tag
+            var desc = tdArr[0].innerHTML;
+            var status =tdArr[1].innerHTML;
+
+            $("#id_alert").val(id_alert);
+            $("#txtDesc").val(desc);
+            $("#selStatus").val(parseInt(status));
+
+        });
+    });
+
+    $('#btNew').click(function () {
+        $("#id_alert").val("");
+        upsert();
+    });
+    $('#btSave').click(function () {
+        upsert();
+    });
+
+    function upsert(){
+        if ($.session.get("id")==null) {
+            alert("Bạn phải đăng nhập.");
+            $.session.clear();
+            window.parent.location.href = "../html/login.html";
+        } else {
+            $('#mydiv').mask("Loading...");
+            $.ajax({
+                url: "/alertType/upsert",
+                type: "GET",
+                data: {
+                    id_alert: $("#id_alert").val(),
+                    desc: $("#txtDesc").val(),
+                    status: $("#selStatus").val(),
+
+                    id: $.session.get("id"),
+                    username:$.session.get("username")
+                },
+                success: function (string) {
+                    $('#mydiv').unmask();
+                    var error = string["error"];
+                    if (error == 0) {
+                        alert("Thành công.");
+                        $("#id_alert").val("");
+                        $("#txtDesc").val("");
+                        $("#selStatus").val("2");
+                        init();
+                    }
+                    else if (error == -1) {
+                        alert("Bạn phải đăng nhập.");
+                        $.session.clear();
+                        window.parent.location.href = "../html/login.html";
+                    }
+                    else
+                        alert("Không thành công. Error code = " + error);
+                },
+                error: function () {
+                    $('#mydiv').unmask();
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        init();
+    });
+
+    function init(){
+        $('#btNew').prop("disabled", false);
+        $("#btSave").prop("disabled", true);
+        clearTable();
+        $.ajax({
+            url: "/alertType/getall",
+            type: "GET",
+            data: {
+            },
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    addItem(i,item);
+                });
+            },
+            error: function () {
+                alert('Có lỗi kết nối xảy ra');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

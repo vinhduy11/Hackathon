@@ -1,0 +1,84 @@
+{
+  "fptplay": [
+    {
+      "form1": {
+        "cap": "http://fptplay.net",
+        "btn": "Thanh toán",
+        "nexfrm": 1,
+        "guide": "http://app.momo.vn:81/momo_app/html/fptplay.html",
+        "fields": [
+          {
+            "fieldtype":"text",
+            "fieldlabel":"Nhập Email",
+            "key":"billid",
+            "required":true,
+            "line":1,
+            "haschild":0
+          },
+          {
+            "fieldtype": "drop",
+            "fieldlabel": "Số tiền",
+            "key": "amt",
+            "required": true,
+            "line": 1,
+            "haschild": 0
+          },
+          {
+            "fieldtype": "cash",
+            "fieldlabel": "Nguồn tiền",
+            "key": "cash",
+            "required": true,
+            "line": 1,
+            "haschild": 0,
+            "readonly": false
+          }
+        ],
+        "data": [
+		{
+			"linkto": "amt",
+			"text": "10.000đ (10 xu)",
+			"value": "10000",
+			"parentid": "",
+			"id": ""
+		},
+		{
+			"linkto": "amt",
+			"text": "20.000đ (20 xu)",
+			"value": "20000",
+			"parentid": "",
+			"id": ""
+		},
+		{
+			"linkto": "amt",
+			"text": "50.000đ (50 xu)",
+			"value": "50000",
+			"parentid": "",
+			"id": ""
+		},
+		{
+			"linkto": "amt",
+			"text": "100.000đ (100 xu)",
+			"value": "100000",
+			"parentid": "",
+			"id": ""
+		},
+		{
+			"linkto": "amt",
+			"text": "200.000đ (200 xu)",
+			"value": "200000",
+			"parentid": "",
+			"id": ""
+		},
+		{
+			"linkto": "amt",
+			"text": "500.000đ (500 xu)",
+			"value": "500000",
+			"parentid": "",
+			"id": ""
+		}
+        ]
+      }
+    }
+  ],
+    "extra":{ "billid": {"key": "Email"}}
+}

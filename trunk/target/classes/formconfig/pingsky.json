@@ -1,0 +1,89 @@
+{
+    "pingsky":[
+        {
+            "form1":{
+                    "cap":"http://pingsky.vn",
+                    "btn":"Tiếp tục",
+                    "nexfrm":1,
+                    "guide":"http://app.momo.vn:81/momo_app/html/pingsky.html",
+
+                    "fields":[
+                        {
+                            "fieldtype":"text",
+                            "fieldlabel":"Nhập tên tài khoản",
+                            "key":"billid",
+                            "required":true,
+                            "line":1,
+                            "haschild":0
+                        }
+                    ],
+                    "data":[
+                    ]
+                }
+        },
+        
+        {
+            "form2":{
+                  "cap":"http://pingsky.vn",
+                  "btn":"Thanh toán",
+                  "nexfrm":2,
+                  "guide":"",
+
+                  "fields":[
+                      { 
+                      "fieldtype": "html",
+                        "fieldlabel": "",
+                        "key": "html",
+                        "required": false,
+                        "line": 1,
+                        "haschild": 0,
+                        "readonly": false,
+                        "value": ""                     
+                      },{
+                          "fieldtype":"drop",
+                          "fieldlabel":"Số tiền",
+                          "key":"amt",
+                          "required":true,
+                          "line":1,
+                          "haschild":0
+                      },{
+                          "fieldtype":"cash",
+                          "fieldlabel":"",
+                          "key":"cash",
+                          "required":true,
+                          "line":1,
+                          "haschild":0
+                      }
+                  ],
+                  "data":[
+                        {
+                            "linkto":"amt",
+                            "text":"10.000đ",
+                            "value":"10000",
+                            "parentid":"",
+                            "id":"" 
+                        },{
+                          "linkto":"amt",
+                          "text":"20.000đ",
+                          "value":"20000",
+                          "parentid":"",
+                          "id":"" 
+                        },{
+                          "linkto":"amt",
+                          "text":"50.000đ",
+                          "value":"50000",
+                          "parentid":"",
+                          "id":""   
+                        },{
+                          "linkto":"amt",
+                          "text":"100.000đ",
+                          "value":"100000",
+                          "parentid":"",
+                          "id":""   
+                        }
+
+                  ]
+            }
+        }
+    ]
+}

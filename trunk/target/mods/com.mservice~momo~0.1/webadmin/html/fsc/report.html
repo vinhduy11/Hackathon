@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FSC 2014 report</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="/css/mask.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/mycss.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/jquery.1.9.js"></script>
+    <script type="text/javascript" src="/js/mask.js"></script>
+    <link rel="stylesheet" href="/css/jquery-ui.css" type="text/css"/>
+    <script src="/js/jquery-ui.js"></script>
+    <script src="/js/myjs.js"></script>
+    <style type="text/css">
+        .noborder table td th
+        {
+            border:0px solid #778899;
+            padding-left:3px;
+            padding-right:3px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div>
+    <h2>FSC 2014 report</h2>
+
+    <table border="0">
+        <tr style="border:0px ;">
+            <td style="border:0px ;text-decoration:underline;font-weight:bold;">Code</td>
+            <td style="border:0px ;text-decoration:underline;font-weight:bold;">Phone number</td>
+            <td style="border:0px ;text-decoration:underline;font-weight:bold;">From date</td>
+            <td style="border:0px ;text-decoration:underline;font-weight:bold;">To date</td>
+
+            <td><button id="btnSearch">Tìm kiếm</button></td>
+        </tr>
+
+        <tr style="border:0px ;">
+            <td><input style="width:100px; border:1px solid #778899;" id="code" name="code" type="text"></td>
+            <td><input style="width:100px; border:1px solid #778899;" id="number" name="number" type="text"/></td>
+            <td>
+                <div style="float:left">
+                    <input style="width:80px; border:1px solid #778899;" id="fdate" name="fdate" type="text"/>
+                    <input style="width:55px; border:1px solid #778899;" type="text" id="fdates" name="fdates" value="00:00:00"/>
+                </div>
+            </td>
+            <td>
+                <div style="float:left">
+                    <input style="width:80px; border:1px solid #778899;" id="tdate" name="tdate" type="text"/>
+                    <input style="width:55px; border:1px solid #778899;" type="text" id="tdates" name="tdates" value="12:00:00"/>
+                </div>
+            </td>
+            <td><button id="btnClear">Reset</button></td>
+        </tr>
+
+    </table>
+    <div class="clear"></div>
+    <table id="mTable">
+
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    var tableData;
+    var current_form_item = null;
+
+    function clearTable() {
+        $("#mTable").html("");
+        var head = "<tr>";
+        head += "<th>STT</th>";
+        head += "<th>Code</th>";
+        head += "<th>Phone</th>";
+        head += "<th>Name</th>";
+        head += "<th>MSSV</th>";
+        head += "<th>Time</th>";
+        head +="</tr>";
+        $("#mTable").html(head);
+    }
+
+    function addItem(ind, item) {
+        var row;
+        row = "<tr>";
+        row += "<td> " + ind + " </td>";
+        row += "<td> " + item._id + " </td>";
+        row += "<td> " + item.num + " </td>";
+        row += "<td> " + item.name + " </td>";
+        row += "<td> " + item.mssv + " </td>";
+        row += "<td> " + item.timevn + " </td>";
+        row += "</tr>";
+        $("#mTable").append(row);
+    }
+
+    $(document).ready(function () {
+        clearTable();
+        $("#fdate").datepicker({ dateFormat: "dd/mm/yy" });
+        $("#tdate").datepicker({ dateFormat: "dd/mm/yy" });
+        $("#tdates").val(getTime24());
+        $("#btnSearch").click(function () {
+            var fdate = $("#fdate").val();
+            var tdate = $("#tdate").val();
+            if(fdate === ""){
+                alert("Chọn From date");
+                $("#fdate").focus();
+                return;
+            }
+
+            if(tdate === ""){
+                alert("Chọn To date");
+                $("#tdate").focus();
+                return;
+            }
+
+            $.ajax({
+                url: "/fsc/search",
+                type: "GET",
+                data: {
+                    code:  $("#code").val(),
+                    number:$("#number").val(),
+                    fdate: $("#fdate").val(),
+                    fdates:$("#fdates").val(),
+                    tdate: $("#tdate").val(),
+                    tdates:$("#tdates").val()
+                },
+                success: function (data) {
+                    clearTable();
+                    $.each(data, function (i, item) {
+                        addItem((i + 1),item);
+                    });
+                },
+                error: function () {
+                    alert('Có lỗi kết nối xảy ra');
+                }
+            });
+        });
+
+        $("#btnClear").click(function () {
+            $("#code").val("");
+            $("#number").val("");
+            $("#fdate").val("");
+            $("#tdate").val("");
+             $("#code").focus();
+        });
+    });
+</script>
+</body>
+</html>
