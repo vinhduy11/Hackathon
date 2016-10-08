@@ -1,1 +1,1 @@
-function H_OnLoad()xipdbg("In Lua: changexla to DPIN")SetSessionValue("SyncUp","0")end
+function H_OnLoad()xipdbg("In Lua: changexla to DPIN")SetSessionValue("SyncUp","0")ChangeXla("DPIN")end
