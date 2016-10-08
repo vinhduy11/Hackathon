@@ -139,8 +139,8 @@
 	<screenType id="0" />
 	<widget name="title" text="SMSUC" />
 
-	<string x="8" y="50" text="SM" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
-	<string x="80" y="48" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	
+	<string x="8" y="48" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
 	<string x="8" y="64" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
 	<string x="8" y="78" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
 	<string x="8" y="96" text="Global:TID" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>

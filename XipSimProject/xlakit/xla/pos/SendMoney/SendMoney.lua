@@ -83,6 +83,8 @@ function SM_CB ()
 	xipdbg("In Lua: perso Status" .. xmsSC)
 	
 	txnId = xal_xms_get_params (SM_xmsConn, "txnId")
+	
+	
 	xal_xms_deInit(SM_xmsConn)
 	SM_xmsConn = 0
 	if tonumber (xmsSC)  ==  0 or tonumber (xmsSC)  ==  0100 then

@@ -18,14 +18,14 @@ array = {}
 MS_Screen = nil
 
 function SMM_OnLoad ()
-	xipdbg("Calling DisplayScreenFromRes")
-	SMM_RET = GetConfigValue ("MLTYPE")	
 	
+	SMM_RET = GetConfigValue ("MLTYPE")	
 	if (SMM_RET == "1") then
 	 DispScreen("sendMoneyMLoadPhoneEntryScreen")
 	elseif (SMM_RET == "2") then
 	 DispScreen("tranferMoneyMLoadPhoneEntryScreen")
   end
+ 
 end
 
 function SMM_OnPhoneNext (phone)
@@ -61,30 +61,7 @@ function SM_OnMPINNext (mPIN)
 end
 
 
-function SM_CB ()
-	XMSSCData = xal_xms_get_params (SM_xmsConn, "sc")
-	xipdbg("In Lua: perso Status" .. XMSSCData)
-	SCDetails = mysplit (XMSSCData,"|")
-	xmsSC = SCDetails[1]
-	xipdbg("In Lua: perso Status" .. xmsSC)
-	
-	txnId = xal_xms_get_params (SM_xmsConn, "txnId")
-	xal_xms_deInit(SM_xmsConn)
-	SM_xmsConn = 0
-	if tonumber (xmsSC)  ==  0 or tonumber (xmsSC)  ==  0100 then
-		xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = " .. xmsSC .. "txnID  " .. txnId)
-		DisplayScreenFromRes("sendMoneySuccessScreen", GetCurrencySymbol().." "..SM_Amount, SMM_MerNo, txnId)
-	elseif tonumber (xmsSC)  ==  8888 then
-		DisplayScreenFromRes("sendMoneyTimeout")
-	else
-		if string.len(SCDetails[2]) > 20 then
-			GetMultipleLines(SCDetails[2])
-			DisplayScreenFromRes("sendMoneyFailureScreen", xmsSC, array[1], array[2], array[3], array[4], array[5] )
-		else
-			DisplayScreenFromRes("sendMoneyFailureScreen", xmsSC, SCDetails[2] )
-		end
-	end
-end
+
 
 function DispScreen (scrName)
 	xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   " .. scrName )
@@ -262,7 +239,6 @@ end
 function XmsRequest_SM ()
   -- Fix lai
   xipdbg("In Lua: XmsRequest_SM")
- 
   if (SMM_RET == "1") then
    DisplayScreenFromRes("MoneyProgressScreen", "#SMPROG_1", "")
   else
@@ -292,10 +268,36 @@ function XmsRequest_SM ()
    xal_xms_add_params( SM_xmsConn, "pass", SM_MPIN )
    xal_xms_add_params( SM_xmsConn, "partnerId", SM_PHONE )
    xal_xms_add_params( SM_xmsConn, "originalAmount", SM_Amount )
-        
-  
-  
   ret = xal_xms_request(SM_xmsConn, 1)
+end
+
+function SM_CB ()
+  XMSSCData = xal_xms_get_params (SM_xmsConn, "sc")
+  xipdbg("In Lua: perso Status" .. XMSSCData)
+  SCDetails = mysplit (XMSSCData,"|")
+  xmsSC = SCDetails[1]
+  xipdbg("In Lua: perso Status" .. xmsSC)
+  
+  phoneSender = xal_xms_get_params (SM_xmsConn, "phoneSender")
+  originalAmount = xal_xms_get_params (SM_xmsConn, "originalAmount")
+  tranId = xal_xms_get_params (SM_xmsConn, "tranId")
+
+  txnId = xal_xms_get_params (SM_xmsConn, "txnId")
+  xal_xms_deInit(SM_xmsConn)
+  SM_xmsConn = 0
+  if tonumber (xmsSC)  ==  0 or tonumber (xmsSC)  ==  0100 then
+    xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = " .. xmsSC .. "txnID  " .. txnId)
+    DisplayScreenFromRes("sendMoneySuccessScreen", phoneSender, GetCurrencySymbol().." "..SM_Amount, SMM_MerNo, txnId)
+  elseif tonumber (xmsSC)  ==  8888 then
+    DisplayScreenFromRes("sendMoneyTimeout")
+  else
+    if string.len(SCDetails[2]) > 20 then
+      GetMultipleLines(SCDetails[2])
+      DisplayScreenFromRes("sendMoneyFailureScreen", xmsSC, array[1], array[2], array[3], array[4], array[5] )
+    else
+      DisplayScreenFromRes("sendMoneyFailureScreen", xmsSC, SCDetails[2] )
+    end
+  end
 end
 
 function comma_value(n) -- credit http://richard.warburton.it
