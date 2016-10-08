@@ -13,6 +13,8 @@
 <str TOP="TOPUP" />
 <str NAP_TIEN_MLOAD="NAP TIEN MLOAD" />
 <str CHUYEN_TIEN_MLOAD="CHUYEN_TIEN_MLOAD" />
+<str KIEMTRA="KIEM TRA" />
+<str MLOAD="DV MLOAD" />
 
 </EN>
 <SP>
@@ -27,6 +29,8 @@
 <str TOP="TOPUP" />
 <str NAP_TIEN_MLOAD="NAP TIEN MLOAD" />
 <str CHUYEN_TIEN_MLOAD="CHUYEN_TIEN_MLOAD" />
+<str KIEMTRA="KIEM TRA" />
+<str MLOAD="DV MLOAD" />
 </SP>
 </language>
 </strings>

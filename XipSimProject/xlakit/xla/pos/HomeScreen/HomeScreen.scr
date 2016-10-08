@@ -1,70 +1,14 @@
 <screen>
   <screenName name="HomeScreen1"/> 
   <screenType id="0" />
-  <widget name="hometl" imageid="Image:33S.gif" text="@1" textx="24"/>
-  <widget name="hometr" imageid="Image:icon.gif" text="RCV" textx="96"/>
-  <widget name="homebl" imageid="Image:icon.gif" text="RCVOFF" textx="24"/>
-  <widget name="homebr" imageid="Image:3bar_ico.gif" text="MENU" textx="108"/>
-
-  <image X1="2" Y1="64" type="3" imageid="img_leftarrow" />
-  <image X1="150" Y1="64" type="3" imageid="img_rightarrow" />
-  
-  <actions key_2 = "HS_OnRight" key_tlsk="HS_OnlineRcvFixed" key_trsk="HS_OnlineRcv" key_blsk="HS_OfflineRcv" key_brsk="HS_ShowMenu" key_ok="HS_ShowMenu" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/>
-  <ticker tickerenable="0"/>
-</screen>
-
-<screen>
-  <screenName name="HomeScreen2"/> 
-  <screenType id="0" />
-  <widget name="hometl" imageid="Image:11S.gif" text="TOP" textx="24"/>
-  <widget name="hometr" imageid="Image:21S.gif" text="PERSO" textx="93"/>
-  <widget name="homebl" imageid="Image:handcoin.gif" text="CBAL" textx="24"/>
-  <widget name="homebr" imageid="Image:3bar_ico.gif" text="MENU" textx="108"/>
-
-  <image X1="2" Y1="64" type="3" imageid="img_leftarrow" />
-  <image X1="150" Y1="64" type="3" imageid="img_rightarrow" />
-  
-  <actions key_1="HS_OnLeft" key_3="HS_OnRight" key_tlsk="HS_OnTopup" key_trsk="HS_OnPerso" key_blsk="HS_OnCBAL" key_brsk="HS_ShowMenu" key_ok="HS_ShowMenu" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/>
-  <ticker tickerenable="0"/>
-</screen>
-
-<screen>
-  <screenName name="HomeScreen3"/>
-  <screenType id="0" />
-  <widget name="hometl" imageid="Image:11S.gif" text="LFT" textx="24"/>
-  <widget name="hometr" imageid="Image:handcoin.gif" text="BAL" textx="83"/>
-  <widget name="homebl" imageid="Image:handcoin.gif" text="SOD" textx="24"/>
-  <widget name="homebr" imageid="Image:3bar_ico.gif" text="MENU" textx="108"/>
-
-  <image X1="2" Y1="64" type="3" imageid="img_leftarrow" />
-  <image X1="150" Y1="64" type="3" imageid="img_rightarrow" />
-  
-  <actions key_1="HS_OnRight"  key_2="HS_OnLeft" key_tlsk="HS_OnLFT" key_trsk="HS_OnBal" key_blsk="HS_OnTSOD" key_brsk="HS_ShowMenu" key_ok="HS_ShowMenu" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/>
-  <ticker tickerenable="0"/>
-</screen>
-
-<screen>
-  <screenName name="HomeScreen4"/>
-  <screenType id="0" />
-  <widget name="hometl" imageid="Image:11S.gif" text="NAP_TIEN_MLOAD" textx="24"/>
-  <widget name="hometr" imageid="Image:11S.gif" text="CHUYEN_TIEN_MLOAD" textx="83"/>
-  
-  <image X1="2" Y1="64" type="3" imageid="img_leftarrow" />
-  <image X1="150" Y1="64" type="3" imageid="img_rightarrow" />
-  
-  <actions key_1="HS_OnRight"  key_2="HS_OnLeft" key_tlsk="HS_OnNAP_TIEN" key_trsk="HS_OnCHUYEN_TIEN" key_blsk="" key_brsk="" key_ok="" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/>
-  <ticker tickerenable="0"/>
-</screen>
-
-<screen>
-  <screenName name="HomeScreen5"/>
-  <screenType id="0" />
+  <widget name="hometl" imageid="Image:21S.gif" text="PERSO" textx="15"/>  
+  <widget name="hometr" imageid="Image:handcoin.gif" text="BAL" textx="90"/>  
+  <widget name="homebr" imageid="Image:3bar_ico.gif" text="MLOAD" textx="90"/>
   
 
   <image X1="2" Y1="64" type="3" imageid="img_leftarrow" />
   <image X1="150" Y1="64" type="3" imageid="img_rightarrow" />
   
-  <actions key_1="HS_OnRight"  key_2="HS_OnLeft" key_tlsk="HS_OnNAP_TIEN" key_trsk="" key_blsk="" key_brsk="" key_ok="" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/>
+  <actions key_1="HS_OnLeft" key_3="HS_OnRight" key_tlsk="HS_OnPerso" key_trsk="HS_OnBal" key_blsk="HS_OnNAP_TIEN" key_brsk="HS_ShowMLoad" key_ok="HS_ShowMLoad" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip=""/>
   <ticker tickerenable="0"/>
 </screen>
-

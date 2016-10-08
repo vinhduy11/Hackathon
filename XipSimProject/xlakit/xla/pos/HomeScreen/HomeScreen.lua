@@ -11,8 +11,9 @@ HS_Screen = nil
 function HS_OnLoad ()
 	HS_Screen = GetConfigValue("profType")
 	xipdbg("In Lua: profile Type".. HS_Screen )
+	DisplayScreenFromRes("HomeScreen1")
 	if( HS_Screen == -1 ) then HS_Screen = "0" end 
-	
+	HS_Screen = 2
 	if ( tonumber( HS_Screen ) == 0) then
 		curSym = GetSessionValue ("CURR")
 		DisplayScreenFromRes("HomeScreen1", curSym.." 10.00")
@@ -49,33 +50,12 @@ function HS_OnCBAL ()
 	ChangeXla("CustBalance")
 end
 
-function HS_OnLFT ()
-	SetSessionValue ("RTType", "1")
-	ChangeXla("RecentTransactions")
-end
-
 function HS_OnBal ()
 	ChangeXla ("BalanceEnquiry")
 end
 
-function HS_OnNAP_TIEN ()
-  xipdbg("In On nap tien mload".. HS_Screen )
-  SetSessionValue ("MLTYPE", "1")
-  ChangeXla ("SendMoneyMLoad")
-end
-
-function HS_OnCHUYEN_TIEN ()
-  xipdbg("In HS_OnCHUYEN_TIEN".. HS_Screen )
-  SetSessionValue ("MLTYPE", "2")
-  ChangeXla ("SendMoneyMLoad")
-end
-
-function HS_OnTSOD ()
-	ChangeXla("SaleSummary")
-end
-
-function HS_ShowMenu ()
-	ChangeXla("CommonMenu")
+function HS_ShowMLoad ()
+  ChangeXla("MenuMload")
 end
 
 function HS_OnRight()
@@ -89,7 +69,7 @@ function HS_OnRight()
 		HS_Screen = "3"
 	elseif ( tonumber( HS_Screen ) == 2) then
 		curSym = GetSessionValue ("CURR")
-		DisplayScreenFromRes("HomeScreen1", curSym.." 10.00")
+		DisplayScreenFromRes("HomeScreen1")
 		SetConfigValue("profType", "0" )
 		HS_Screen = "0"
   elseif ( tonumber( HS_Screen ) == 3) then
@@ -114,7 +94,7 @@ function HS_OnLeft()
 		SetConfigValue("profType", "1" )
 		HS_Screen = "1"
   elseif ( tonumber( HS_Screen ) == 3) then
-    DisplayScreenFromRes("HomeScreen4", curSym.." 10.00")
+    DisplayScreenFromRes("HomeScreen4")
     SetConfigValue("profType", "0" )
     HS_Screen = "0"
 	end

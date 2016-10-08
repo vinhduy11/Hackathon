@@ -6,23 +6,23 @@
 -- History: Initial version created
 --]]
 
-function CM_OnLoad ()
-	DisplayScreenFromRes("CommonMenuScreen")
+function MM_OnLoad ()
+	DisplayScreenFromRes("MenuMloadScreen")
 end
 
 function OnGenericMenu()
 	MenuText,MenuKeyIndex = GetMenuKeyIndex()
+	xipdbg("MenuKeyIndex".. MenuKeyIndex )
 	if (MenuKeyIndex == 1001 ) then
-		ChangeXla ("SendMoney")
+    xipdbg("MLTYPE ".. '1' )
+    SetConfigValue ("MLTYPE", "1")
 	elseif (MenuKeyIndex == 1002 ) then
-		ChangeXla ("ChangeMPIN")
-	elseif (MenuKeyIndex == 1003 ) then
-		ChangeXla ("SyncSV")
-	elseif (MenuKeyIndex == 1004 ) then
-		ChangeXla ("PreferencesMenu")
+	  SetConfigValue ("MLTYPE", "2")
+	  xipdbg("MLTYPE ".. '2' )
 	end
+	ChangeXla ("SendMoneyMLoad")
 end
 
-function CM_goHome()
+function MM_goHome()
 	ChangeXla ("HomeScreen")
 end
