@@ -28,15 +28,9 @@ function SMM_OnPhoneNext (phone)
     SM_PHONE = phone
     SMM_MerNo = phone
     SetConfigValue("PHONE", phone)
-    
-    if (SMM_RET == "1") then
-      DisplayScreenFromRes("MoneyScreen1")
-      SetConfigValue("profType", "0" )
-      MS_Screen = "0"
-    else
-      DisplayScreenFromRes("MoneyScreenInputAmount", "#AMTT")
-    end
-    
+    DisplayScreenFromRes("MoneyScreen1")
+    SetConfigValue("profType", "0" )
+    MS_Screen = "0"
    else
     xipdbg("phone error")
     DisplayScreenFromRes("sendMoneyMLoadPhoneEntryScreen", "#INCRCT")
@@ -45,7 +39,7 @@ end
 
 function SM_OnMPINNext (mPIN)
 --	xipdbg("Calling XMS Request For SM, Pin = " .. mPIN )
-	if( mPIN ~= nil and mPIN:len() == 4 )then
+	if( mPIN ~= nil and mPIN:len() == 6 )then
 		SM_MPIN=mPIN
 		XmsRequest_SM()
 	else
@@ -205,13 +199,9 @@ function MS_OnCancel()
   if(SM_xmsConn ~= 0) then 
     xal_xms_deInit(SM_xmsConn)
   end
-  if(SMM_RET == "1") then
     DisplayScreenFromRes("MoneyScreen1")
     SetConfigValue("profType", "0" )
     MS_Screen = "0"
-  else
-    SM_goHome()
-  end
 end
 
 
@@ -220,11 +210,7 @@ function MS_OnMPINNext (mPIN)
     SM_MPIN=mPIN
     XmsRequest_SM()
   else
-    if(SMM_RET == "1") then
       DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "So Tien: ".. SM_Amount .. ".D", "SDT: " .. SMM_MerNo, "#GETPIN_1")
-    else
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "So Tien: ".. SM_Amount .. ".D", "SDT: " .. SMM_MerNo, "#GETPIN_2")
-    end
   end 
 end
 
@@ -232,11 +218,7 @@ end
 function XmsRequest_SM ()
   -- Fix lai
   xipdbg("In Lua: XmsRequest_SM")
-  if (SMM_RET == "1") then
    DisplayScreenFromRes("MoneyProgressScreen", "#SMPROG_1", "")
-  else
-   DisplayScreenFromRes("MoneyProgressScreen", "#SMPROG_2", "#SMPROG_3")
-  end
   cntType = xal_xms_getcontentType()
   if( cntType == -1 ) then txnType = "TEAM_TEST".."|".. "7/f"
   else txnType = "TEAM_TEST".."|"..cntType end
@@ -255,8 +237,8 @@ function XmsRequest_SM ()
   xal_xms_add_params( SM_xmsConn, "com", "2" )
   -- xipdbg("Adding Param MPIN = " .. SM_MPIN)  
   xal_xms_add_params( SM_xmsConn, "mp", SM_MPIN )
-  xal_xms_add_params( SM_xmsConn, "msgType", "TOPUP_MSG" )
   
+  xal_xms_add_params( SM_xmsConn, "msgType", "TOPUP_MSG" )
    xal_xms_add_params( SM_xmsConn, "user", "01696945543" )
    xal_xms_add_params( SM_xmsConn, "pass", SM_MPIN )
    xal_xms_add_params( SM_xmsConn, "partnerId", SM_PHONE )

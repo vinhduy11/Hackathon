@@ -4,106 +4,10 @@ Buff=<properties><XLAmeta><package name="XLAKIT" XLA="TransferMoneyMLoad" ver="1
 </XLAmeta>
 <params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
 </properties>
-[strings]
-size=839
-Buff=<strings><language><EN><str NXT="Tiep theo"/><str CNCL="Huy"/><str AMT="Chuyen tien MLOAD"/><str PHONE="Nhap so dien thoai:"/><str AMT_2="Nhap so tien"/><str GETPIN="Xac nhan ma PIN"/><str PHONE_E="So dien thoai chua dung"/><str AMT_E="Chua nhap so tien"/><str INCRCT="Ma PIN chua dung"/><str SMPROG="Dang thuc hien..."/><str SMPROG_1="Chuyen:"/><str TO="Den SDT:"/><str SMSUC="Send money success"/><str SM="Send money"/><str IMPRDATA="Improper data entered"/></EN>
-<SP><str AMT="Enter amount to send"/><str MERNO="Enter merchant number"/><str GETPIN="Enter merchant mPIN"/><str GETPIN_1="Enter mPIN for sending"/><str SMPROG="Processing send money"/><str SMPROG_1="Transferring"/><str SMSUC="Send money success"/><str SM="Send money"/><str IMPRDATA="Improper data entered"/><str INCRCT="Incorrect mPIN"/></SP>
-</language>
-</strings>
 [LUAScript]
-size=4243
+size=124
 Buff=SM_xmsConn=0
 SM_Amount=nil
 SM_PHONE=nil
 SM_MPIN=0
-array={}function SM_OnLoad()xipdbg("Calling DisplayScreenFromRes")DispScreen("PhoneScreen")end
-function SM_OnPhoneNext(n)xipdbg("In Lua: Phone = "..n)if(string.find(n,'0')==1 and(string.len(n)==11 or string.len(n)==10))then
-SM_PHONE=n
-DisplayScreenFromRes("AmountEntryScreen")else
-xipdbg("phone error")DisplayScreenFromRes("PhoneScreen","#PHONE_E")end
-end
-function SM_OnAmountNext(n)DisplaySetMaxInputDataLen("0")SM_Amount=n
-if(SM_Amount~=nil and tonumber(SM_Amount)>0)then
-xipdbg("In Lua: Displaying MoneyMPinEntryScreen: amount = "..SM_Amount.."phone = "..SM_PHONE)DisplayScreenFromRes("MoneyMPinEntryScreen"," ","So tien: "..comma_value(SM_Amount).."VND","SDT: "..SM_PHONE)else
-DisplayScreenFromRes("AmountEntryScreen","#AMT_E")end
-end
-function SM_OnMPINNext(n)if(n~=nil and n:len()==6)then
-SM_MPIN=n
-XmsRequest_SM()else
-DisplayScreenFromRes("MoneyMPinEntryScreen","#INCRCT","So tien: "..comma_value(SM_Amount).."VND","SDT: "..SM_PHONE)end
-end
-function XmsRequest_SM()xipdbg("In Lua: XmsRequest_SM")DisplayScreenFromRes("MoneyProgressScreen","#SMPROG_2","#SMPROG_3")cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="TEAM_TEST".."|".."7/f"else txnType="TEAM_TEST".."|"..cntType end
-SM_xmsConn=xal_xms_init("NULL",txnType,0,"SM_CB")xid=GetDeviceXID()xal_xms_add_params(SM_xmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(SM_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(SM_xmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(SM_xmsConn,"exid",exid)xipdbg("Adding Param amount = "..SM_Amount)xal_xms_add_params(SM_xmsConn,"amt",SM_Amount)xal_xms_add_params(SM_xmsConn,"rms",SMM_MerNo)xipdbg("Adding Param Mode of com= ".."2")xal_xms_add_params(SM_xmsConn,"com","2")xal_xms_add_params(SM_xmsConn,"mp",SM_MPIN)xal_xms_add_params(SM_xmsConn,"msgType","TOPUP_MSG")xal_xms_add_params(SM_xmsConn,"user","01696945543")xal_xms_add_params(SM_xmsConn,"pass",SM_MPIN)xal_xms_add_params(SM_xmsConn,"partnerId",SM_PHONE)xal_xms_add_params(SM_xmsConn,"originalAmount",SM_Amount)ret=xal_xms_request(SM_xmsConn,1)end
-function SM_CB()XMSSCData=xal_xms_get_params(SM_xmsConn,"sc")xipdbg("In Lua: perso Status"..XMSSCData)SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)phoneSender=xal_xms_get_params(SM_xmsConn,"phoneSender")originalAmount=xal_xms_get_params(SM_xmsConn,"originalAmount")tranId=xal_xms_get_params(SM_xmsConn,"tranId")txnId=xal_xms_get_params(SM_xmsConn,"txnId")xal_xms_deInit(SM_xmsConn)SM_xmsConn=0
-if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
-xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = "..xmsSC.."txnID  "..txnId)DisplayScreenFromRes("sendMoneySuccessScreen",phoneSender,GetCurrencySymbol().." "..SM_Amount,SMM_MerNo,txnId)elseif tonumber(xmsSC)==8888 then
-DisplayScreenFromRes("sendMoneyTimeout")else
-if string.len(SCDetails[2])>20 then
-GetMultipleLines(SCDetails[2])DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
-DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,SCDetails[2])end
-end
-end
-function SM_goHome()ChangeXla("HomeScreen")end
-function DispScreen(n)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..n)DisplayScreenFromRes(n)end
-function SM_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
-xal_xms_deInit(SM_xmsConn)end
-SM_goHome()end
-function mysplit(s,n)if n==nil then
-n="%s"end
-local e={};i=1
-xipdbg("LFT: Split: Input String val = "..s)for n in string.gmatch(s,"([^"..n.."]+)")do
-e[i]=n
-xipdbg("LFT: Individual Split String val = "..e[i])i=i+1
-end
-return e
-end
-function GetMultipleLines(n)xipdbg("DisplayMultipleLines:Line Received : "..n)count=1
-result=""for n in n:gmatch("%w+")do
-if(string.len(result)+string.len(n)+1>20)then
-xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
-count=count+1
-result=n
-elseif(string.len(result)>0)then
-result=result.." "..n
-else
-result=n
-end
-end
-xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
-count=count+1
-while(count<=5)do
-array[count]=" "count=count+1
-end
-end
-function comma_value(n)local e,n,s=string.match(n,'^([^%d]*%d)(%d*)(.-)$')return e..(n:reverse():gsub('(%d%d%d)','%1,'):reverse())..s
-end[PhoneScreen]
-screenType=1
-size=493
-Buff=<screen><screenName name="PhoneScreen"/><screenType id="1"/><widget name="title" text="AMT"/><string x="10" y="37" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="PHONE" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="3" maxinputlen="11"/><widget name="brsk" text="NXT"/><widget name="blsk" text="CNCL"/><actions key_blsk="SM_OnCancel" key_brsk="SM_OnPhoneNext" key_ok="SM_OnPhoneNext"/></screen>
-[AmountEntryScreen]
-screenType=1
-size=407
-Buff=<screen><screenName name="AmountEntryScreen"/><screenType id="1"/><widget name="title" text="AMT_2"/><string x="15" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="input" inputtype="3" maxinputlen="9"/><widget name="brsk" text="NXT"/><widget name="blsk" text="CNCL"/><actions key_blsk="SM_OnCancel" key_brsk="SM_OnAmountNext" key_ok="SM_OnAmountNext"/></screen>
-[MoneyMPinEntryScreen]
-screenType=1
-size=581
-Buff=<screen><screenName name="MoneyMPinEntryScreen"/><screenType id="1"/><widget name="title" text="GETPIN"/><string x="15" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="45" text="@2" font="1" fontcolorR="" fontcolorG="" fontcolorB="255"/><string x="8" y="60" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="input" inputtype="0" maxinputlen="6"/><widget name="brsk" text="NXT"/><widget name="blsk" text="CNCL"/><actions key_blsk="SM_OnCancel" key_brsk="SM_OnMPINNext" key_ok="SM_OnMPINNext"/></screen>
-[MoneyProgressScreen]
-screenType=0
-size=604
-Buff=<screen><screenName name="MoneyProgressScreen"/><screenType id="0"/><widget name="title" text="SMPROG"/><string x="8" y="40" text="SMPROG_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="60" y="38" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="55" text="TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="60" y="55" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="progress"/><widget name="blsk" text="CNCL"/><actions key_blsk="SM_OnCancel"/><ticker tickerenable="0"/></screen>
-[MoneySuccessScreen]
-screenType=0
-size=762
-Buff=<screen><screenName name="MoneySuccessScreen"/><screenType id="0"/><widget name="title" text="SMSUC"/><string x="8" y="50" text="SM" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="80" y="48" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="64" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="78" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="96" text="Global:TID" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="30" y="96" text="@3" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
-[MoneyFailureScreen]
-screenType=0
-size=742
-Buff=<screen><screenName name="MoneyFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
-[MoneyTimeout]
-screenType=0
-size=306
-Buff=<screen><screenName name="MoneyTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
-[CRC]
-size=10
-Buff=fw==
+array={}function SM_OnLoad()xipdbg("Calling DisplayScreenFromRes")end
