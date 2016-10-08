@@ -4,6 +4,12 @@ Buff=<properties><XLAmeta><package name="XLAKIT" XLA="RecentTransactions" ver="1
 </XLAmeta>
 <params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
 </properties>
+[strings]
+size=847
+Buff=<strings><language><EN><str BACK="Back"/><str RTPROG="Fetching records.."/><str RTMENU="Recent transactions"/><str DATE="Date:"/><str CNSMR="Consumer:"/><str TID="Id:"/><str TYPE="Type:"/><str STAT="Status:"/><str CRDT="Credit"/><str SUCC="Success"/><str DBT="Debit"/><str FAIL="Fail"/><str GETPIN_1="To get recent"/><str GETPIN_2="transactions"/><str GETMPIN="Enter merchant mPIN"/><str INCRCT="Incorrect mPIN"/></EN>
+<SP><str BACK="Back"/><str RTPROG="Fetching records.."/><str RTMENU="Recent transactions"/><str DATE="Date:"/><str CNSMR="Consumer:"/><str TID="Id:"/><str TYPE="Type:"/><str STAT="Status:"/><str CRDT="Credit"/><str SUCC="Success"/><str DBT="Debit"/><str FAIL="Fail"/><str GETPIN_1="To get recent"/><str GETPIN_2="transactions"/><str GETMPIN="Enter merchant mPIN"/><str INCRCT="Incorrect mPIN"/></SP>
+</language>
+</strings>
 [LUAScript]
 size=4555
 Buff=RT_xmsConn=0
@@ -90,4 +96,32 @@ count=count+1
 while(count<=5)do
 array[count]=" "count=count+1
 end
-end
+end[RecentTxnsMPinEntryScreen]
+screenType=1
+size=618
+Buff=<screen><screenName name="RecentTxnsMPinEntryScreen"/><screenType id="1"/><widget name="title" text="@1"/><string x="45" y="40" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="GETPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="GETPIN_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="RT_OnCancel" key_brsk="RT_OnMPINNext" key_ok="RT_OnMPINNext"/></screen>
+[RecentTxnsProgress]
+screenType=0
+size=242
+Buff=<screen><screenName name="RecentTxnsProgress"/><screenType id="0"/><widget name="title" text="RTPROG"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="RT_OnCancel"/><ticker tickerenable="0"/></screen>
+[RecentTxnsMenuScreen]
+screenType=2
+Menus=5
+size=657
+Buff=<screen><screenName name="RecentTxnsMenuScreen"/><screenType id="2"/><widget name="title" text="RTMENU"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1"/><menustr text="@1" handler="RT_OnMenuBtn1"/><menustr text="@2" handler="RT_OnMenuBtn2"/><menustr text="@3" handler="RT_OnMenuBtn3"/><menustr text="@4" handler="RT_OnMenuBtn4"/><menustr text="@5" handler="RT_OnMenuBtn5"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="brsk" text="Global:OK"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="RT_goHome"/></screen>
+[RecentTxnsScreen]
+screenType=0
+size=1130
+Buff=<screen><screenName name="RecentTxnsScreen"/><widget name="title" text="@1"/><screenType id="0"/><string x="8" y="40" text="DATE" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="50" y="40" text="@2" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="55" text="CNSMR" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="70" y="55" text="@3" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="70" text="TID" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="35" y="70" text="@4" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="85" text="TYPE" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="63" y="85" text="@5" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="100" text="STAT" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="63" y="100" text="@6" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="blsk" text="@7"/><widget name="brsk" text="@8"/><actions key_blsk="@9" key_brsk="@10"/></screen>
+[RecentTxnsFailureScreen]
+screenType=0
+size=747
+Buff=<screen><screenName name="RecentTxnsFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="RT_goHome" key_ok="RT_goHome"/></screen>
+[RecentTxnsTimeout]
+screenType=0
+size=311
+Buff=<screen><screenName name="RecentTxnsTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="RT_goHome" key_ok="RT_goHome"/></screen>
+[CRC]
+size=10
+Buff=Sw==

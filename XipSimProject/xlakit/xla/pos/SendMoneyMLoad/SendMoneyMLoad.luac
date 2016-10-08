@@ -20,11 +20,11 @@ end
 function SM_OnMPINNext(e)if(e~=nil and e:len()==4)then
 SM_MPIN=e
 XmsRequest_SM()else
-DisplayScreenFromRes("sendMoneyMPinEntryScreen","#INCRCT",GetCurrencySymbol().." "..SM_Amount,SM_MerNo)end
+DisplayScreenFromRes("sendMoneyMPinEntryScreen","#INCRCT",GetCurrencySymbol().." "..SM_Amount,SMM_MerNo)end
 end
 function SM_CB()XMSSCData=xal_xms_get_params(SM_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)txnId=xal_xms_get_params(SM_xmsConn,"txnId")xal_xms_deInit(SM_xmsConn)SM_xmsConn=0
 if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
-xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = "..xmsSC.."txnID  "..txnId)DisplayScreenFromRes("sendMoneySuccessScreen",GetCurrencySymbol().." "..SM_Amount,SM_MerNo,txnId)elseif tonumber(xmsSC)==8888 then
+xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = "..xmsSC.."txnID  "..txnId)DisplayScreenFromRes("sendMoneySuccessScreen",GetCurrencySymbol().." "..SM_Amount,SMM_MerNo,txnId)elseif tonumber(xmsSC)==8888 then
 DisplayScreenFromRes("sendMoneyTimeout")else
 if string.len(SCDetails[2])>20 then
 GetMultipleLines(SCDetails[2])DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else

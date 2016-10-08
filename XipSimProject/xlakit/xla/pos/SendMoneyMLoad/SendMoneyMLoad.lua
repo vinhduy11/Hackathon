@@ -52,7 +52,7 @@ function SM_OnMPINNext (mPIN)
 		SM_MPIN=mPIN
 		XmsRequest_SM()
 	else
-		DisplayScreenFromRes("sendMoneyMPinEntryScreen", "#INCRCT", GetCurrencySymbol().." "..SM_Amount, SM_MerNo )
+		DisplayScreenFromRes("sendMoneyMPinEntryScreen", "#INCRCT", GetCurrencySymbol().." "..SM_Amount, SMM_MerNo )
 	end	
 end
 
@@ -68,7 +68,7 @@ function SM_CB ()
 	SM_xmsConn = 0
 	if tonumber (xmsSC)  ==  0 or tonumber (xmsSC)  ==  0100 then
 		xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = " .. xmsSC .. "txnID  " .. txnId)
-		DisplayScreenFromRes("sendMoneySuccessScreen", GetCurrencySymbol().." "..SM_Amount, SM_MerNo, txnId)
+		DisplayScreenFromRes("sendMoneySuccessScreen", GetCurrencySymbol().." "..SM_Amount, SMM_MerNo, txnId)
 	elseif tonumber (xmsSC)  ==  8888 then
 		DisplayScreenFromRes("sendMoneyTimeout")
 	else
