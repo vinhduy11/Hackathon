@@ -13,7 +13,6 @@ SM_Amount = nil
 array = {}
 
 MS_Screen = nil
-MS_MPIN = 0
 
 function SMM_OnLoad ()
 	xipdbg("Calling DisplayScreenFromRes")
@@ -236,12 +235,12 @@ function MS_OnMoney(amount)
   -- check so tien 
   SM_Amount = amount
   if(SMM_RET == "1") then
-    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_1")
+    DisplayScreenFromRes("sendMoneyMPinEntryScreen", "", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_1")
   else
-    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_2")
+    DisplayScreenFromRes("sendMoneyMPinEntryScreen", "", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_2")
   end
-  maxAmt = GetPinlessEndAmount()
-  DisplaySetMaxInputDataLen("99999")
+  --maxAmt = GetPinlessEndAmount()
+  --DisplaySetMaxInputDataLen("99999")
 end
 
 function MS_OnInputNNext(amount)
@@ -264,18 +263,18 @@ end
 
 
 function MS_OnMPINNext (mPIN)
-  xipdbg("Calling XMS Request For MS, Pin = " .. mPIN )
   if( mPIN ~= nil and mPIN:len() == 4 )then
-    MS_MPIN=mPIN
+    SM_MPIN=mPIN
     XmsRequest_SM()
   else
     if(SMM_RET == "1") then
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_1")
+      DisplayScreenFromRes("sendMoneyMPinEntryScreen", "#INCRCTPIN", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_1")
     else
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_2")
+      DisplayScreenFromRes("sendMoneyMPinEntryScreen", "#INCRCTPIN", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_2")
     end
   end 
 end
+
 
 function XmsRequest_SM ()
   -- Fix lai
