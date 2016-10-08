@@ -37,8 +37,8 @@ function XmsRequest_BE ()
 	cntType = xal_xms_getcontentType()
 	xipdbg("In Lua: XmsRequest_BE content Type:".. cntType )
 	
-	if( cntType == -1 ) then txnType = "BE".."|".. "7/f"
-	else txnType = "BE".."|"..cntType end
+	if( cntType == -1 ) then txnType = "TEAM_TEST".."|".. "7/f"
+	else txnType = "TEAM_TEST".."|"..cntType end
 	BE_xmsConn=xal_xms_init("NULL", txnType, 0, "BE_CB")
 	mccMnc = GetMncMcc()
 	xal_xms_add_params( BE_xmsConn, "mcc", string.sub(mccMnc, 1, 3) )
