@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str NXT="Tiep theo" />
+<str CNCL="Huy" />
+<str AMT="Chuyen tien MLoad" />
+<str PHONE_1="Nhap so dien thoai" />
+<str PHONE_2="can nap:" />
+<str AMT_2="Nhap so tien" />
+<str MERNO="Enter merchant number" />
+<str GETPIN="Enter merchant mPIN" />
+<str GETPIN_1="Enter mPIN for sending" />
+<str SMPROG="Processing send money" />
+<str SMPROG_1="Transferring" />
+<str SMSUC="Send money success" />
+<str SM="Send money" />
+<str IMPRDATA="Improper data entered" />
+<str INCRCT="Incorrect mPIN" />
+</EN>
+<SP>
+<str AMT="Enter amount to send" />
+<str MERNO="Enter merchant number" />
+<str GETPIN="Enter merchant mPIN" />
+<str GETPIN_1="Enter mPIN for sending" />
+<str SMPROG="Processing send money" />
+<str SMPROG_1="Transferring" />
+<str SMSUC="Send money success" />
+<str SM="Send money" />
+<str IMPRDATA="Improper data entered" />
+<str INCRCT="Incorrect mPIN" />
+</SP>
+</language>
+</strings>

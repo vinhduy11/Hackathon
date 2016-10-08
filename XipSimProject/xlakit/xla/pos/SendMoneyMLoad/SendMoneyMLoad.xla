@@ -5,9 +5,9 @@ Buff=<properties><XLAmeta><package name="XLAKIT" XLA="SendMoneyMLoad" ver="1.0.0
 <params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
 </properties>
 [strings]
-size=1611
-Buff=<strings><language><EN><str PHONE_1="Nhap so dien thoai"/><str PHONE_2="can nap:"/><str TPHONE_2="can chuyen tien:"/><str GETPIN="Xac nhan ma PIN"/><str GETPIN_1="Nhap ma PIN de nap:"/><str GETPIN_2="Nhap ma PIN de chuyen:"/><str SMPROG_1="Dang thuc hien nap tien"/><str SMPROG_2="Dang thuc hien chuyen tien"/><str SMPROG_3="tien"/><str SMSUC="Send money success"/><str SMM="NAP TIEN MLOAD"/><str SMT="CHUYEN TIEN MLOAD"/><str IMPRDATA="Improper data entered"/><str INCRCT="So dien thoai chua dung"/><str K10="10.000 D"/><str K20="20.000 D"/><str K30="30.000 D"/><str K50="50.000 D"/><str K100="100.000 D"/><str K200="200.000 D"/><str K500="500.000 D"/><str SO_KHAC="SO KHAC"/><str TO="Cho"/><str INCRCTPIN="PIN Chua dung"/><str AMT="Nhap so tien muon nap"/><str AMTT="Nhap so tien can chuyen"/></EN>
-<SP><str PHONE_1="Nhap so dien thoai"/><str PHONE_2="can nap:"/><str TPHONE_2="can chuyen tien:"/><str GETPIN="Xac nhan ma PIN"/><str GETPIN_1="Nhap ma PIN de nap:"/><str GETPIN_2="Nhap ma PIN de chuyen:"/><str SMPROG_1="Dang thuc hien nap tien"/><str SMPROG_2="Dang thuc hien chuyen tien"/><str SMPROG_3="tien"/><str SMSUC="Send money success"/><str SMM="NAP TIEN MLOAD"/><str SMT="CHUYEN TIEN MLOAD"/><str IMPRDATA="Improper data entered"/><str INCRCT="So dien thoai chua dung"/><str K10="10.000 D"/><str K20="20.000 D"/><str K30="30.000 D"/><str K50="50.000 D"/><str K100="100.000 D"/><str K200="200.000 D"/><str K500="500.000 D"/><str SO_KHAC="SO KHAC"/><str TO="Cho"/><str INCRCTPIN="PIN Chua dung"/><str AMT="Nhap so tien muon nap"/><str AMTT="Nhap so tien can chuyen"/></SP>
+size=1657
+Buff=<strings><language><EN><str PHONE_1="Nhap so dien thoai"/><str PHONE_2="can nap:"/><str TPHONE_2="can chuyen tien:"/><str GETPIN="Xac nhan ma PIN"/><str GETPIN_1="Nhap ma PIN de nap:"/><str GETPIN_2="Nhap ma PIN de chuyen:"/><str SMPROG_1="Dang thuc hien nap tien"/><str SMPROG_2="Dang thuc hien chuyen tien"/><str SMPROG_3="tien"/><str SMSUC="Send money success"/><str SMM="NAP TIEN MLOAD"/><str SMT="CHUYEN TIEN MLOAD"/><str IMPRDATA="Improper data entered"/><str INCRCT="So dien thoai chua dung"/><str K10="10.000 D"/><str K20="20.000 D"/><str K30="30.000 D"/><str K50="50.000 D"/><str K100="100.000 D"/><str K200="200.000 D"/><str K500="500.000 D"/><str SO_KHAC="SO KHAC"/><str TO="Cho"/><str INCRCTPIN="PIN Chua dung"/><str AMT="Nhap so tien muon nap"/><str AMTT="Nhap so tien can chuyen"/><str KETQUA="KET QUA"/></EN>
+<SP><str PHONE_1="Nhap so dien thoai"/><str PHONE_2="can nap:"/><str TPHONE_2="can chuyen tien:"/><str GETPIN="Xac nhan ma PIN"/><str GETPIN_1="Nhap ma PIN de nap:"/><str GETPIN_2="Nhap ma PIN de chuyen:"/><str SMPROG_1="Dang thuc hien nap tien"/><str SMPROG_2="Dang thuc hien chuyen tien"/><str SMPROG_3="tien"/><str SMSUC="Send money success"/><str SMM="NAP TIEN MLOAD"/><str SMT="CHUYEN TIEN MLOAD"/><str IMPRDATA="Improper data entered"/><str INCRCT="So dien thoai chua dung"/><str K10="10.000 D"/><str K20="20.000 D"/><str K30="30.000 D"/><str K50="50.000 D"/><str K100="100.000 D"/><str K200="200.000 D"/><str K500="500.000 D"/><str SO_KHAC="SO KHAC"/><str TO="Cho"/><str INCRCTPIN="PIN Chua dung"/><str AMT="Nhap so tien muon nap"/><str AMTT="Nhap so tien can chuyen"/><str KETQUA="KET QUA"/></SP>
 </language>
 </strings>
 [LUAScript]
@@ -141,11 +141,11 @@ Buff=<screen><screenName name="MoneyScreen2"/><screenType id="0"/><widget name="
 [MoneyScreenConfirmMPin]
 screenType=1
 size=597
-Buff=<screen><screenName name="MoneyScreenConfirmMPin"/><screenType id="1"/><widget name="title" text="GETPIN"/><string x="15" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="45" text="@2" font="1" fontcolorR="" fontcolorG="" fontcolorB="255"/><string x="8" y="60" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="input" inputtype="0" maxinputlen="1"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="MS_OnCancel" key_brsk="MS_OnMPINNext" key_ok="MS_OnMPINNext"/></screen>
+Buff=<screen><screenName name="MoneyScreenConfirmMPin"/><screenType id="1"/><widget name="title" text="GETPIN"/><string x="15" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="45" text="@2" font="1" fontcolorR="" fontcolorG="" fontcolorB="255"/><string x="8" y="60" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="MS_OnCancel" key_brsk="MS_OnMPINNext" key_ok="MS_OnMPINNext"/></screen>
 [MoneyScreenInputAmount]
 screenType=1
 size=334
-Buff=<screen><screenName name="MoneyScreenInputAmount"/><screenType id="1"/><widget name="title" text="@1"/><widget name="input" inputtype="1" maxinputlen="3"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="MS_OnCancel" key_brsk="MS_OnInputNNext" key_ok="MS_OnInputNNext"/></screen>
+Buff=<screen><screenName name="MoneyScreenInputAmount"/><screenType id="1"/><widget name="title" text="@1"/><widget name="input" inputtype="1" maxinputlen="9"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="MS_OnCancel" key_brsk="MS_OnInputNNext" key_ok="MS_OnInputNNext"/></screen>
 [MoneyProgressScreen]
 screenType=0
 size=272
@@ -162,6 +162,10 @@ Buff=<screen><screenName name="MoneyMLoadTranferScreen"/><screenType id="1"/><wi
 screenType=0
 size=310
 Buff=<screen><screenName name="sendMoneyTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
+[sendMoneyNoti]
+screenType=0
+size=377
+Buff=<screen><screenName name="sendMoneyNoti"/><screenType id="0"/><widget name="title" text="KETQUA"/><string x="8" y="70" text="@1" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="70" text="@2" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
 [CRC]
 size=10
-Buff=Aw==
+Buff=Fw==

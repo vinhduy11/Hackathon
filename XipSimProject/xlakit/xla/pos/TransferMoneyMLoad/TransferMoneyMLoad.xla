@@ -1,0 +1,107 @@
+[properties]
+size=576
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="SendMoney" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="SM_OnInstall" onload="SM_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=737
+Buff=<strings><language><EN><str AMT="Enter amount to send"/><str MERNO="Enter merchant number"/><str GETPIN="Enter merchant mPIN"/><str GETPIN_1="Enter mPIN for sending"/><str SMPROG="Processing send money"/><str SMPROG_1="Transferring"/><str SMSUC="Send money success"/><str SM="Send money"/><str IMPRDATA="Improper data entered"/><str INCRCT="Incorrect mPIN"/></EN>
+<SP><str AMT="Enter amount to send"/><str MERNO="Enter merchant number"/><str GETPIN="Enter merchant mPIN"/><str GETPIN_1="Enter mPIN for sending"/><str SMPROG="Processing send money"/><str SMPROG_1="Transferring"/><str SMSUC="Send money success"/><str SM="Send money"/><str IMPRDATA="Improper data entered"/><str INCRCT="Incorrect mPIN"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=3690
+Buff=SM_xmsConn=0
+SM_Amount=nil
+SM_MerNo=nil
+SM_MPIN=0
+array={}function SM_OnLoad()xipdbg("Calling DisplayScreenFromRes")DispScreen("sendMoneyMsisdnNumberEntryScreen")end
+function SM_OnMerNoNext(n)SM_MerNo=n
+if(SM_MerNo==nil)then
+DisplayScreenFromRes("sendMoneyFailureScreen"," "," ","#IMPRDATA")else
+xipdbg("In Lua: mer no = "..SM_MerNo)DisplayScreenFromRes("sendMoneyAmountEntryScreen",SM_MerNo)end
+maxAmt=GetPinlessEndAmount()DisplaySetMaxInputDataLen("99999")end
+function SM_OnAmountNext(n)DisplaySetMaxInputDataLen("0")SM_Amount=n
+if(SM_Amount~=nil and tonumber(SM_Amount)>0)then
+xipdbg("In Lua: Displaying sendMoneyMPinEntryScreen: amount = "..SM_Amount.."mer no = "..SM_MerNo)DisplayScreenFromRes("sendMoneyMPinEntryScreen"," ",GetCurrencySymbol().." "..SM_Amount,SM_MerNo)else
+SM_goHome()end
+end
+function SM_OnMPINNext(n)if(n~=nil and n:len()==4)then
+SM_MPIN=n
+XmsRequest_SM()else
+DisplayScreenFromRes("sendMoneyMPinEntryScreen","#INCRCT",GetCurrencySymbol().." "..SM_Amount,SM_MerNo)end
+end
+function XmsRequest_SM()xipdbg("In Lua: XmsRequest_SM")DisplayScreenFromRes("sendMoneyProgressScreen",GetCurrencySymbol().." "..SM_Amount,SM_MerNo)cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="SM".."|".."7/f"else txnType="SM".."|"..cntType end
+SM_xmsConn=xal_xms_init("NULL",txnType,0,"SM_CB")xid=GetDeviceXID()xal_xms_add_params(SM_xmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(SM_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(SM_xmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(SM_xmsConn,"exid",exid)xipdbg("Adding Param amount = "..SM_Amount)xal_xms_add_params(SM_xmsConn,"amt",SM_Amount)xipdbg("Adding Param merchant number = "..SM_MerNo)xal_xms_add_params(SM_xmsConn,"rms",SM_MerNo)xipdbg("Adding Param Mode of com= ".."2")xal_xms_add_params(SM_xmsConn,"com","2")xal_xms_add_params(SM_xmsConn,"mp",SM_MPIN)ret=xal_xms_request(SM_xmsConn,1)end
+function SM_CB()XMSSCData=xal_xms_get_params(SM_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)txnId=xal_xms_get_params(SM_xmsConn,"txnId")xal_xms_deInit(SM_xmsConn)SM_xmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = "..xmsSC.."txnID  "..txnId)DisplayScreenFromRes("sendMoneySuccessScreen",GetCurrencySymbol().." "..SM_Amount,SM_MerNo,txnId)elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("sendMoneyTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,SCDetails[2])end
+end
+end
+function SM_goHome()ChangeXla("HomeScreen")end
+function DispScreen(n)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..n)DisplayScreenFromRes(n)end
+function SM_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
+xal_xms_deInit(SM_xmsConn)end
+SM_goHome()end
+function mysplit(s,n)if n==nil then
+n="%s"end
+local e={};i=1
+xipdbg("LFT: Split: Input String val = "..s)for n in string.gmatch(s,"([^"..n.."]+)")do
+e[i]=n
+xipdbg("LFT: Individual Split String val = "..e[i])i=i+1
+end
+return e
+end
+function GetMultipleLines(n)xipdbg("DisplayMultipleLines:Line Received : "..n)count=1
+result=""for n in n:gmatch("%w+")do
+if(string.len(result)+string.len(n)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=n
+elseif(string.len(result)>0)then
+result=result.." "..n
+else
+result=n
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end[sendMoneyAmountEntryScreen]
+screenType=1
+size=619
+Buff=<screen><screenName name="sendMoneyAmountEntryScreen"/><screenType id="1"/><widget name="title" text="AMT"/><string x="8" y="44" text="SM" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="58" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="52" y="56" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="input" inputtype="1" maxinputlen="9"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SM_OnCancel" key_brsk="SM_OnAmountNext" key_ok="SM_OnAmountNext"/></screen>
+[sendMoneyMsisdnNumberEntryScreen]
+screenType=1
+size=365
+Buff=<screen><screenName name="sendMoneyMsisdnNumberEntryScreen"/><screenType id="1"/><widget name="title" text="MERNO"/><widget name="alphainput" inputtype="3" maxinputlen="10" alphatype="0"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SM_OnCancel" key_brsk="SM_OnMerNoNext" key_ok="SM_OnMerNoNext"/></screen>
+[sendMoneyMPinEntryScreen]
+screenType=1
+size=899
+Buff=<screen><screenName name="sendMoneyMPinEntryScreen"/><screenType id="1"/><widget name="title" text="GETPIN"/><string x="35" y="34" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="44" text="GETPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="56" text="Global:OF" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="35" y="54" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="68" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="52" y="66" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="input" inputtype="0" maxinputlen="4"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SM_OnCancel" key_brsk="SM_OnMPINNext" key_ok="SM_OnMPINNext"/></screen>
+[sendMoneyProgressScreen]
+screenType=0
+size=622
+Buff=<screen><screenName name="sendMoneyProgressScreen"/><screenType id="0"/><widget name="title" text="SMPROG"/><string x="8" y="40" text="SMPROG_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="85" y="38" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="50" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="55" y="50" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SM_OnCancel"/><ticker tickerenable="0"/></screen>
+[sendMoneySuccessScreen]
+screenType=0
+size=766
+Buff=<screen><screenName name="sendMoneySuccessScreen"/><screenType id="0"/><widget name="title" text="SMSUC"/><string x="8" y="50" text="SM" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="80" y="48" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="64" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="78" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="96" text="Global:TID" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="30" y="96" text="@3" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
+[sendMoneyFailureScreen]
+screenType=0
+size=746
+Buff=<screen><screenName name="sendMoneyFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
+[sendMoneyTimeout]
+screenType=0
+size=310
+Buff=<screen><screenName name="sendMoneyTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
+[CRC]
+size=10
+Buff=ZA==
