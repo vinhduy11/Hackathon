@@ -31,8 +31,7 @@ DisplayScreenFromRes("topupInputEntryScreen","#CMPIN","#INCRCT","#CMPIN_1",GetCu
 end
 function Topup_OnNFCReadDetectData(n,e,t)TU_Xid=e
 xipdbg("Topup_OnNFCReadDetectData: TU_Xid "..TU_Xid.." status "..n.." tagdata "..e.."tagdatalen"..t)if(n=="true")then
-TU_epid=1e5
-sysnfc_svEpurseSetId(TU_nfcSess,TU_epid)sysnfc_svEpurseReadAmount(TU_nfcSess,"Topup_OnNFCReadAmountCB")else
+TU_epid=GetEpurse/ID()sysnfc_svEpurseSetId(TU_nfcSess,TU_epid)sysnfc_svEpurseReadAmount(TU_nfcSess,"Topup_OnNFCReadAmountCB")else
 DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," "," ","#TAPTO"," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")end
 end
 function Topup_OnNFCReadAmountCB(e,t,n,o,o)xipdbg("In Lua: Topup_OnNFCReadAmountCB amount:"..t)xipdbg("In Lua: Topup_OnNFCReadAmountCB status:"..e)xipdbg("expiry "..n)TU_CBal=sysnfc_svEpurseConvAmtInt2Dec(t)xipdbg("In Lua: To/pup_OnNFCReadAmountCB Card Bal "..TU_CBal)if(e=="1")then

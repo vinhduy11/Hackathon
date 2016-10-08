@@ -64,8 +64,8 @@ function Topup_OnNFCReadDetectData (status, tagdata, tagdatalen)
 	TU_Xid = tagdata
 	xipdbg("Topup_OnNFCReadDetectData: TU_Xid "..TU_Xid .. " status " ..status .. " tagdata " .. tagdata .. "tagdatalen" .. tagdatalen)
 	if (status == "true") then
-	  --TU_epid = GetEpurseID()
-		TU_epid = 100000
+	  TU_epid = GetEpurse/ID()
+		--TU_epid = 100000
 		--xipdbg("Topup_OnNFCReadDetectData: epid "..TU_epid)
 		sysnfc_svEpurseSetId(TU_nfcSess, TU_epid)
 		--xipdbg("Topup_OnNFCReadDetectData1: epid "..TU_epid)

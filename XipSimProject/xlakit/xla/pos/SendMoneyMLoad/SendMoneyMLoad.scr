@@ -53,7 +53,7 @@
 	<string x="8" y="45" text="@2" font="1" fontcolorR="" fontcolorG="" fontcolorB="255"/>
 	<string x="8" y="60" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
 
-	<widget name="input" inputtype="0" maxinputlen="4" />
+	<widget name="input" inputtype="0" maxinputlen="6" />
 	
 	<widget name="brsk" text="Global:NXT" />
 	<widget name="blsk" text="Global:CNCL" />
@@ -72,7 +72,7 @@
 	<string x="8" y="68" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
 	<string x="52" y="66" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
 
-	<widget name="input" inputtype="0" maxinputlen="4" />
+	<widget name="input" inputtype="0" maxinputlen="6" />
 	
 	<widget name="brsk" text="Global:NXT" />
 	<widget name="blsk" text="Global:CNCL" />
