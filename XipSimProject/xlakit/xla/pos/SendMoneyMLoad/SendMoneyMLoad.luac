@@ -20,11 +20,11 @@ end
 function SM_OnMPINNext(e)if(e~=nil and e:len()==4)then
 SM_MPIN=e
 XmsRequest_SM()else
-DisplayScreenFromRes("sendMoneyMPinEntryScreen","#INCRCT",GetCurrencySymbol().." "..SM_Amount,SM_MerNo)end
+DisplayScreenFromRes("sendMoneyMPinEntryScreen","#INCRCT",GetCurrencySymbol().." "..SM_Amount,SMM_MerNo)end
 end
 function SM_CB()XMSSCData=xal_xms_get_params(SM_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)txnId=xal_xms_get_params(SM_xmsConn,"txnId")xal_xms_deInit(SM_xmsConn)SM_xmsConn=0
 if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
-xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = "..xmsSC.."txnID  "..txnId)DisplayScreenFromRes("sendMoneySuccessScreen",GetCurrencySymbol().." "..SM_Amount,SM_MerNo,txnId)elseif tonumber(xmsSC)==8888 then
+xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = "..xmsSC.."txnID  "..txnId)DisplayScreenFromRes("sendMoneySuccessScreen",GetCurrencySymbol().." "..SM_Amount,SMM_MerNo,txnId)elseif tonumber(xmsSC)==8888 then
 DisplayScreenFromRes("sendMoneyTimeout")else
 if string.len(SCDetails[2])>20 then
 GetMultipleLines(SCDetails[2])DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
@@ -36,10 +36,10 @@ function DispScreen(e)xipdbg("DispScreen: Calling DisplayScreenFromRes for scree
 function SMM_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
 xal_xms_deInit(SM_xmsConn)end
 SMM_goHome()end
-function mysplit(o,n)if n==nil then
+function mysplit(S,n)if n==nil then
 n="%s"end
 local e={};i=1
-xipdbg("LFT: Split: Input String val = "..o)for n in string.gmatch(o,"([^"..n.."]+)")do
+xipdbg("LFT: Split: Input String val = "..S)for n in string.gmatch(S,"([^"..n.."]+)")do
 e[i]=n
 xipdbg("LFT: Individual Split String val = "..e[i])i=i+1
 end
@@ -90,8 +90,8 @@ function SM_goHome()ChangeXla("HomeScreen")end
 function MS_OnMoneyANOSelect()xipdbg("amount = ANO")xipdbg("change screen")DisplayScreenFromRes("MoneyScreenInputAmount","#AMT")end
 function MS_OnMoney(e)xipdbg("amount pass"..e)xipdbg("Confirm")SM_Amount=e
 if(SMM_RET=="1")then
-DisplayScreenFromRes("MoneyScreenConfirmMPin","",SM_Amount.." Ngan",SMM_MerNo,"#GETPIN_1")else
-DisplayScreenFromRes("MoneyScreenConfirmMPin","",SM_Amount.." Ngan",SMM_MerNo,"#GETPIN_2")end
+DisplayScreenFromRes("MoneyScreenConfirmMPin","","ST: "..SM_Amount..".000D","SDT: "..SMM_MerNo,"#GETPIN_1")else
+DisplayScreenFromRes("MoneyScreenConfirmMPin","","ST: "..SM_Amount..".000D","SDT: "..SMM_MerNo,"#GETPIN_2")end
 maxAmt=GetPinlessEndAmount()DisplaySetMaxInputDataLen("99999")end
 function MS_OnInputNNext(e)xipdbg("amount = "..e)MS_OnMoney(e)end
 function MS_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
@@ -104,8 +104,8 @@ function MS_OnMPINNext(e)xipdbg("Calling XMS Request For MS, Pin = "..e)if(e~=ni
 MS_MPIN=e
 XmsRequest_SM()else
 if(SMM_RET=="1")then
-DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN",SM_Amount.." Ngan",SMM_MerNo,"#GETPIN_1")else
-DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN",SM_Amount.." Ngan",SMM_MerNo,"#GETPIN_2")end
+DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN","ST: "..SM_Amount..".000D","SDT: "..SMM_MerNo,"#GETPIN_1")else
+DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN","ST: "..SM_Amount..".000D","SDT: "..SMM_MerNo,"#GETPIN_2")end
 end
 end
 function XmsRequest_SM()xipdbg("In Lua: XmsRequest_SM")if(SMM_RET=="1")then
