@@ -11,7 +11,7 @@ Buff=<strings><language><EN><str NXT="Tiep theo"/><str CNCL="Huy"/><str AMT="Chu
 </language>
 </strings>
 [LUAScript]
-size=3800
+size=4243
 Buff=SM_xmsConn=0
 SM_Amount=nil
 SM_PHONE=nil
@@ -32,15 +32,15 @@ SM_MPIN=n
 XmsRequest_SM()else
 DisplayScreenFromRes("MoneyMPinEntryScreen","#INCRCT","So tien: "..comma_value(SM_Amount).."VND","SDT: "..SM_PHONE)end
 end
-function XmsRequest_SM()xipdbg("In Lua: XmsRequest_SM")DisplayScreenFromRes("MoneyProgressScreen",comma_value(SM_Amount).."VND",SM_PHONE)cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="SM".."|".."7/f"else txnType="SM".."|"..cntType end
-SM_xmsConn=xal_xms_init("NULL",txnType,0,"SM_CB")xid=GetDeviceXID()xal_xms_add_params(SM_xmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(SM_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(SM_xmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(SM_xmsConn,"exid",exid)xipdbg("Adding Param amount = "..SM_Amount)xal_xms_add_params(SM_xmsConn,"amt",SM_Amount)xipdbg("Adding Param merchant number = "..SM_PHONE)xal_xms_add_params(SM_xmsConn,"rms",SM_PHONE)xipdbg("Adding Param Mode of com= ".."2")xal_xms_add_params(SM_xmsConn,"com","2")xal_xms_add_params(SM_xmsConn,"mp",SM_MPIN)ret=xal_xms_request(SM_xmsConn,1)end
-function SM_CB()XMSSCData=xal_xms_get_params(SM_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)txnId=xal_xms_get_params(SM_xmsConn,"txnId")xal_xms_deInit(SM_xmsConn)SM_xmsConn=0
+function XmsRequest_SM()xipdbg("In Lua: XmsRequest_SM")DisplayScreenFromRes("MoneyProgressScreen","#SMPROG_2","#SMPROG_3")cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="TEAM_TEST".."|".."7/f"else txnType="TEAM_TEST".."|"..cntType end
+SM_xmsConn=xal_xms_init("NULL",txnType,0,"SM_CB")xid=GetDeviceXID()xal_xms_add_params(SM_xmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(SM_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(SM_xmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(SM_xmsConn,"exid",exid)xipdbg("Adding Param amount = "..SM_Amount)xal_xms_add_params(SM_xmsConn,"amt",SM_Amount)xal_xms_add_params(SM_xmsConn,"rms",SMM_MerNo)xipdbg("Adding Param Mode of com= ".."2")xal_xms_add_params(SM_xmsConn,"com","2")xal_xms_add_params(SM_xmsConn,"mp",SM_MPIN)xal_xms_add_params(SM_xmsConn,"msgType","TOPUP_MSG")xal_xms_add_params(SM_xmsConn,"user","01696945543")xal_xms_add_params(SM_xmsConn,"pass",SM_MPIN)xal_xms_add_params(SM_xmsConn,"partnerId",SM_PHONE)xal_xms_add_params(SM_xmsConn,"originalAmount",SM_Amount)ret=xal_xms_request(SM_xmsConn,1)end
+function SM_CB()XMSSCData=xal_xms_get_params(SM_xmsConn,"sc")xipdbg("In Lua: perso Status"..XMSSCData)SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)phoneSender=xal_xms_get_params(SM_xmsConn,"phoneSender")originalAmount=xal_xms_get_params(SM_xmsConn,"originalAmount")tranId=xal_xms_get_params(SM_xmsConn,"tranId")txnId=xal_xms_get_params(SM_xmsConn,"txnId")xal_xms_deInit(SM_xmsConn)SM_xmsConn=0
 if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
-xipdbg("In Lua: Displaying MoneySuccessScreen: SC = "..xmsSC.."txnID  "..txnId)DisplayScreenFromRes("MoneySuccessScreen",GetCurrencySymbol().." "..SM_Amount,SM_PHONE,txnId)elseif tonumber(xmsSC)==8888 then
-DisplayScreenFromRes("MoneyTimeout")else
+xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = "..xmsSC.."txnID  "..txnId)DisplayScreenFromRes("sendMoneySuccessScreen",phoneSender,GetCurrencySymbol().." "..SM_Amount,SMM_MerNo,txnId)elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("sendMoneyTimeout")else
 if string.len(SCDetails[2])>20 then
-GetMultipleLines(SCDetails[2])DisplayScreenFromRes("MoneyFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
-DisplayScreenFromRes("MoneyFailureScreen",xmsSC,SCDetails[2])end
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,SCDetails[2])end
 end
 end
 function SM_goHome()ChangeXla("HomeScreen")end
@@ -106,4 +106,4 @@ size=306
 Buff=<screen><screenName name="MoneyTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
 [CRC]
 size=10
-Buff=LA==
+Buff=fw==
