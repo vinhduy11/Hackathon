@@ -251,9 +251,9 @@ function MS_OnMoney(amount)
   -- check so tien 
   SMM_Amount = amount
   if(SMM_RET == "1") then
-    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_1")
+    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", "ST: ".. SMM_Amount .. ".000D", "SDT: " .. SMM_PHONE, "#GETPIN_1")
   else
-    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_2")
+    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", "ST: ".. SMM_Amount .. ".000D", "SDT: " .. SMM_PHONE, "#GETPIN_2")
   end
 end
 
@@ -283,9 +283,9 @@ function MS_OnMPINNext (mPIN)
     XmsRequest_SM()
   else
     if(SMM_RET == "1") then
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_1")
+      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "ST: ".. SMM_Amount .. ".000D", "SDT: " .. SMM_PHONE, "#GETPIN_1")
     else
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_2")
+      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "ST: ".. SMM_Amount .. ".000D", "SDT: " .. SMM_PHONE, "#GETPIN_2")
     end
   end 
 end

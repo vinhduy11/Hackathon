@@ -39,10 +39,10 @@ function DispScreen(e)xipdbg("DispScreen: Calling DisplayScreenFromRes for scree
 function SMM_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
 xal_xms_deInit(SM_xmsConn)end
 SMM_goHome()end
-function mysplit(M,n)if n==nil then
+function mysplit(S,n)if n==nil then
 n="%s"end
 local e={};i=1
-xipdbg("LFT: Split: Input String val = "..M)for n in string.gmatch(M,"([^"..n.."]+)")do
+xipdbg("LFT: Split: Input String val = "..S)for n in string.gmatch(S,"([^"..n.."]+)")do
 e[i]=n
 xipdbg("LFT: Individual Split String val = "..e[i])i=i+1
 end
@@ -89,8 +89,8 @@ function MS_OnMoney500KSelect()xipdbg("amount = 500k")MS_OnMoney(500)end
 function MS_OnMoneyANOSelect()xipdbg("amount = ANO")xipdbg("change screen")DisplayScreenFromRes("MoneyScreenInputAmount","#AMT")end
 function MS_OnMoney(e)xipdbg("amount pass"..e)xipdbg("Confirm")SMM_Amount=e
 if(SMM_RET=="1")then
-DisplayScreenFromRes("MoneyScreenConfirmMPin","",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_1")else
-DisplayScreenFromRes("MoneyScreenConfirmMPin","",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_2")end
+DisplayScreenFromRes("MoneyScreenConfirmMPin","","ST: "..SMM_Amount..".000D","SDT: "..SMM_PHONE,"#GETPIN_1")else
+DisplayScreenFromRes("MoneyScreenConfirmMPin","","ST: "..SMM_Amount..".000D","SDT: "..SMM_PHONE,"#GETPIN_2")end
 end
 function MS_OnInputNNext(e)xipdbg("amount = "..e)MS_OnMoney(e)end
 function MS_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
@@ -103,8 +103,8 @@ function MS_OnMPINNext(e)xipdbg("Calling XMS Request For MS, Pin = "..e)if(e~=ni
 MS_MPIN=e
 XmsRequest_SM()else
 if(SMM_RET=="1")then
-DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_1")else
-DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_2")end
+DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN","ST: "..SMM_Amount..".000D","SDT: "..SMM_PHONE,"#GETPIN_1")else
+DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN","ST: "..SMM_Amount..".000D","SDT: "..SMM_PHONE,"#GETPIN_2")end
 end
 end
 function XmsRequest_SM()xipdbg("In Lua: XmsRequest_SM")xipdbg("In Lua: Displaying sendMoneyProgressScreen: amount = "..SMM_Amount.."phone = "..SMM_PHONE)if(SMM_RET=="1")then
