@@ -29,6 +29,8 @@
 <str INCRCTPIN="PIN Chua dung" />
 <str AMT="Nhap so tien muon nap" />
 <str AMTT="Nhap so tien can chuyen" />
+<str KETQUA="KET QUA" />
+
 
 
 </EN>
@@ -60,6 +62,7 @@
 <str INCRCTPIN="PIN Chua dung" />
 <str AMT="Nhap so tien muon nap" />
 <str AMTT="Nhap so tien can chuyen" />
+<str KETQUA="KET QUA" />
 </SP>
 </language>
 </strings>
