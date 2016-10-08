@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str MENUT="DICH VU MLOAD" />
+<str MM1="Nap tien MLoad" />
+<str MM2="Chuyen tien MLoad" />
+</EN>
+<SP>
+<str MENUT="DICH VU MLOAD" />
+<str MM1="Nap tien MLoad" />
+<str MM2="Chuyen tien MLoad" />
+</SP>
+</language>
+</strings>

@@ -18,11 +18,11 @@ MS_MPIN = 0
 
 function SMM_OnLoad ()
 	xipdbg("Calling DisplayScreenFromRes")
-	SMM_RET = GetSessionValue ("MLTYPE")
-	if (SMM_RET == 1) then
+	SMM_RET = GetConfigValue ("MLTYPE")	
+	if (SMM_RET == "1") then
 	 DispScreen("sendMoneyMLoadPhoneEntryScreen")
-	else
-	 DispScreen("MoneyMLoadTranferScreen")
+	elseif (SMM_RET == "2") then
+	 DispScreen("tranferMoneyMLoadPhoneEntryScreen")
   end
 end
 
@@ -33,14 +33,13 @@ function SMM_OnPhoneNext (phone)
     SMM_PHONE = phone
     SetConfigValue("PHONE", phone)
     
-    if (SMM_RET == 1) then
+    if (SMM_RET == "1") then
       DisplayScreenFromRes("MoneyScreen1")
       SetConfigValue("profType", "0" )
       MS_Screen = "0"
     else
       DisplayScreenFromRes("MoneyScreenInputAmount", "#AMTT")
     end
-    
     
    else
     xipdbg("phone error")
@@ -251,7 +250,7 @@ function MS_OnMoney(amount)
   xipdbg("Confirm")
   -- check so tien 
   SMM_Amount = amount
-  if(SMM_RET == 1) then
+  if(SMM_RET == "1") then
     DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_1")
   else
     DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_2")
@@ -267,7 +266,7 @@ function MS_OnCancel()
   if(SM_xmsConn ~= 0) then 
     xal_xms_deInit(SM_xmsConn)
   end
-  if(SMM_RET == 1) then
+  if(SMM_RET == "1") then
     DisplayScreenFromRes("MoneyScreen1")
     SetConfigValue("profType", "0" )
     MS_Screen = "0"
@@ -283,10 +282,10 @@ function MS_OnMPINNext (mPIN)
     MS_MPIN=mPIN
     XmsRequest_SM()
   else
-    if(SMM_RET == 1) then
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_1")
+    if(SMM_RET == "1") then
+      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_1")
     else
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_2")
+      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_2")
     end
   end 
 end
@@ -295,7 +294,11 @@ function XmsRequest_SM ()
   -- Fix lai
   xipdbg("In Lua: XmsRequest_SM")
   xipdbg("In Lua: Displaying sendMoneyProgressScreen: amount = " .. SMM_Amount .. "phone = " .. SMM_PHONE)
-  DisplayScreenFromRes("MoneyProgressScreen")
+  if (SMM_RET == "1") then
+   DisplayScreenFromRes("MoneyProgressScreen", "#SMPROG_1", "")
+  else
+   DisplayScreenFromRes("MoneyProgressScreen", "#SMPROG_2", "#SMPROG_3")
+  end
   cntType = xal_xms_getcontentType()
   if( cntType == -1 ) then txnType = "SM".."|".. "7/f"
   else txnType = "SM".."|"..cntType end

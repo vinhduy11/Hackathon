@@ -1,0 +1,28 @@
+[properties]
+size=510
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="MenuMload" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="MM_OnInstall" onload="MM_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="trigger"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=237
+Buff=<strings><language><EN><str MENUT="DICH VU MLOAD"/><str MM1="Nap tien MLoad"/><str MM2="Chuyen tien MLoad"/></EN>
+<SP><str MENUT="DICH VU MLOAD"/><str MM1="Nap tien MLoad"/><str MM2="Chuyen tien MLoad"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=406
+Buff=function MM_OnLoad()DisplayScreenFromRes("MenuMloadScreen")end
+function OnGenericMenu()MenuText,MenuKeyIndex=GetMenuKeyIndex()xipdbg("MenuKeyIndex"..MenuKeyIndex)if(MenuKeyIndex==1001)then
+xipdbg("MLTYPE "..'1')SetConfigValue("MLTYPE","1")elseif(MenuKeyIndex==1002)then
+SetConfigValue("MLTYPE","2")xipdbg("MLTYPE "..'2')end
+ChangeXla("SendMoneyMLoad")end
+function MM_goHome()ChangeXla("HomeScreen")end[MenuMloadScreen]
+screenType=2
+Menus=2
+size=504
+Buff=<screen><screenName name="MenuMloadScreen"/><screenType id="2"/><widget name="title" text="MENUT"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/><menustr text="MM1"/><menustr text="MM2"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="brsk" text="Global:OK"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="MM_goHome"/></screen>
+[CRC]
+size=10
+Buff=Xw==

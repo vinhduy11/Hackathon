@@ -6,13 +6,13 @@ SMM_MerNo=nil
 SMM_MPIN=0
 array={}MS_Screen=nil
 MS_MPIN=0
-function SMM_OnLoad()xipdbg("Calling DisplayScreenFromRes")SMM_RET=GetSessionValue("MLTYPE")if(SMM_RET==1)then
-DispScreen("sendMoneyMLoadPhoneEntryScreen")else
-DispScreen("MoneyMLoadTranferScreen")end
+function SMM_OnLoad()xipdbg("Calling DisplayScreenFromRes")SMM_RET=GetConfigValue("MLTYPE")if(SMM_RET=="1")then
+DispScreen("sendMoneyMLoadPhoneEntryScreen")elseif(SMM_RET=="2")then
+DispScreen("tranferMoneyMLoadPhoneEntryScreen")end
 end
 function SMM_OnPhoneNext(e)xipdbg("In Lua: Phone = "..e)xipdbg("In Lua: Phone = "..string.len(e))if(string.find(e,'0')==1 and(string.len(e)==11 or string.len(e)==10))then
 SMM_PHONE=e
-SetConfigValue("PHONE",e)if(SMM_RET==1)then
+SetConfigValue("PHONE",e)if(SMM_RET=="1")then
 DisplayScreenFromRes("MoneyScreen1")SetConfigValue("profType","0")MS_Screen="0"else
 DisplayScreenFromRes("MoneyScreenInputAmount","#AMTT")end
 else
@@ -88,24 +88,27 @@ function MS_OnMoney200KSelect()xipdbg("amount = 200k")MS_OnMoney(200)end
 function MS_OnMoney500KSelect()xipdbg("amount = 500k")MS_OnMoney(500)end
 function MS_OnMoneyANOSelect()xipdbg("amount = ANO")xipdbg("change screen")DisplayScreenFromRes("MoneyScreenInputAmount","#AMT")end
 function MS_OnMoney(e)xipdbg("amount pass"..e)xipdbg("Confirm")SMM_Amount=e
-if(SMM_RET==1)then
+if(SMM_RET=="1")then
 DisplayScreenFromRes("MoneyScreenConfirmMPin","",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_1")else
 DisplayScreenFromRes("MoneyScreenConfirmMPin","",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_2")end
 end
 function MS_OnInputNNext(e)xipdbg("amount = "..e)MS_OnMoney(e)end
 function MS_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
 xal_xms_deInit(SM_xmsConn)end
-if(SMM_RET==1)then
+if(SMM_RET=="1")then
 DisplayScreenFromRes("MoneyScreen1")SetConfigValue("profType","0")MS_Screen="0"else
 SMM_goHome()end
 end
 function MS_OnMPINNext(e)xipdbg("Calling XMS Request For MS, Pin = "..e)if(e~=nil and e:len()==4)then
 MS_MPIN=e
 XmsRequest_SM()else
-if(SMM_RET==1)then
-DisplayScreenFromRes("MoneyScreenConfirmMPin","",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_1")else
-DisplayScreenFromRes("MoneyScreenConfirmMPin","",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_2")end
+if(SMM_RET=="1")then
+DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_1")else
+DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN",SMM_Amount.." Ngan",SMM_PHONE,"#GETPIN_2")end
 end
 end
-function XmsRequest_SM()xipdbg("In Lua: XmsRequest_SM")xipdbg("In Lua: Displaying sendMoneyProgressScreen: amount = "..SMM_Amount.."phone = "..SMM_PHONE)DisplayScreenFromRes("MoneyProgressScreen")cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="SM".."|".."7/f"else txnType="SM".."|"..cntType end
+function XmsRequest_SM()xipdbg("In Lua: XmsRequest_SM")xipdbg("In Lua: Displaying sendMoneyProgressScreen: amount = "..SMM_Amount.."phone = "..SMM_PHONE)if(SMM_RET=="1")then
+DisplayScreenFromRes("MoneyProgressScreen","#SMPROG_1","")else
+DisplayScreenFromRes("MoneyProgressScreen","#SMPROG_2","#SMPROG_3")end
+cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="SM".."|".."7/f"else txnType="SM".."|"..cntType end
 SM_xmsConn=xal_xms_init("NULL",txnType,0,"SM_CB")xid=GetDeviceXID()xal_xms_add_params(SM_xmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(SM_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(SM_xmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(SM_xmsConn,"exid",exid)xipdbg("Adding Param amount = "..SM_Amount)xal_xms_add_params(SM_xmsConn,"amt",SM_Amount)xipdbg("Adding Param merchant number = "..SM_MerNo)xal_xms_add_params(SM_xmsConn,"rms",SM_MerNo)xipdbg("Adding Param Mode of com= ".."2")xal_xms_add_params(SM_xmsConn,"com","2")xal_xms_add_params(SM_xmsConn,"mp",SM_MPIN)ret=xal_xms_request(SM_xmsConn,1)end
