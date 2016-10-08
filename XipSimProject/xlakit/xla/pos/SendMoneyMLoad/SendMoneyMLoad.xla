@@ -1,0 +1,166 @@
+[properties]
+size=583
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="SendMoneyMLoad" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="SMM_OnInstall" onload="SMM_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="xms"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="indicator"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="appconfig"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=1657
+Buff=<strings><language><EN><str PHONE_1="Nhap so dien thoai"/><str PHONE_2="can nap:"/><str TPHONE_2="can chuyen tien:"/><str GETPIN="Xac nhan ma PIN"/><str GETPIN_1="Nhap ma PIN de nap:"/><str GETPIN_2="Nhap ma PIN de chuyen:"/><str SMPROG_1="Dang thuc hien nap tien"/><str SMPROG_2="Dang thuc hien chuyen tien"/><str SMPROG_3="tien"/><str SMSUC="Send money success"/><str SMM="NAP TIEN MLOAD"/><str SMT="CHUYEN TIEN MLOAD"/><str IMPRDATA="Improper data entered"/><str INCRCT="So dien thoai chua dung"/><str K10="10.000 D"/><str K20="20.000 D"/><str K30="30.000 D"/><str K50="50.000 D"/><str K100="100.000 D"/><str K200="200.000 D"/><str K500="500.000 D"/><str SO_KHAC="SO KHAC"/><str TO="Cho"/><str INCRCTPIN="PIN Chua dung"/><str AMT="Nhap so tien muon nap"/><str AMTT="Nhap so tien can chuyen"/><str KETQUA="KET QUA"/></EN>
+<SP><str PHONE_1="Nhap so dien thoai"/><str PHONE_2="can nap:"/><str TPHONE_2="can chuyen tien:"/><str GETPIN="Xac nhan ma PIN"/><str GETPIN_1="Nhap ma PIN de nap:"/><str GETPIN_2="Nhap ma PIN de chuyen:"/><str SMPROG_1="Dang thuc hien nap tien"/><str SMPROG_2="Dang thuc hien chuyen tien"/><str SMPROG_3="tien"/><str SMSUC="Send money success"/><str SMM="NAP TIEN MLOAD"/><str SMT="CHUYEN TIEN MLOAD"/><str IMPRDATA="Improper data entered"/><str INCRCT="So dien thoai chua dung"/><str K10="10.000 D"/><str K20="20.000 D"/><str K30="30.000 D"/><str K50="50.000 D"/><str K100="100.000 D"/><str K200="200.000 D"/><str K500="500.000 D"/><str SO_KHAC="SO KHAC"/><str TO="Cho"/><str INCRCTPIN="PIN Chua dung"/><str AMT="Nhap so tien muon nap"/><str AMTT="Nhap so tien can chuyen"/><str KETQUA="KET QUA"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=6279
+Buff=SMM_RET=nil
+SMM_xmsConn=0
+SMM_MerNo=nil
+SM_MPIN=0
+SM_Amount=nil
+SM_PHONE=nil
+array={}MS_Screen=nil
+function SMM_OnLoad()DispScreen("sendMoneyMLoadPhoneEntryScreen")end
+function SMM_OnPhoneNext(n)xipdbg("In Lua: Phone = "..n)xipdbg("In Lua: Phone = "..string.len(n))if(string.find(n,'0')==1 and(string.len(n)==11 or string.len(n)==10))then
+SM_PHONE=n
+SMM_MerNo=n
+SetConfigValue("PHONE",n)if(SMM_RET=="1")then
+DisplayScreenFromRes("MoneyScreen1")SetConfigValue("profType","0")MS_Screen="0"else
+DisplayScreenFromRes("MoneyScreenInputAmount","#AMTT")end
+else
+xipdbg("phone error")DisplayScreenFromRes("sendMoneyMLoadPhoneEntryScreen","#INCRCT")end
+end
+function SM_OnMPINNext(n)if(n~=nil and n:len()==4)then
+SM_MPIN=n
+XmsRequest_SM()else
+DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCT",GetCurrencySymbol().." "..SM_Amount,SMM_MerNo)end
+end
+function DispScreen(n)xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   "..n)DisplayScreenFromRes(n)end
+function SMM_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
+xal_xms_deInit(SM_xmsConn)end
+SM_goHome()end
+function mysplit(o,e)if e==nil then
+e="%s"end
+local n={};i=1
+xipdbg("LFT: Split: Input String val = "..o)for e in string.gmatch(o,"([^"..e.."]+)")do
+n[i]=e
+xipdbg("LFT: Individual Split String val = "..n[i])i=i+1
+end
+return n
+end
+function GetMultipleLines(n)xipdbg("DisplayMultipleLines:Line Received : "..n)count=1
+result=""for n in n:gmatch("%w+")do
+if(string.len(result)+string.len(n)+1>20)then
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+result=n
+elseif(string.len(result)>0)then
+result=result.." "..n
+else
+result=n
+end
+end
+xipdbg("DisplayMultipleLines:Line chunk : "..result)array[count]=result
+count=count+1
+while(count<=5)do
+array[count]=" "count=count+1
+end
+end
+function MS_OnRight()if(tonumber(MS_Screen)==0)then
+DisplayScreenFromRes("MoneyScreen2")SetConfigValue("profType","1")MS_Screen="1"elseif(tonumber(MS_Screen)==1)then
+DisplayScreenFromRes("MoneyScreen1")SetConfigValue("profType","0")MS_Screen="0"end
+end
+function MS_OnLeft()if(tonumber(MS_Screen)==0)then
+DisplayScreenFromRes("MoneyScreen2")SetConfigValue("profType","1")MS_Screen="1"elseif(tonumber(MS_Screen)==1)then
+DisplayScreenFromRes("MoneyScreen1")SetConfigValue("profType","0")MS_Screen="0"end
+end
+function MS_OnMoney10KSelect()xipdbg("amount = 10k")MS_OnMoney(1e4)end
+function MS_OnMoney20KSelect()xipdbg("amount = 20k")MS_OnMoney(2e4)end
+function MS_OnMoney30KSelect()xipdbg("amount = 30k")MS_OnMoney(3e4)end
+function MS_OnMoney50KSelect()xipdbg("amount = 50k")MS_OnMoney(5e4)end
+function MS_OnMoney100KSelect()xipdbg("amount = 100k")MS_OnMoney(1e5)end
+function MS_OnMoney200KSelect()xipdbg("amount = 200k")MS_OnMoney(2e5)end
+function MS_OnMoney500KSelect()xipdbg("amount = 500k")MS_OnMoney(5e5)end
+function SM_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
+xal_xms_deInit(SM_xmsConn)end
+SM_goHome()end
+function SM_goHome()ChangeXla("HomeScreen")end
+function MS_OnMoneyANOSelect()xipdbg("amount = ANO")xipdbg("change screen")DisplayScreenFromRes("MoneyScreenInputAmount","#AMT")end
+function MS_OnMoney(n)xipdbg("amount pass"..n)xipdbg("Confirm")SM_Amount=n
+DisplayScreenFromRes("MoneyScreenConfirmMPin","","So Tien: "..SM_Amount.."D","SDT: "..SMM_MerNo,"#GETPIN_1")end
+function MS_OnInputNNext(n)xipdbg("amount = "..n)MS_OnMoney(n)end
+function MS_OnCancel()DisplaySetMaxInputDataLen("0")if(SM_xmsConn~=0)then
+xal_xms_deInit(SM_xmsConn)end
+if(SMM_RET=="1")then
+DisplayScreenFromRes("MoneyScreen1")SetConfigValue("profType","0")MS_Screen="0"else
+SM_goHome()end
+end
+function MS_OnMPINNext(n)if(n~=nil and n:len()==6)then
+SM_MPIN=n
+XmsRequest_SM()else
+if(SMM_RET=="1")then
+DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN","So Tien: "..SM_Amount..".D","SDT: "..SMM_MerNo,"#GETPIN_1")else
+DisplayScreenFromRes("MoneyScreenConfirmMPin","#INCRCTPIN","So Tien: "..SM_Amount..".D","SDT: "..SMM_MerNo,"#GETPIN_2")end
+end
+end
+function XmsRequest_SM()xipdbg("In Lua: XmsRequest_SM")if(SMM_RET=="1")then
+DisplayScreenFromRes("MoneyProgressScreen","#SMPROG_1","")else
+DisplayScreenFromRes("MoneyProgressScreen","#SMPROG_2","#SMPROG_3")end
+cntType=xal_xms_getcontentType()if(cntType==-1)then txnType="TEAM_TEST".."|".."7/f"else txnType="TEAM_TEST".."|"..cntType end
+SM_xmsConn=xal_xms_init("NULL",txnType,0,"SM_CB")xid=GetDeviceXID()xal_xms_add_params(SM_xmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(SM_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(SM_xmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(SM_xmsConn,"exid",exid)xipdbg("Adding Param amount = "..SM_Amount)xal_xms_add_params(SM_xmsConn,"amt",SM_Amount)xal_xms_add_params(SM_xmsConn,"rms",SMM_MerNo)xipdbg("Adding Param Mode of com= ".."2")xal_xms_add_params(SM_xmsConn,"com","2")xal_xms_add_params(SM_xmsConn,"mp",SM_MPIN)xal_xms_add_params(SM_xmsConn,"msgType","TOPUP_MSG")xal_xms_add_params(SM_xmsConn,"user","01696945543")xal_xms_add_params(SM_xmsConn,"pass",SM_MPIN)xal_xms_add_params(SM_xmsConn,"partnerId",SM_PHONE)xal_xms_add_params(SM_xmsConn,"originalAmount",SM_Amount)ret=xal_xms_request(SM_xmsConn,1)end
+function SM_CB()XMSSCData=xal_xms_get_params(SM_xmsConn,"sc")xipdbg("In Lua: perso Status"..XMSSCData)SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)phoneSender=xal_xms_get_params(SM_xmsConn,"phoneSender")originalAmount=xal_xms_get_params(SM_xmsConn,"originalAmount")tranId=xal_xms_get_params(SM_xmsConn,"tranId")txnId=xal_xms_get_params(SM_xmsConn,"txnId")xal_xms_deInit(SM_xmsConn)SM_xmsConn=0
+if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
+xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = "..xmsSC.."txnID  "..txnId)DisplayScreenFromRes("sendMoneySuccessScreen",phoneSender,GetCurrencySymbol().." "..SM_Amount,SMM_MerNo,txnId)elseif tonumber(xmsSC)==8888 then
+DisplayScreenFromRes("sendMoneyTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("sendMoneyFailureScreen",xmsSC,SCDetails[2])end
+end
+end
+function comma_value(n)local n,e,o=string.match(n,'^([^%d]*%d)(%d*)(.-)$')return n..(e:reverse():gsub('(%d%d%d)','%1,'):reverse())..o
+end[sendMoneyMLoadPhoneEntryScreen]
+screenType=1
+size=639
+Buff=<screen><screenName name="sendMoneyMLoadPhoneEntryScreen"/><screenType id="1"/><widget name="title" text="SMM"/><string x="10" y="37" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="PHONE_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="PHONE_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="3" maxinputlen="11"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SMM_OnCancel" key_brsk="SMM_OnPhoneNext" key_ok="SMM_OnPhoneNext" key_xip=""/></screen>
+[MoneyScreen1]
+screenType=0
+size=719
+Buff=<screen><screenName name="MoneyScreen1"/><screenType id="0"/><widget name="hometl" imageid="Image:11S.gif" text="K10" textx="20"/><widget name="hometr" imageid="Image:11S.gif" text="K20" textx="95"/><widget name="homebl" imageid="Image:11S.gif" text="K30" textx="20"/><widget name="homebr" imageid="Image:11S.gif" text="K50" textx="95"/><image X1="2" Y1="64" type="3" imageid="img_leftarrow"/><image X1="150" Y1="64" type="3" imageid="img_rightarrow"/><actions key_2="MS_OnRight" key_tlsk="MS_OnMoney10KSelect" key_trsk="MS_OnMoney20KSelect" key_blsk="MS_OnMoney30KSelect" key_brsk="MS_OnMoney50KSelect" key_ok="MS_OnMoney50KSelect" key_left="MS_OnLeft" key_right="MS_OnRight"/><ticker tickerenable="0"/></screen>
+[MoneyScreen2]
+screenType=0
+size=729
+Buff=<screen><screenName name="MoneyScreen2"/><screenType id="0"/><widget name="hometl" imageid="Image:11S.gif" text="K100" textx="20"/><widget name="hometr" imageid="Image:11S.gif" text="K200" textx="95"/><widget name="homebl" imageid="Image:11S.gif" text="K500" textx="20"/><widget name="homebr" imageid="Image:11S.gif" text="SO_KHAC" textx="95"/><image X1="2" Y1="64" type="3" imageid="img_leftarrow"/><image X1="150" Y1="64" type="3" imageid="img_rightarrow"/><actions key_2="MS_OnRight" key_tlsk="MS_OnMoney100KSelect" key_trsk="MS_OnMoney200KSelect" key_blsk="MS_OnMoney500KSelect" key_brsk="MS_OnMoneyANOSelect" key_ok="MS_OnMoneyANOSelect" key_left="MS_OnLeft" key_right="MS_OnRight"/><ticker tickerenable="0"/></screen>
+[MoneyScreenConfirmMPin]
+screenType=1
+size=597
+Buff=<screen><screenName name="MoneyScreenConfirmMPin"/><screenType id="1"/><widget name="title" text="GETPIN"/><string x="15" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="45" text="@2" font="1" fontcolorR="" fontcolorG="" fontcolorB="255"/><string x="8" y="60" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="input" inputtype="0" maxinputlen="6"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="MS_OnCancel" key_brsk="MS_OnMPINNext" key_ok="MS_OnMPINNext"/></screen>
+[sendMoneyMPinEntryScreen]
+screenType=1
+size=899
+Buff=<screen><screenName name="sendMoneyMPinEntryScreen"/><screenType id="1"/><widget name="title" text="GETPIN"/><string x="35" y="34" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="44" text="GETPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="56" text="Global:OF" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="35" y="54" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="68" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="52" y="66" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="input" inputtype="0" maxinputlen="6"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SM_OnCancel" key_brsk="MS_OnMPINNext" key_ok="MS_OnMPINNext"/></screen>
+[MoneyScreenInputAmount]
+screenType=1
+size=334
+Buff=<screen><screenName name="MoneyScreenInputAmount"/><screenType id="1"/><widget name="title" text="@1"/><widget name="input" inputtype="1" maxinputlen="9"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="MS_OnCancel" key_brsk="MS_OnInputNNext" key_ok="MS_OnInputNNext"/></screen>
+[MoneyProgressScreen]
+screenType=0
+size=272
+Buff=<screen><screenName name="MoneyProgressScreen"/><screenType id="0"/><widget name="title" text="@1"/><widget name="title" text="@2"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SMM_OnCancel"/><ticker tickerenable="0"/></screen>
+[MoneyMLoadTranferScreen]
+screenType=1
+size=633
+Buff=<screen><screenName name="MoneyMLoadTranferScreen"/><screenType id="1"/><widget name="title" text="SMT"/><string x="10" y="37" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="PHONE_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="TPHONE_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="1" maxinputlen="11"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="SMM_OnCancel" key_brsk="SMM_OnPhoneNext" key_ok="SMM_OnPhoneNext" key_xip=""/></screen>
+[sendMoneyTimeout]
+screenType=0
+size=310
+Buff=<screen><screenName name="sendMoneyTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
+[sendMoneySuccessScreen]
+screenType=0
+size=673
+Buff=<screen><screenName name="sendMoneySuccessScreen"/><screenType id="0"/><widget name="title" text="SMSUC"/><string x="8" y="48" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="64" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="78" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><string x="8" y="96" text="Global:TID" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="30" y="96" text="@3" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
+[sendMoneyFailureScreen]
+screenType=0
+size=746
+Buff=<screen><screenName name="sendMoneyFailureScreen"/><screenType id="0"/><widget name="title" text="Global:STATUS"/><string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
+[CRC]
+size=10
+Buff=SQ==

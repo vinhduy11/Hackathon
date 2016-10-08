@@ -18,14 +18,7 @@ array = {}
 MS_Screen = nil
 
 function SMM_OnLoad ()
-	
-	SMM_RET = GetConfigValue ("MLTYPE")	
-	if (SMM_RET == "1") then
 	 DispScreen("sendMoneyMLoadPhoneEntryScreen")
-	elseif (SMM_RET == "2") then
-	 DispScreen("tranferMoneyMLoadPhoneEntryScreen")
-  end
- 
 end
 
 function SMM_OnPhoneNext (phone)

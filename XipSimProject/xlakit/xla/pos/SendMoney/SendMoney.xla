@@ -11,7 +11,7 @@ Buff=<strings><language><EN><str AMT="Enter amount to send"/><str MERNO="Enter m
 </language>
 </strings>
 [LUAScript]
-size=3690
+size=3628
 Buff=SM_xmsConn=0
 SM_Amount=nil
 SM_MerNo=nil
@@ -21,7 +21,7 @@ function SM_OnMerNoNext(n)SM_MerNo=n
 if(SM_MerNo==nil)then
 DisplayScreenFromRes("sendMoneyFailureScreen"," "," ","#IMPRDATA")else
 xipdbg("In Lua: mer no = "..SM_MerNo)DisplayScreenFromRes("sendMoneyAmountEntryScreen",SM_MerNo)end
-maxAmt=GetPinlessEndAmount()DisplaySetMaxInputDataLen("99999")end
+end
 function SM_OnAmountNext(n)DisplaySetMaxInputDataLen("0")SM_Amount=n
 if(SM_Amount~=nil and tonumber(SM_Amount)>0)then
 xipdbg("In Lua: Displaying sendMoneyMPinEntryScreen: amount = "..SM_Amount.."mer no = "..SM_MerNo)DisplayScreenFromRes("sendMoneyMPinEntryScreen"," ",GetCurrencySymbol().." "..SM_Amount,SM_MerNo)else
@@ -104,4 +104,4 @@ size=310
 Buff=<screen><screenName name="sendMoneyTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
 [CRC]
 size=10
-Buff=ZA==
+Buff=SQ==

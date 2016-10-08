@@ -7,7 +7,7 @@ function SM_OnMerNoNext(n)SM_MerNo=n
 if(SM_MerNo==nil)then
 DisplayScreenFromRes("sendMoneyFailureScreen"," "," ","#IMPRDATA")else
 xipdbg("In Lua: mer no = "..SM_MerNo)DisplayScreenFromRes("sendMoneyAmountEntryScreen",SM_MerNo)end
-maxAmt=GetPinlessEndAmount()DisplaySetMaxInputDataLen("99999")end
+end
 function SM_OnAmountNext(n)DisplaySetMaxInputDataLen("0")SM_Amount=n
 if(SM_Amount~=nil and tonumber(SM_Amount)>0)then
 xipdbg("In Lua: Displaying sendMoneyMPinEntryScreen: amount = "..SM_Amount.."mer no = "..SM_MerNo)DisplayScreenFromRes("sendMoneyMPinEntryScreen"," ",GetCurrencySymbol().." "..SM_Amount,SM_MerNo)else
