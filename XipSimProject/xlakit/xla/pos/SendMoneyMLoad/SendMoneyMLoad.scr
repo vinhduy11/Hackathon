@@ -20,7 +20,7 @@
   <widget name="hometl" imageid="Image:11S.gif" text="K10" textx="24"/>
   <widget name="hometr" imageid="Image:11S.gif" text="K20" textx="96"/>
   <widget name="homebl" imageid="Image:11S.gif" text="K30" textx="24"/>
-  <widget name="homebr" imageid="Image:11S.gif" text="K50" textx="108"/>
+  <widget name="homebr" imageid="Image:11S.gif" text="K50" textx="96"/>
 
   <image X1="2" Y1="64" type="3" imageid="img_leftarrow" />
   <image X1="150" Y1="64" type="3" imageid="img_rightarrow" />
@@ -50,7 +50,7 @@
 	<widget name="title" text="GETPIN" />
 	
 	<string x="8" y="42" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
-	<string x="8" y="42" text="GETPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="42" text="@4" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
 	<string x="10" y="53" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
 	<string x="8" y="68" text="TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
 	<string x="65" y="65" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
@@ -65,11 +65,57 @@
 <screen>
 	<screenName name="MoneyScreenInputAmount"/>
 	<screenType id="1" />
-	<widget name="title" text="AMT" />
+	<widget name="title" text="@1" />
 
 	<widget name="input" inputtype="1" maxinputlen="9" />
 	
 	<widget name="brsk" text="Global:NXT" />
 	<widget name="blsk" text="Global:CNCL" />
 	<actions  key_blsk="MS_OnCancel" key_brsk="MS_OnInputNNext" key_ok="MS_OnInputNNext"/>
+</screen>
+
+<screen>
+	<screenName name="MoneyProgressScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="SMPROG" />
+	 
+	<widget name="progress" />
+	
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="SMM_OnCancel"/>
+    <ticker tickerenable="0"/>	
+</screen>
+
+
+<screen>
+	<screenName name="tranferMoneyMLoadPhoneEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="SMM" />
+
+	<string x="10" y="37" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="50" text="PHONE_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="60" text="PHONE_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	
+	<widget name="input" inputtype="3" maxinputlen="11" />
+	
+	<widget name="brsk" text="Global:NXT" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="SMM_OnCancel" key_brsk="SMM_OnPhoneNext" key_ok="SMM_OnPhoneNext" key_xip=""/>
+</screen>
+
+
+<screen>
+	<screenName name="MoneyMLoadTranferScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="SMT" />
+
+	<string x="10" y="37" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="50" text="PHONE_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="60" text="TPHONE_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	
+	<widget name="input" inputtype="1" maxinputlen="11" />
+	
+	<widget name="brsk" text="Global:NXT" />
+	<widget name="blsk" text="Global:CNCL" />
+	<actions  key_blsk="SMM_OnCancel" key_brsk="SMM_OnPhoneNext" key_ok="SMM_OnPhoneNext" key_xip=""/>
 </screen>

@@ -4,12 +4,15 @@
 <EN>
 <str PHONE_1="Nhap so dien thoai" />
 <str PHONE_2="can nap:" />
+<str TPHONE_2="can chuyen tien:" />
 <str GETPIN="Xac nhan" />
-<str GETPIN_1="Nhap ma PIN de nap" />
-<str SMPROG="Dang nap" />
+<str GETPIN_1="Nhap ma PIN de nap:" />
+<str GETPIN_2="Nhap ma PIN de chuyen:" />
+<str SMPROG="Dang thuc hien nap tien" />
 <str SMPROG_1="Transferring" />
 <str SMSUC="Send money success" />
 <str SMM="NAP TIEN MLOAD" />
+<str SMT="CHUYEN TIEN MLOAD" />
 <str IMPRDATA="Improper data entered" />
 <str INCRCT="So dien thoai chua dung" />
 
@@ -24,18 +27,22 @@
 <str TO="Cho" />
 <str INCRCTPIN="PIN Chua dung" />
 <str AMT="Nhap so tien muon nap" />
+<str AMTT="Nhap so tien can chuyen" />
 
 
 </EN>
 <SP>
 <str PHONE_1="Nhap so dien thoai" />
 <str PHONE_2="can nap:" />
+<str TPHONE_2="can chuyen tien:" />
 <str GETPIN="Xac nhan" />
-<str GETPIN_1="Nhap ma PIN de nap" />
-<str SMPROG="Dang nap" />
+<str GETPIN_1="Nhap ma PIN de nap:" />
+<str GETPIN_2="Nhap ma PIN de chuyen:" />
+<str SMPROG="Dang thuc hien nap tien" />
 <str SMPROG_1="Transferring" />
 <str SMSUC="Send money success" />
 <str SMM="NAP TIEN MLOAD" />
+<str SMT="CHUYEN TIEN MLOAD" />
 <str IMPRDATA="Improper data entered" />
 <str INCRCT="So dien thoai chua dung" />
 
@@ -50,6 +57,7 @@
 <str TO="Cho" />
 <str INCRCTPIN="PIN Chua dung" />
 <str AMT="Nhap so tien muon nap" />
+<str AMTT="Nhap so tien can chuyen" />
 </SP>
 </language>
 </strings>

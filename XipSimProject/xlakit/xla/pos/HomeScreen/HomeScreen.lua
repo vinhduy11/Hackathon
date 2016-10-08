@@ -60,6 +60,13 @@ end
 
 function HS_OnNAP_TIEN ()
   xipdbg("In On nap tien mload".. HS_Screen )
+  SetSessionValue ("MLTYPE", "1")
+  ChangeXla ("SendMoneyMLoad")
+end
+
+function HS_OnCHUYEN_TIEN ()
+  xipdbg("In HS_OnCHUYEN_TIEN".. HS_Screen )
+  SetSessionValue ("MLTYPE", "2")
   ChangeXla ("SendMoneyMLoad")
 end
 
