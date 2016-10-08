@@ -42,3 +42,15 @@
   <actions key_1="HS_OnRight"  key_2="HS_OnLeft" key_tlsk="HS_OnLFT" key_trsk="HS_OnBal" key_blsk="HS_OnTSOD" key_brsk="HS_ShowMenu" key_ok="HS_ShowMenu" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/>
   <ticker tickerenable="0"/>
 </screen>
+
+<screen>
+  <screenName name="HomeScreen4"/>
+  <screenType id="0" />
+  <widget name="hometl" imageid="Image:11S.gif" text="NAP_TIEN_MLOAD" textx="24"/>
+
+  <image X1="2" Y1="64" type="3" imageid="img_leftarrow" />
+  <image X1="150" Y1="64" type="3" imageid="img_rightarrow" />
+  
+  <actions key_1="HS_OnRight"  key_2="HS_OnLeft" key_tlsk="HS_OnNAP_TIEN" key_trsk="" key_blsk="" key_brsk="" key_ok="" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/>
+  <ticker tickerenable="0"/>
+</screen>

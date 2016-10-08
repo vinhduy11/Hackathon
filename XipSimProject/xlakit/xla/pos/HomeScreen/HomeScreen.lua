@@ -58,6 +58,11 @@ function HS_OnBal ()
 	ChangeXla ("BalanceEnquiry")
 end
 
+function HS_OnNAP_TIEN ()
+  xipdbg("In On nap tien mload".. HS_Screen )
+  ChangeXla ("SendMoneyMLoad")
+end
+
 function HS_OnTSOD ()
 	ChangeXla("SaleSummary")
 end
@@ -73,13 +78,17 @@ function HS_OnRight()
 		HS_Screen = "1"
 	elseif ( tonumber( HS_Screen ) == 1) then
 		DisplayScreenFromRes("HomeScreen3")
-		SetConfigValue("profType", "2" )
-		HS_Screen = "2"
+		SetConfigValue("profType", "3" )
+		HS_Screen = "3"
 	elseif ( tonumber( HS_Screen ) == 2) then
 		curSym = GetSessionValue ("CURR")
 		DisplayScreenFromRes("HomeScreen1", curSym.." 10.00")
 		SetConfigValue("profType", "0" )
 		HS_Screen = "0"
+  elseif ( tonumber( HS_Screen ) == 3) then
+    DisplayScreenFromRes("HomeScreen4")
+    SetConfigValue("profType", "2" )
+    HS_Screen = "2"
 	end
 end
 
@@ -90,13 +99,17 @@ function HS_OnLeft()
 		HS_Screen = "2"
 	elseif ( tonumber( HS_Screen ) == 1) then
 		curSym = GetSessionValue ("CURR")
-		DisplayScreenFromRes("HomeScreen1", curSym.." 10.00")
-		SetConfigValue("profType", "0" )
-		HS_Screen = "0"
+		DisplayScreenFromRes("HomeScreen1")
+		SetConfigValue("profType", "3" )
+		HS_Screen = "3"
 	elseif ( tonumber( HS_Screen ) == 2) then
 		DisplayScreenFromRes("HomeScreen2")
 		SetConfigValue("profType", "1" )
 		HS_Screen = "1"
+  elseif ( tonumber( HS_Screen ) == 3) then
+    DisplayScreenFromRes("HomeScreen4", curSym.." 10.00")
+    SetConfigValue("profType", "0" )
+    HS_Screen = "0"
 	end
 end
 

@@ -11,6 +11,7 @@
 <str SOD=" TSOD" />
 <str CBAL="CUST BAL" />
 <str TOP="TOPUP" />
+<str NAP_TIEN_MLOAD="NAP TIEN MLOAD" />
 </EN>
 <SP>
 <str RCV="RECV ONL" />
@@ -22,6 +23,7 @@
 <str SOD=" TSOD" />
 <str CBAL="CUST BAL" />
 <str TOP="TOPUP" />
+<str NAP_TIEN_MLOAD="NAP TIEN MLOAD" />
 </SP>
 </language>
 </strings>

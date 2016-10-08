@@ -7,11 +7,13 @@
 		<xla package ="XLAKIT"  ver="1.0.0" name="Global" />
 		<xla package ="XLAKIT"  ver="1.0.0" name="Perso" />
 		<xla package ="XLAKIT"  ver="1.0.0" name="RecentTransactions" />
-		<xla package ="XLAKIT"  ver="1.0.0" name="SendMoney" />	
+		<xla package ="XLAKIT"  ver="1.0.0" name="SendMoney" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="SendMoneyMLoad" />	
 		<xla package ="XLAKIT"  ver="1.0.0" name="Image" />
 		<xla package ="XLAKIT"  ver="1.0.0" name="Home" />
 		<xla package ="XLAKIT"  ver="1.0.0" name="SyncSV" />		
-		<xla package ="XLAKIT"  ver="1.0.0" name="HomeScreen" />
+		<xla package ="XLAKIT"  ver="1.0.0" name="HomeScreen" />	
+		<xla package ="XLAKIT"  ver="1.0.0" name="MoneyScreen" />
 		<xla package ="XLAKIT"  ver="1.0.0" name="CommonMenu" />
 		<xla package ="XLAKIT"  ver="1.0.0" name="Wakeup" />
 		<xla package ="XLAKIT"  ver="1.0.0" name="TopUp" />
