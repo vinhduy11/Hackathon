@@ -119,3 +119,14 @@
 	<widget name="blsk" text="Global:CNCL" />
 	<actions  key_blsk="SMM_OnCancel" key_brsk="SMM_OnPhoneNext" key_ok="SMM_OnPhoneNext" key_xip=""/>
 </screen>
+
+<screen>
+	<screenName name="sendMoneyTimeout"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:TXNTO" />	
+	
+	<string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SM_goHome" key_ok="SM_goHome"/>
+</screen>

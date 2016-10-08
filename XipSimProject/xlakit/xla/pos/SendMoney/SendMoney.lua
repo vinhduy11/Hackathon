@@ -53,7 +53,6 @@ end
 
 function XmsRequest_SM ()
 	xipdbg("In Lua: XmsRequest_SM")
-	xipdbg("In Lua: Displaying sendMoneyProgressScreen: amount = " .. SM_Amount .. "mer no = " .. SM_MerNo)
 	DisplayScreenFromRes("sendMoneyProgressScreen", GetCurrencySymbol().." "..SM_Amount, SM_MerNo )
 	cntType = xal_xms_getcontentType()
 	if( cntType == -1 ) then txnType = "SM".."|".. "7/f"

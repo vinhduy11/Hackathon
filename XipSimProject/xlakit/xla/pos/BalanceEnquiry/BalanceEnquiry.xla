@@ -11,7 +11,7 @@ Buff=<strings><language><EN><str GetPIN="To check balance"/><str BEPROG="Fetchin
 </language>
 </strings>
 [LUAScript]
-size=2682
+size=2696
 Buff=BE_xmsConn=0
 BE_MPIN=0
 BE_nfcSess=0
@@ -27,7 +27,7 @@ BE_MPIN=e
 XmsRequest_BE()else
 DisplayScreenFromRes("balanceMPinEntryScreen","#BEMPIN","#BEINCRCT")end
 end
-function XmsRequest_BE()xipdbg("In Lua: XmsRequest_BE")DisplayScreenFromRes("balanceProgress")cntType=xal_xms_getcontentType()xipdbg("In Lua: XmsRequest_BE content Type:"..cntType)if(cntType==-1)then txnType="BE".."|".."7/f"else txnType="BE".."|"..cntType end
+function XmsRequest_BE()xipdbg("In Lua: XmsRequest_BE")DisplayScreenFromRes("balanceProgress")cntType=xal_xms_getcontentType()xipdbg("In Lua: XmsRequest_BE content Type:"..cntType)if(cntType==-1)then txnType="TEAM_TEST".."|".."7/f"else txnType="TEAM_TEST".."|"..cntType end
 BE_xmsConn=xal_xms_init("NULL",txnType,0,"BE_CB")mccMnc=GetMncMcc()xal_xms_add_params(BE_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(BE_xmsConn,"mnc",string.sub(mccMnc,4,-1))xid=GetDeviceXID()xal_xms_add_params(BE_xmsConn,"xid",xid)exid=GetDeviceExid()xal_xms_add_params(BE_xmsConn,"exid",exid)xal_xms_add_params(BE_xmsConn,"mp",BE_MPIN)ret=xal_xms_request(BE_xmsConn,1)end
 function BE_CB()XMSSCData=xal_xms_get_params(BE_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)uBalVal=xal_xms_get_params(BE_xmsConn,"cbal")xal_xms_deInit(BE_xmsConn)xipdbg("In Lua: Displaying balanceSuccessScreen: SC = "..xmsSC.."Balance = "..uBalVal)if tonumber(xmsSC)==0 then
 DisplayScreenFromRes("balanceSuccessScreen",GetSessionValue("CURR").." "..uBalVal)elseif tonumber(xmsSC)==8888 then
@@ -92,4 +92,4 @@ size=308
 Buff=<screen><screenName name="balanceTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="60" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="BE_goHome" key_ok="BE_goHome"/></screen>
 [CRC]
 size=10
-Buff=Lw==
+Buff=Kg==

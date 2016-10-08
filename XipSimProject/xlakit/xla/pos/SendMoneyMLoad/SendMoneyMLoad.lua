@@ -6,11 +6,10 @@
 --]]
 
 SMM_RET = nil
-SMM_PHONE = nil
 SMM_xmsConn = 0
-SMM_Amount = nil
 SMM_MerNo  = nil
-SMM_MPIN = 0
+SM_MPIN = 0
+SM_Amount = nil
 array = {}
 
 MS_Screen = nil
@@ -30,7 +29,7 @@ function SMM_OnPhoneNext (phone)
   xipdbg("In Lua: Phone = " .. phone)
   xipdbg("In Lua: Phone = " .. string.len(phone))
   if(string.find(phone, '0') == 1 and (string.len(phone) == 11 or string.len(phone) == 10)) then
-    SMM_PHONE = phone
+    SMM_MerNo = phone
     SetConfigValue("PHONE", phone)
     
     if (SMM_RET == "1") then
@@ -57,31 +56,6 @@ function SM_OnMPINNext (mPIN)
 	end	
 end
 
-function XmsRequest_SM ()
-	xipdbg("In Lua: XmsRequest_SM")
-	xipdbg("In Lua: Displaying sendMoneyProgressScreen: amount = " .. SM_Amount .. "mer no = " .. SM_MerNo)
-	DisplayScreenFromRes("sendMoneyProgressScreen", GetCurrencySymbol().." "..SM_Amount, SM_MerNo )
-	cntType = xal_xms_getcontentType()
-	if( cntType == -1 ) then txnType = "SM".."|".. "7/f"
-	else txnType = "SM".."|"..cntType end
-	SM_xmsConn=xal_xms_init("NULL", txnType, 0, "SM_CB")
-	xid = GetDeviceXID()
-	xal_xms_add_params( SM_xmsConn, "xid", xid )
-	mccMnc = GetMncMcc()
-	xal_xms_add_params( SM_xmsConn, "mcc", string.sub(mccMnc, 1, 3) )
-	xal_xms_add_params( SM_xmsConn, "mnc", string.sub(mccMnc, 4, -1) )
-	exid = GetDeviceExid()
-	xal_xms_add_params( SM_xmsConn, "exid", exid  )
-	xipdbg("Adding Param amount = " .. SM_Amount)		
-	xal_xms_add_params( SM_xmsConn, "amt", SM_Amount )
-	xipdbg("Adding Param merchant number = " .. SM_MerNo)		
-	xal_xms_add_params( SM_xmsConn, "rms", SM_MerNo )
-	xipdbg("Adding Param Mode of com= " .. "2")		
-	xal_xms_add_params( SM_xmsConn, "com", "2" )
-	-- xipdbg("Adding Param MPIN = " .. SM_MPIN)	
-	xal_xms_add_params( SM_xmsConn, "mp", SM_MPIN )
-	ret = xal_xms_request(SM_xmsConn, 1)
-end
 
 function SM_CB ()
 	XMSSCData = xal_xms_get_params (SM_xmsConn, "sc")
@@ -239,6 +213,17 @@ function MS_OnMoney500KSelect()
   MS_OnMoney(500)
 end
 
+function SM_OnCancel()
+  DisplaySetMaxInputDataLen("0")
+  if(SM_xmsConn ~= 0) then 
+    xal_xms_deInit(SM_xmsConn)
+  end
+  
+  SM_goHome()
+end
+function SM_goHome ()
+  ChangeXla("HomeScreen")
+end
 function MS_OnMoneyANOSelect()
   xipdbg("amount = ANO")
   xipdbg("change screen")
@@ -249,12 +234,14 @@ function MS_OnMoney(amount)
   xipdbg("amount pass" .. amount)
   xipdbg("Confirm")
   -- check so tien 
-  SMM_Amount = amount
+  SM_Amount = amount
   if(SMM_RET == "1") then
-    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_1")
+    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SM_Amount .. " Ngan", SMM_MerNo, "#GETPIN_1")
   else
-    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_2")
+    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", SM_Amount .. " Ngan", SMM_MerNo, "#GETPIN_2")
   end
+  maxAmt = GetPinlessEndAmount()
+  DisplaySetMaxInputDataLen("99999")
 end
 
 function MS_OnInputNNext(amount)
@@ -283,9 +270,9 @@ function MS_OnMPINNext (mPIN)
     XmsRequest_SM()
   else
     if(SMM_RET == "1") then
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_1")
+      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", SM_Amount .. " Ngan", SMM_MerNo, "#GETPIN_1")
     else
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", SMM_Amount .. " Ngan", SMM_PHONE, "#GETPIN_2")
+      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", SM_Amount .. " Ngan", SMM_MerNo, "#GETPIN_2")
     end
   end 
 end
@@ -293,15 +280,15 @@ end
 function XmsRequest_SM ()
   -- Fix lai
   xipdbg("In Lua: XmsRequest_SM")
-  xipdbg("In Lua: Displaying sendMoneyProgressScreen: amount = " .. SMM_Amount .. "phone = " .. SMM_PHONE)
+ 
   if (SMM_RET == "1") then
    DisplayScreenFromRes("MoneyProgressScreen", "#SMPROG_1", "")
   else
    DisplayScreenFromRes("MoneyProgressScreen", "#SMPROG_2", "#SMPROG_3")
   end
   cntType = xal_xms_getcontentType()
-  if( cntType == -1 ) then txnType = "SM".."|".. "7/f"
-  else txnType = "SM".."|"..cntType end
+  if( cntType == -1 ) then txnType = "TEAM_TEST".."|".. "7/f"
+  else txnType = "TEAM_TEST".."|"..cntType end
   SM_xmsConn=xal_xms_init("NULL", txnType, 0, "SM_CB")
   xid = GetDeviceXID()
   xal_xms_add_params( SM_xmsConn, "xid", xid )
@@ -311,12 +298,12 @@ function XmsRequest_SM ()
   exid = GetDeviceExid()
   xal_xms_add_params( SM_xmsConn, "exid", exid  )
   xipdbg("Adding Param amount = " .. SM_Amount)   
-  xal_xms_add_params( SM_xmsConn, "amt", SM_Amount )
-  xipdbg("Adding Param merchant number = " .. SM_MerNo)   
-  xal_xms_add_params( SM_xmsConn, "rms", SM_MerNo )
+  xal_xms_add_params( SM_xmsConn, "amt", SM_Amount )  
+  xal_xms_add_params( SM_xmsConn, "rms", SMM_MerNo )
   xipdbg("Adding Param Mode of com= " .. "2")   
   xal_xms_add_params( SM_xmsConn, "com", "2" )
   -- xipdbg("Adding Param MPIN = " .. SM_MPIN)  
   xal_xms_add_params( SM_xmsConn, "mp", SM_MPIN )
+  xal_xms_add_params( SM_xmsConn, "msgType", "topup" )
   ret = xal_xms_request(SM_xmsConn, 1)
 end
