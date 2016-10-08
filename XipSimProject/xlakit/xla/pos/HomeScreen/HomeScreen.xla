@@ -5,13 +5,13 @@ Buff=<properties><XLAmeta><package name="XLAKIT" XLA="HomeScreen" ver="1.0.0" de
 <params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
 </properties>
 [strings]
-size=507
-Buff=<strings><language><EN><str RCV="RECV ONL"/><str RCVOFF="RECV OFFL"/><str PERSO="REGISTER"/><str BAL="BALANCE"/><str MENU="MENU"/><str LFT=" LFT"/><str SOD=" TSOD"/><str CBAL="CUST BAL"/><str TOP="TOPUP"/><str NAP_TIEN_MLOAD="NAP TIEN MLOAD"/></EN>
-<SP><str RCV="RECV ONL"/><str RCVOFF="RECV OFFL"/><str PERSO="REGISTER"/><str BAL="BALANCE"/><str MENU="MENU"/><str LFT=" LFT"/><str SOD=" TSOD"/><str CBAL="CUST BAL"/><str TOP="TOPUP"/><str NAP_TIEN_MLOAD="NAP TIEN MLOAD"/></SP>
+size=595
+Buff=<strings><language><EN><str RCV="RECV ONL"/><str RCVOFF="RECV OFFL"/><str PERSO="REGISTER"/><str BAL="BALANCE"/><str MENU="MENU"/><str LFT=" LFT"/><str SOD=" TSOD"/><str CBAL="CUST BAL"/><str TOP="TOPUP"/><str NAP_TIEN_MLOAD="NAP TIEN MLOAD"/><str CHUYEN_TIEN_MLOAD="CHUYEN_TIEN_MLOAD"/></EN>
+<SP><str RCV="RECV ONL"/><str RCVOFF="RECV OFFL"/><str PERSO="REGISTER"/><str BAL="BALANCE"/><str MENU="MENU"/><str LFT=" LFT"/><str SOD=" TSOD"/><str CBAL="CUST BAL"/><str TOP="TOPUP"/><str NAP_TIEN_MLOAD="NAP TIEN MLOAD"/><str CHUYEN_TIEN_MLOAD="CHUYEN_TIEN_MLOAD"/></SP>
 </language>
 </strings>
 [LUAScript]
-size=2158
+size=2314
 Buff=HS_Screen=nil
 function HS_OnLoad()HS_Screen=GetConfigValue("profType")xipdbg("In Lua: profile Type"..HS_Screen)if(HS_Screen==-1)then HS_Screen="0"end
 if(tonumber(HS_Screen)==0)then
@@ -27,7 +27,8 @@ function HS_OnPerso()ChangeXla("Perso")end
 function HS_OnCBAL()ChangeXla("CustBalance")end
 function HS_OnLFT()SetSessionValue("RTType","1")ChangeXla("RecentTransactions")end
 function HS_OnBal()ChangeXla("BalanceEnquiry")end
-function HS_OnNAP_TIEN()xipdbg("In On nap tien mload"..HS_Screen)ChangeXla("SendMoneyMLoad")end
+function HS_OnNAP_TIEN()xipdbg("In On nap tien mload"..HS_Screen)SetSessionValue("MLTYPE","1")ChangeXla("SendMoneyMLoad")end
+function HS_OnCHUYEN_TIEN()xipdbg("In HS_OnCHUYEN_TIEN"..HS_Screen)SetSessionValue("MLTYPE","2")ChangeXla("SendMoneyMLoad")end
 function HS_OnTSOD()ChangeXla("SaleSummary")end
 function HS_ShowMenu()ChangeXla("CommonMenu")end
 function HS_OnRight()if(tonumber(HS_Screen)==0)then
@@ -55,8 +56,12 @@ size=724
 Buff=<screen><screenName name="HomeScreen3"/><screenType id="0"/><widget name="hometl" imageid="Image:11S.gif" text="LFT" textx="24"/><widget name="hometr" imageid="Image:handcoin.gif" text="BAL" textx="83"/><widget name="homebl" imageid="Image:handcoin.gif" text="SOD" textx="24"/><widget name="homebr" imageid="Image:3bar_ico.gif" text="MENU" textx="108"/><image X1="2" Y1="64" type="3" imageid="img_leftarrow"/><image X1="150" Y1="64" type="3" imageid="img_rightarrow"/><actions key_1="HS_OnRight" key_2="HS_OnLeft" key_tlsk="HS_OnLFT" key_trsk="HS_OnBal" key_blsk="HS_OnTSOD" key_brsk="HS_ShowMenu" key_ok="HS_ShowMenu" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/><ticker tickerenable="0"/></screen>
 [HomeScreen4]
 screenType=0
-size=477
-Buff=<screen><screenName name="HomeScreen4"/><screenType id="0"/><widget name="hometl" imageid="Image:11S.gif" text="NAP_TIEN_MLOAD" textx="24"/><image X1="2" Y1="64" type="3" imageid="img_leftarrow"/><image X1="150" Y1="64" type="3" imageid="img_rightarrow"/><actions key_1="HS_OnRight" key_2="HS_OnLeft" key_tlsk="HS_OnNAP_TIEN" key_trsk="" key_blsk="" key_brsk="" key_ok="" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/><ticker tickerenable="0"/></screen>
+size=576
+Buff=<screen><screenName name="HomeScreen4"/><screenType id="0"/><widget name="hometl" imageid="Image:11S.gif" text="NAP_TIEN_MLOAD" textx="24"/><widget name="hometr" imageid="Image:11S.gif" text="CHUYEN_TIEN_MLOAD" textx="83"/><image X1="2" Y1="64" type="3" imageid="img_leftarrow"/><image X1="150" Y1="64" type="3" imageid="img_rightarrow"/><actions key_1="HS_OnRight" key_2="HS_OnLeft" key_tlsk="HS_OnNAP_TIEN" key_trsk="HS_OnCHUYEN_TIEN" key_blsk="" key_brsk="" key_ok="" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/><ticker tickerenable="0"/></screen>
+[HomeScreen5]
+screenType=0
+size=397
+Buff=<screen><screenName name="HomeScreen5"/><screenType id="0"/><image X1="2" Y1="64" type="3" imageid="img_leftarrow"/><image X1="150" Y1="64" type="3" imageid="img_rightarrow"/><actions key_1="HS_OnRight" key_2="HS_OnLeft" key_tlsk="HS_OnNAP_TIEN" key_trsk="" key_blsk="" key_brsk="" key_ok="" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip="HS_OnRcv"/><ticker tickerenable="0"/></screen>
 [CRC]
 size=10
-Buff=BA==
+Buff=Pg==
