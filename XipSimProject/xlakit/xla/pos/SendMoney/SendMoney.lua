@@ -25,8 +25,8 @@ function SM_OnMerNoNext (merNo)
 		DisplayScreenFromRes("sendMoneyAmountEntryScreen", SM_MerNo )
 	end 
 	
-	maxAmt = GetPinlessEndAmount()
-	DisplaySetMaxInputDataLen("99999")
+	--maxAmt = GetPinlessEndAmount()
+	--DisplaySetMaxInputDataLen("99999")
 end
 
 function SM_OnAmountNext (amount)

@@ -4,8 +4,7 @@
 	<widget name="title" text="AMT" />
 
 	<string x="10" y="37" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
-	<string x="8" y="50" text="PHONE_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
-	<string x="8" y="60" text="PHONE_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="50" text="PHONE" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
 
 	<widget name="input" inputtype="3" maxinputlen="11" />
 	
@@ -19,6 +18,7 @@
 	<screenType id="1" />
 	<widget name="title" text="AMT_2" />
 
+	<string x="15" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
 	<widget name="input" inputtype="3" maxinputlen="9" />
 	
 	<widget name="brsk" text="NXT" />
@@ -27,54 +27,39 @@
 </screen>
 
 <screen>
-	<screenName name="sendMoneyMsisdnNumberEntryScreen"/>
-	<screenType id="1" />
-	<widget name="title" text="MERNO" />
-	
-	<widget name="alphainput" inputtype="3" maxinputlen="10" alphatype="0"/>
-	
-	<widget name="brsk" text="Global:NXT" />
-	<widget name="blsk" text="Global:CNCL" />
-	<actions  key_blsk="SM_OnCancel" key_brsk="SM_OnMerNoNext" key_ok="SM_OnMerNoNext"/>
-</screen>
-
-<screen>
-	<screenName name="sendMoneyMPinEntryScreen"/>
+	<screenName name="MoneyMPinEntryScreen"/>
 	<screenType id="1" />
 	<widget name="title" text="GETPIN" />
 	
-	<string x="35" y="34" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
-	<string x="8" y="44" text="GETPIN_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
-	<string x="8" y="56" text="Global:OF" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
-	<string x="35" y="54" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
-	<string x="8" y="68" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
-	<string x="52" y="66" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="15" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="45" text="@2" font="1" fontcolorR="" fontcolorG="" fontcolorB="255"/>
+	<string x="8" y="60" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
 
-	<widget name="input" inputtype="0" maxinputlen="4" />
+	<widget name="input" inputtype="0" maxinputlen="6" />
 	
-	<widget name="brsk" text="Global:NXT" />
-	<widget name="blsk" text="Global:CNCL" />
+	<widget name="brsk" text="NXT" />
+	<widget name="blsk" text="CNCL" />
 	<actions  key_blsk="SM_OnCancel" key_brsk="SM_OnMPINNext" key_ok="SM_OnMPINNext"/>	
 </screen>
 
 <screen>
-	<screenName name="sendMoneyProgressScreen"/>
+	<screenName name="MoneyProgressScreen"/>
 	<screenType id="0" />
 	<widget name="title" text="SMPROG" />
 	
 	<string x="8" y="40" text="SMPROG_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/> 
-	<string x="85" y="38" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/> 
-	<string x="8" y="50" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/> 
-	<string x="55" y="50" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/> 
+	<string x="60" y="38" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/> 
+	<string x="8" y="55" text="TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/> 
+	<string x="60" y="55" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/> 
 	<widget name="progress" />
 	
-	<widget name="blsk" text="Global:CNCL" />
+	<widget name="blsk" text="CNCL" />
 	<actions  key_blsk="SM_OnCancel"/>
     <ticker tickerenable="0"/>	
 </screen>
 
 <screen>
-	<screenName name="sendMoneySuccessScreen"/>
+	<screenName name="MoneySuccessScreen"/>
 	<screenType id="0" />
 	<widget name="title" text="SMSUC" />
 
@@ -90,7 +75,7 @@
 </screen>
 
 <screen>
-	<screenName name="sendMoneyFailureScreen"/>
+	<screenName name="MoneyFailureScreen"/>
 	<screenType id="0" />
 	<widget name="title" text="Global:STATUS" />
 	<string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
@@ -106,7 +91,7 @@
 </screen>
 
 <screen>
-	<screenName name="sendMoneyTimeout"/>
+	<screenName name="MoneyTimeout"/>
 	<screenType id="0" />
 	<widget name="title" text="Global:TXNTO" />	
 	

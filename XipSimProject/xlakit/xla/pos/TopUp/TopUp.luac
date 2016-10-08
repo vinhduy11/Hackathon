@@ -30,11 +30,11 @@ else
 DisplayScreenFromRes("topupInputEntryScreen","#CMPIN","#INCRCT","#CMPIN_1",GetCurrencySymbol()..TU_Amount,"0","4","TU_OnMPINOk","TU_OnMPINOk")end
 end
 function Topup_OnNFCReadDetectData(n,e,t)TU_Xid=e
-if(n=="true")then
-TU_epid=GetEpurseID()sysnfc_svEpurseSetId(TU_nfcSess,TU_epid)sysnfc_svEpurseReadAmount(TU_nfcSess,"Topup_OnNFCReadAmountCB")else
+xipdbg("Topup_OnNFCReadDetectData: TU_Xid "..TU_Xid.." status "..n.." tagdata "..e.."tagdatalen"..t)if(n=="true")then
+TU_epid=GetEpurse/ID()sysnfc_svEpurseSetId(TU_nfcSess,TU_epid)sysnfc_svEpurseReadAmount(TU_nfcSess,"Topup_OnNFCReadAmountCB")else
 DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," "," ","#TAPTO"," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")end
 end
-function Topup_OnNFCReadAmountCB(e,t,n,o,o)TU_CBal=sysnfc_svEpurseConvAmtInt2Dec(t)if(e=="1")then
+function Topup_OnNFCReadAmountCB(e,t,n,o,o)xipdbg("In Lua: Topup_OnNFCReadAmountCB amount:"..t)xipdbg("In Lua: Topup_OnNFCReadAmountCB status:"..e)xipdbg("expiry "..n)TU_CBal=sysnfc_svEpurseConvAmtInt2Dec(t)xipdbg("In Lua: To/pup_OnNFCReadAmountCB Card Bal "..TU_CBal)if(e=="1")then
 DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," ","#URCRD","#TRYAGAIN"," "," ","#Global:CNCL","#Global:RETRY","TU_OnCancel","TU_retry","TU_retry")elseif(e=="7")then
 DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," ","#INVALID1","#INVALID2"," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")else
 TU_TxnId=generateUUID()TU_TAGepoch=n
@@ -44,7 +44,7 @@ function TU_retry()TU_deInit()DisplayScreenFromRes("NFCProgress","#NFCPRGS",GetC
 DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," ","#NFCFAIL","#TRYAGAIN"," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")end
 end
 function XmsRequest_TopUp()cntType=xal_xms_getcontentType()if(TU_TopUpErr==0)then
-DisplayScreenFromRes("topupProgressScreen","#TUPRGS","#TU",GetCurrencySymbol().." "..TU_Amount,"#Global:TO",TU_Xid,"#Global:CNCL","TopUpCancel")if(cntType==-1)then txnType="TOPUP".."|".."7/f"else txnType="TOPUP".."|"..cntType end
+DisplayScreenFromRes("topupProgressScreen","#TUPRGS","#TU",GetCurrencySymbol().." "..TU_Amount,"#Global:TO",TU_Xid,"#Global:CNCL","TopUpCancel")if(cntType==-1)then txnType="TEAM_TEST".."|".."7/f"else txnType="TEAM_TEST".."|"..cntType end
 TU_XmsConn=xal_xms_init("NULL",txnType,0,"TU_CB")else
 DisplayScreenFromRes("topupProgressScreen","#CLPRGS"," "," "," "," "," "," ")if(cntType==-1)then txnType="TOPERR".."|".."7/f"else txnType="TOPERR".."|"..cntType end
 TU_XmsConn=xal_xms_init("NULL",txnType,0,"TU_CB")end

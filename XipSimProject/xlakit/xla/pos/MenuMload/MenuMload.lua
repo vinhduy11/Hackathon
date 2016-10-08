@@ -14,13 +14,10 @@ function OnGenericMenu()
 	MenuText,MenuKeyIndex = GetMenuKeyIndex()
 	xipdbg("MenuKeyIndex".. MenuKeyIndex )
 	if (MenuKeyIndex == 1001 ) then
-    xipdbg("MLTYPE ".. '1' )
-    SetConfigValue ("MLTYPE", "1")
+    ChangeXla ("SendMoneyMLoad")
 	elseif (MenuKeyIndex == 1002 ) then
-	  SetConfigValue ("MLTYPE", "2")
-	  xipdbg("MLTYPE ".. '2' )
+    ChangeXla ("TransferMoneyMLoad")
 	end
-	ChangeXla ("SendMoneyMLoad")
 end
 
 function MM_goHome()

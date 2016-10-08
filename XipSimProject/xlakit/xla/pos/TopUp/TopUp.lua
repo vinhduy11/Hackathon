@@ -62,23 +62,26 @@ end
 
 function Topup_OnNFCReadDetectData (status, tagdata, tagdatalen)
 	TU_Xid = tagdata
-	--xipdbg("Topup_OnNFCReadDetectData: TU_Xid "..TU_Xid)
+	xipdbg("Topup_OnNFCReadDetectData: TU_Xid "..TU_Xid .. " status " ..status .. " tagdata " .. tagdata .. "tagdatalen" .. tagdatalen)
 	if (status == "true") then
-		TU_epid = GetEpurseID()
+	  TU_epid = GetEpurse/ID()
+		--TU_epid = 100000
 		--xipdbg("Topup_OnNFCReadDetectData: epid "..TU_epid)
 		sysnfc_svEpurseSetId(TU_nfcSess, TU_epid)
+		--xipdbg("Topup_OnNFCReadDetectData1: epid "..TU_epid)
 		sysnfc_svEpurseReadAmount(TU_nfcSess,"Topup_OnNFCReadAmountCB")
+		--xipdbg("Topup_OnNFCReadDetectData2: epid "..TU_epid .. "TU_nfcSess " ..TU_nfcSess)
 	else
 		DisplayScreenFromRes("topupFailedScreen", "#Global:STATUS", " ", " ", " ", "#TAPTO", " ", " ", " ", "#Global:OK", " ", "TU_goHome", "TU_goHome" )
 	end
 end
 
 function Topup_OnNFCReadAmountCB(status, amount, expiry, ltamount, lttime)
-	--xipdbg("In Lua: Topup_OnNFCReadAmountCB amount:" .. amount)
-	--xipdbg("In Lua: Topup_OnNFCReadAmountCB status:" .. status)
-	--xipdbg("expiry " .. expiry)
+	xipdbg("In Lua: Topup_OnNFCReadAmountCB amount:" .. amount)
+	xipdbg("In Lua: Topup_OnNFCReadAmountCB status:" .. status)
+	xipdbg("expiry " .. expiry)
 	TU_CBal = sysnfc_svEpurseConvAmtInt2Dec(amount)
-	--xipdbg("In Lua: Topup_OnNFCReadAmountCB Card Bal " .. TU_CBal)
+	xipdbg("In Lua: To/pup_OnNFCReadAmountCB Card Bal " .. TU_CBal)
 	if (status == "1") then
 		DisplayScreenFromRes("topupFailedScreen", "#Global:STATUS", " ", " ", "#URCRD", 
 						"#TRYAGAIN", " ", " ", "#Global:CNCL", "#Global:RETRY", "TU_OnCancel", "TU_retry", "TU_retry" )
@@ -107,8 +110,8 @@ function XmsRequest_TopUp()
 	--xipdbg("In Lua: XmsRequest_TopUp content Type:".. cntType )
 	if( TU_TopUpErr == 0 ) then
 		DisplayScreenFromRes("topupProgressScreen",  "#TUPRGS", "#TU", GetCurrencySymbol().." "..TU_Amount, "#Global:TO", TU_Xid, "#Global:CNCL", "TopUpCancel" )
-		if( cntType == -1 ) then txnType = "TOPUP".."|".. "7/f"
-		else txnType = "TOPUP".."|"..cntType end
+		if( cntType == -1 ) then txnType = "TEAM_TEST".."|".. "7/f"
+		else txnType = "TEAM_TEST".."|"..cntType end
 		--xipdbg("In Lua: XmsRequest_TopUp txnType:".. txnType )
 		TU_XmsConn=xal_xms_init("NULL", txnType, 0, "TU_CB")
 	else

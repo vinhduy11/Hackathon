@@ -10,14 +10,17 @@ SMM_xmsConn = 0
 SMM_MerNo  = nil
 SM_MPIN = 0
 SM_Amount = nil
+
+SM_PHONE = nil
 array = {}
 
+
 MS_Screen = nil
-MS_MPIN = 0
 
 function SMM_OnLoad ()
 	xipdbg("Calling DisplayScreenFromRes")
 	SMM_RET = GetConfigValue ("MLTYPE")	
+	
 	if (SMM_RET == "1") then
 	 DispScreen("sendMoneyMLoadPhoneEntryScreen")
 	elseif (SMM_RET == "2") then
@@ -29,6 +32,7 @@ function SMM_OnPhoneNext (phone)
   xipdbg("In Lua: Phone = " .. phone)
   xipdbg("In Lua: Phone = " .. string.len(phone))
   if(string.find(phone, '0') == 1 and (string.len(phone) == 11 or string.len(phone) == 10)) then
+    SM_PHONE = phone
     SMM_MerNo = phone
     SetConfigValue("PHONE", phone)
     
@@ -52,13 +56,14 @@ function SM_OnMPINNext (mPIN)
 		SM_MPIN=mPIN
 		XmsRequest_SM()
 	else
-		DisplayScreenFromRes("sendMoneyMPinEntryScreen", "#INCRCT", GetCurrencySymbol().." "..SM_Amount, SMM_MerNo )
+		DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCT", GetCurrencySymbol().." "..SM_Amount, SMM_MerNo )
 	end	
 end
 
 
 function SM_CB ()
 	XMSSCData = xal_xms_get_params (SM_xmsConn, "sc")
+	xipdbg("In Lua: perso Status" .. XMSSCData)
 	SCDetails = mysplit (XMSSCData,"|")
 	xmsSC = SCDetails[1]
 	xipdbg("In Lua: perso Status" .. xmsSC)
@@ -81,10 +86,6 @@ function SM_CB ()
 	end
 end
 
-function SMM_goHome ()
-	ChangeXla("HomeScreen")
-end
-
 function DispScreen (scrName)
 	xipdbg("DispScreen: Calling DisplayScreenFromRes for screen   " .. scrName )
 	DisplayScreenFromRes(scrName)
@@ -96,7 +97,7 @@ function SMM_OnCancel()
 		xal_xms_deInit(SM_xmsConn)
 	end
 	
-	SMM_goHome()
+	SM_goHome()
 end
 
 function mysplit(inputstr, sep)
@@ -139,21 +140,6 @@ function GetMultipleLines (buf)
 	end
 end
 
-
---###################################
-function MS_OnLoad ()
-  MS_Screen = GetConfigValue("profType")
-  --MS_PHONE = GetConfigValue("PHONE")
-  xipdbg("In Lua: profile Type".. MS_Screen )
-  if(MS_Screen == -1) then MS_Screen = "0" end 
-  
-  if (tonumber(MS_Screen) == 0) then
-    DisplayScreenFromRes("MoneyScreen1")
-  elseif (tonumber(MS_Screen ) == 1) then
-    DisplayScreenFromRes("MoneyScreen2")
-  end
-end
-
 function MS_OnRight()
   if (tonumber(MS_Screen) == 0) then
     DisplayScreenFromRes("MoneyScreen2")
@@ -180,37 +166,37 @@ end
 
 function MS_OnMoney10KSelect()
   xipdbg("amount = 10k")
-  MS_OnMoney(10)
+  MS_OnMoney(10000)
 end
 
 function MS_OnMoney20KSelect()
   xipdbg("amount = 20k")
-  MS_OnMoney(20)
+  MS_OnMoney(20000)
 end
 
 function MS_OnMoney30KSelect()
   xipdbg("amount = 30k")
-  MS_OnMoney(30)
+  MS_OnMoney(30000)
 end
 
 function MS_OnMoney50KSelect()
   xipdbg("amount = 50k")
-  MS_OnMoney(50)
+  MS_OnMoney(50000)
 end
 
 function MS_OnMoney100KSelect()
   xipdbg("amount = 100k")
-  MS_OnMoney(100)
+  MS_OnMoney(100000)
 end
 
 function MS_OnMoney200KSelect()
   xipdbg("amount = 200k")
-  MS_OnMoney(200)
+  MS_OnMoney(200000)
 end
 
 function MS_OnMoney500KSelect()
   xipdbg("amount = 500k")
-  MS_OnMoney(500)
+  MS_OnMoney(500000)
 end
 
 function SM_OnCancel()
@@ -235,13 +221,9 @@ function MS_OnMoney(amount)
   xipdbg("Confirm")
   -- check so tien 
   SM_Amount = amount
-  if(SMM_RET == "1") then
-    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_1")
-  else
-    DisplayScreenFromRes("MoneyScreenConfirmMPin", "", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_2")
-  end
-  maxAmt = GetPinlessEndAmount()
-  DisplaySetMaxInputDataLen("99999")
+   DisplayScreenFromRes("MoneyScreenConfirmMPin", "", "So Tien: ".. SM_Amount .. "D", "SDT: " .. SMM_MerNo, "#GETPIN_1")
+  --maxAmt = GetPinlessEndAmount()
+  --DisplaySetMaxInputDataLen("99999")
 end
 
 function MS_OnInputNNext(amount)
@@ -258,24 +240,24 @@ function MS_OnCancel()
     SetConfigValue("profType", "0" )
     MS_Screen = "0"
   else
-    SMM_goHome()
+    SM_goHome()
   end
 end
 
 
 function MS_OnMPINNext (mPIN)
-  xipdbg("Calling XMS Request For MS, Pin = " .. mPIN )
-  if( mPIN ~= nil and mPIN:len() == 4 )then
-    MS_MPIN=mPIN
+  if( mPIN ~= nil and mPIN:len() == 6 )then
+    SM_MPIN=mPIN
     XmsRequest_SM()
   else
     if(SMM_RET == "1") then
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_1")
+      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "So Tien: ".. SM_Amount .. ".D", "SDT: " .. SMM_MerNo, "#GETPIN_1")
     else
-      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "ST: ".. SM_Amount .. ".000D", "SDT: " .. SMM_MerNo, "#GETPIN_2")
+      DisplayScreenFromRes("MoneyScreenConfirmMPin", "#INCRCTPIN", "So Tien: ".. SM_Amount .. ".D", "SDT: " .. SMM_MerNo, "#GETPIN_2")
     end
   end 
 end
+
 
 function XmsRequest_SM ()
   -- Fix lai
@@ -304,6 +286,19 @@ function XmsRequest_SM ()
   xal_xms_add_params( SM_xmsConn, "com", "2" )
   -- xipdbg("Adding Param MPIN = " .. SM_MPIN)  
   xal_xms_add_params( SM_xmsConn, "mp", SM_MPIN )
-  xal_xms_add_params( SM_xmsConn, "msgType", "topup" )
+  xal_xms_add_params( SM_xmsConn, "msgType", "TOPUP_MSG" )
+  
+   xal_xms_add_params( SM_xmsConn, "user", "01696945543" )
+   xal_xms_add_params( SM_xmsConn, "pass", SM_MPIN )
+   xal_xms_add_params( SM_xmsConn, "partnerId", SM_PHONE )
+   xal_xms_add_params( SM_xmsConn, "originalAmount", SM_Amount )
+        
+  
+  
   ret = xal_xms_request(SM_xmsConn, 1)
+end
+
+function comma_value(n) -- credit http://richard.warburton.it
+  local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
+  return left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right
 end
