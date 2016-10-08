@@ -1,8 +1,0 @@
-<resources>
-    <message name="service">
-        <sms>Quy khach da thanh toan thanh cong so tien %sd cho hoa don %s cua dich vu %s. Cam on quy khach da su dung
-            dich vu MoMo.
-        </sms>
-    </message>
-
-</resources>

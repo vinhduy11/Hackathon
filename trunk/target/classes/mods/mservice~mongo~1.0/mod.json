@@ -1,9 +1,0 @@
-{
-
-  // Java verticle
-  "main":"com.mservice.momo.gateway.internal.db.mongo.MongoVerticle",
-  "auto-redeploy": true,
-  "worker": true,
-  "global-config" : {
-  }
-}

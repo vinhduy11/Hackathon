@@ -1,7 +1,0 @@
-{
-  // Java verticle
-  "main":"com.mservice.momo.vertx.MainVerticle",
-  "auto-redeploy": true,
-  "global-config" : {
-  }
-}

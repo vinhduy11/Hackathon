@@ -1,8 +1,0 @@
-{
-
-  // Java verticle
-  "main":"com.mservice.momo.vertx.NamVerticle",
-  "auto-redeploy": true,
-  "global-config" : {
-  }
-}
