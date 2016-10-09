@@ -22,7 +22,7 @@ end
 
 function BE_OnMPINOk(mPIN)
 --	xipdbg("Calling XMS Request For BE, Pin = " .. mPIN )
-	if( mPIN ~= nil and mPIN:len() == 4 ) then
+	if( mPIN ~= nil and mPIN:len() == 6 ) then
 		BE_MPIN = mPIN
 		XmsRequest_BE()
 	else
@@ -49,6 +49,10 @@ function XmsRequest_BE ()
 	exid = GetDeviceExid()
 	xal_xms_add_params( BE_xmsConn, "exid", exid  )
 	xal_xms_add_params( BE_xmsConn, "mp", BE_MPIN )
+	
+	  xal_xms_add_params( BE_xmsConn, "msgType", "MOMO_BALANCE" )
+   xal_xms_add_params( BE_xmsConn, "pass", BE_MPIN )
+   
 	ret = xal_xms_request(BE_xmsConn, 1)
 end
 

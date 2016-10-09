@@ -20,6 +20,18 @@
 <str IMPRDATA="Improper data entered" />
 </EN>
 <SP>
+<str NXT="Tiep theo" />
+<str CNCL="Huy" />
+<str AMT="Chuyen tien MLOAD" />
+<str PHONE="Nhap so dien thoai:" />
+<str AMT_2="Nhap so tien" />
+<str GETPIN="Xac nhan ma PIN" />
+<str PHONE_E="So dien thoai chua dung" />
+<str AMT_E="Chua nhap so tien" />
+<str INCRCT="Ma PIN chua dung" />
+<str SMPROG="Dang thuc hien..." />
+<str SMPROG_1="Chuyen:" />
+<str TO="Den SDT:" />
 <str AMT="Enter amount to send" />
 <str MERNO="Enter merchant number" />
 <str GETPIN="Enter merchant mPIN" />
