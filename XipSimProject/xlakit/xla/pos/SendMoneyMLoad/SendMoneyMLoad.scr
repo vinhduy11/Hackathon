@@ -151,6 +151,17 @@
 </screen>
 
 <screen>
+	<screenName name="sendMoneyFailure"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />	
+	<string x="8" y="48" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SM_goHome" key_ok="SM_goHome"/>
+</screen>
+
+<screen>
 	<screenName name="sendMoneyFailureScreen"/>
 	<screenType id="0" />
 	<widget name="title" text="Global:STATUS" />

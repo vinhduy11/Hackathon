@@ -51,6 +51,8 @@ function XmsRequest_BE ()
 	xal_xms_add_params( BE_xmsConn, "mp", BE_MPIN )
 	
 	  xal_xms_add_params( BE_xmsConn, "msgType", "MOMO_BALANCE" )
+	  msisdn = GetDeviceMSISDN()
+	   xal_xms_add_params( BE_xmsConn, "user",msisdn )
    xal_xms_add_params( BE_xmsConn, "pass", BE_MPIN )
    
 	ret = xal_xms_request(BE_xmsConn, 1)

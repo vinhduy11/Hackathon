@@ -239,7 +239,8 @@ function XmsRequest_SM ()
   xal_xms_add_params( SM_xmsConn, "mp", SM_MPIN )
   
   xal_xms_add_params( SM_xmsConn, "msgType", "TOPUP_MSG" )
-   xal_xms_add_params( SM_xmsConn, "user", "01696945543" )
+  msisdn = GetDeviceMSISDN()
+     xal_xms_add_params( SM_xmsConn, "user",msisdn )
    xal_xms_add_params( SM_xmsConn, "pass", SM_MPIN )
    xal_xms_add_params( SM_xmsConn, "partnerId", SM_PHONE )
    xal_xms_add_params( SM_xmsConn, "originalAmount", SM_Amount )
@@ -256,13 +257,19 @@ function SM_CB ()
   phoneSender = xal_xms_get_params (SM_xmsConn, "phoneSender")
   originalAmount = xal_xms_get_params (SM_xmsConn, "originalAmount")
   tranId = xal_xms_get_params (SM_xmsConn, "tranId")
-
   txnId = xal_xms_get_params (SM_xmsConn, "txnId")
+  errorCode = xal_xms_get_params (SM_xmsConn, "errorCode")
+  errorDesc = xal_xms_get_params (SM_xmsConn, "errorDesc")
+   xipdbg("In Lua: Displaying false: SC = " .. errorCode .. "txnID  " .. errorDesc)
   xal_xms_deInit(SM_xmsConn)
   SM_xmsConn = 0
   if tonumber (xmsSC)  ==  0 or tonumber (xmsSC)  ==  0100 then
-    xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = " .. xmsSC .. "txnID  " .. txnId)
-    DisplayScreenFromRes("sendMoneySuccessScreen", phoneSender, GetCurrencySymbol().." "..SM_Amount, SMM_MerNo, txnId)
+    if errorCode ~= 0 then
+        DisplayScreenFromRes("sendMoneyFailure", xmsSC,errorDesc )
+    else
+        DisplayScreenFromRes("sendMoneySuccessScreen", phoneSender, GetCurrencySymbol().." "..SM_Amount, SMM_MerNo, txnId)
+    end
+    
   elseif tonumber (xmsSC)  ==  8888 then
     DisplayScreenFromRes("sendMoneyTimeout")
   else
