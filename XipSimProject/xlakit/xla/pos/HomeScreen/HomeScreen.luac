@@ -10,7 +10,7 @@ function HS_OnlineRcv()SetSessionValue("rcvamount","-10")ChangeXla("ReceiveOnlin
 function HS_OnlineRcvFixed()SetSessionValue("rcvamount","10.00")ChangeXla("ReceiveOnline")end
 function HS_OfflineRcv()ChangeXla("ReceiveOffline")end
 function HS_OnTopup()ChangeXla("TopUp")end
-function HS_OnPerso()ChangeXla("Perso")end
+function HS_OnPerso()ChangeXla("MenuHeoDat")end
 function HS_OnCBAL()ChangeXla("CustBalance")end
 function HS_OnBal()ChangeXla("BalanceEnquiry")end
 function HS_ShowMLoad()ChangeXla("MenuMload")end

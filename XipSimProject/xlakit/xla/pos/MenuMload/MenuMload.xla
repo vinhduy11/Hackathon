@@ -5,24 +5,25 @@ Buff=<properties><XLAmeta><package name="XLAKIT" XLA="MenuMload" ver="1.0.0" des
 <params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
 </properties>
 [strings]
-size=237
-Buff=<strings><language><EN><str MENUT="DICH VU MLOAD"/><str MM1="Nap tien MLoad"/><str MM2="Chuyen tien MLoad"/></EN>
-<SP><str MENUT="DICH VU MLOAD"/><str MM1="Nap tien MLoad"/><str MM2="Chuyen tien MLoad"/></SP>
+size=301
+Buff=<strings><language><EN><str MENUT="DICH VU MLOAD"/><str MM1="Nap tien dien thoai"/><str MM2="Chuyen tien MLoad"/><str MM3="Kiem tra so du"/></EN>
+<SP><str MENUT="DICH VU MLOAD"/><str MM1="Nap tien dien thoai"/><str MM2="Chuyen tien MLoad"/><str MM3="Kiem tra so du"/></SP>
 </language>
 </strings>
 [LUAScript]
-size=337
+size=381
 Buff=function MM_OnLoad()DisplayScreenFromRes("MenuMloadScreen")end
 function OnGenericMenu()MenuText,MenuKeyIndex=GetMenuKeyIndex()xipdbg("MenuKeyIndex"..MenuKeyIndex)if(MenuKeyIndex==1001)then
 ChangeXla("SendMoneyMLoad")elseif(MenuKeyIndex==1002)then
-ChangeXla("TransferMoneyMLoad")end
+ChangeXla("TEST")elseif(MenuKeyIndex==1003)then
+ChangeXla("BalanceEnquiry")end
 end
 function MM_goHome()ChangeXla("HomeScreen")end[MenuMloadScreen]
 screenType=2
-Menus=2
-size=504
-Buff=<screen><screenName name="MenuMloadScreen"/><screenType id="2"/><widget name="title" text="MENUT"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/><menustr text="MM1"/><menustr text="MM2"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+Menus=3
+size=525
+Buff=<screen><screenName name="MenuMloadScreen"/><screenType id="2"/><widget name="title" text="MENUT"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/><menustr text="MM1"/><menustr text="MM2"/><menustr text="MM3"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
 <widget name="brsk" text="Global:OK"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="MM_goHome"/></screen>
 [CRC]
 size=10
-Buff=OA==
+Buff=AA==

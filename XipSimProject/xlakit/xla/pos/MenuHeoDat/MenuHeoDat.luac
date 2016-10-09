@@ -1,7 +1,7 @@
 function MM_OnLoad()DisplayScreenFromRes("MenuMloadScreen")end
 function OnGenericMenu()MenuText,MenuKeyIndex=GetMenuKeyIndex()xipdbg("MenuKeyIndex"..MenuKeyIndex)if(MenuKeyIndex==1001)then
-ChangeXla("SendMoneyMLoad")elseif(MenuKeyIndex==1002)then
-ChangeXla("TEST")elseif(MenuKeyIndex==1003)then
-ChangeXla("BalanceEnquiry")end
+ChangeXla("PigMoney")elseif(MenuKeyIndex==1002)then
+ChangeXla("PigMoneyCashIn")elseif(MenuKeyIndex==1002)then
+ChangeXla("PigMoneyCheck")end
 end
 function MM_goHome()ChangeXla("HomeScreen")end

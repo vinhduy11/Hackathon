@@ -7,8 +7,8 @@
 	<string x="30" y="50" text="GetPIN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
 	<widget name="input" inputtype="0" maxinputlen="6" />
 
-	<widget name="brsk" text="Global:NXT" />
-	<widget name="blsk" text="Global:CNCL" />
+	<widget name="brsk" text="NXT" />
+	<widget name="blsk" text="CNCL" />
 	<actions  key_blsk="BE_OnCancel" key_brsk="BE_OnMPINOk" key_ok="BE_OnMPINOk"/>
 	<ticker tickerenable="0"/>
 </screen>
@@ -20,7 +20,7 @@
 	
 	<widget name="progress" />
 
-	<widget name="blsk" text="Global:CNCL" />
+	<widget name="blsk" text="CNCL" />
 	<actions  key_blsk="BE_OnCancel"/>
 </screen>
 
@@ -29,9 +29,8 @@
 	<screenType id="0" />
 	<widget name="title" text="BAL0" />
 
-	<string x="8" y="50" text="BAL1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
-	<string x="8" y="60" text="BAL2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
-	<string x="20" y="80" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="60" text="@1" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="80" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
 
 	<widget name="brsk" text="Global:OK" />
 	<actions  key_brsk="BE_goHome" key_ok="BE_goHome"/>
@@ -64,3 +63,13 @@
 	<actions  key_brsk="BE_goHome" key_ok="BE_goHome"/>
 </screen>
 
+<screen>
+	<screenName name="sendMoneyFailure"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />	
+	<string x="8" y="48" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SM_goHome" key_ok="SM_goHome"/>
+</screen>

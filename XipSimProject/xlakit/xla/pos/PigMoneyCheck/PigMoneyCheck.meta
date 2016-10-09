@@ -1,19 +1,21 @@
 <properties>
 	 <XLAmeta>
-		<package name="XLAKIT" XLA="TransferMoneyMLoad" ver="1.0.0" desc="POS based on XLAs" />
+		<package name="XLAKIT" XLA="PigMoneyCheck" ver="1.0.1" desc="POS based on XLAs" />
 		<device version="2.2.1" /> <server version="2.0.0" />
-		<entry oninstall="SM_OnInstall" onload="SM_OnLoad"/>
+		<entry oninstall="TU_OnInstall" onload="TU_OnLoad"/>
 		<script lua="yes" />
 		<reqlualib LuaLibName="xla" />
 		<reqlualib LuaLibName="xms" />
 		<reqlualib LuaLibName="screen" />
-		<reqlualib LuaLibName="indicator" />
+		<reqlualib LuaLibName="sysnfc" />
 		<reqlualib LuaLibName="config" />
+		<reqlualib LuaLibName="record" />
+		<reqlualib LuaLibName="uuid" />
 		<reqlualib LuaLibName="appconfig" />
-		<require>
+	 </XLAmeta>
+	 <require>
 			<XipXla name="Global.xla" />
 		</require>
-	 </XLAmeta>
 	 <params>
 		<param refreshGPRS="1" />
 		<param showLastTxn="0" />

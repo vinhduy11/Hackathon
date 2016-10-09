@@ -1,26 +1,30 @@
 <strings>
 <language>
 <EN>
-<str GetPIN="To check balance"/>
-<str BEPROG="Fetching balance.."/>
-<str BAL0="Balance"/>
+<str NXT="Tiep theo" />
+<str CNCL="Huy" />
+<str GetPIN="Kiem tra so du"/>
+<str BEPROG="Dang xu ly..."/>
+<str BAL0="So du"/>
 <str BAL1="The balance in your"/>
 <str BAL2="account is"/>
 <str BETAPTO = "Tap timeout"/>
-<str BEMPIN = "Enter merchant mPIN"/>
+<str BEMPIN = "Nhap ma PIN"/>
 <str BECPIN = "Enter customer mPIN"/>
 <str BEIMPRDATA = "Improper data received"/>
 <str BEINCRCT = "Incorrect mPIN"/>
 <str />
 </EN>
 <SP>
-<str GetPIN="To check balance"/>
+<str NXT="Tiep theo" />
+<str CNCL="Huy" />
+<str GetPIN="Kiem tra so du"/>
 <str BEPROG="Fetching balance.."/>
-<str BAL0="Balance"/>
+<str BAL0="So du"/>
 <str BAL1="The balance in your"/>
 <str BAL2="account is"/>
 <str BETAPTO = "Tap timeout"/>
-<str BEMPIN = "Enter merchant mPIN"/>
+<str BEMPIN = "Nhap ma PIN"/>
 <str BECPIN = "Enter customer mPIN"/>
 <str BEIMPRDATA = "Improper data received"/>
 <str BEINCRCT = "Incorrect mPIN"/>

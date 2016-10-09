@@ -1,0 +1,29 @@
+[properties]
+size=511
+Buff=<properties><XLAmeta><package name="XLAKIT" XLA="MenuHeoDat" ver="1.0.0" desc="POS based on XLAs"/><device version="2.2.1"/><server version="2.0.0"/><entry oninstall="MM_OnInstall" onload="MM_OnLoad"/><script lua="yes"/><reqlualib LuaLibName="xla"/><reqlualib LuaLibName="screen"/><reqlualib LuaLibName="config"/><reqlualib LuaLibName="trigger"/><require><XipXla name="Global.xla"/></require>
+</XLAmeta>
+<params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
+</properties>
+[strings]
+size=289
+Buff=<strings><language><EN><str MENUT="DV HEO DAT"/><str MM1="Dang ki"/><str MM2="Nap tien"/><str MM3="Chuyen tien"/><str MM4="KT so du"/></EN>
+<SP><str MENUT="DV HEO DAT"/><str MM1="Dang ki"/><str MM2="Nap tien"/><str MM3="Chuyen tien"/><str MM4="KT so du"/></SP>
+</language>
+</strings>
+[LUAScript]
+size=384
+Buff=function MM_OnLoad()DisplayScreenFromRes("MenuMloadScreen")end
+function OnGenericMenu()MenuText,MenuKeyIndex=GetMenuKeyIndex()xipdbg("MenuKeyIndex"..MenuKeyIndex)if(MenuKeyIndex==1001)then
+ChangeXla("PigMoney")elseif(MenuKeyIndex==1002)then
+ChangeXla("PigMoneyCashIn")elseif(MenuKeyIndex==1002)then
+ChangeXla("PigMoneyCheck")end
+end
+function MM_goHome()ChangeXla("HomeScreen")end[MenuMloadScreen]
+screenType=2
+Menus=3
+size=525
+Buff=<screen><screenName name="MenuMloadScreen"/><screenType id="2"/><widget name="title" text="MENUT"/><menus><menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/><menustr text="MM1"/><menustr text="MM2"/><menustr text="MM4"/><menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/><menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/></menus>
+<widget name="brsk" text="Global:OK"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="MM_goHome"/></screen>
+[CRC]
+size=10
+Buff=Fw==

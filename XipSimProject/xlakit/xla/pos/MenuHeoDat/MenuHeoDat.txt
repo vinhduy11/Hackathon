@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings>
+<language>
+<EN>
+<str MENUT="DV HEO DAT" />
+<str MM1="Dang ki" />
+<str MM2="Nap tien" />
+<str MM3="Chuyen tien" />
+<str MM4="KT so du" />
+</EN>
+<SP>
+<str MENUT="DV HEO DAT" />
+<str MM1="Dang ki" />
+<str MM2="Nap tien" />
+<str MM3="Chuyen tien" />
+<str MM4="KT so du" />
+</SP>
+</language>
+</strings>

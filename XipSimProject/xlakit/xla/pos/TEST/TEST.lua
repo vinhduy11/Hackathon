@@ -7,26 +7,26 @@
 
 SM_xmsConn = 0
 SM_Amount = nil
-SM_MerNo  = nil
+SM_PHONE  = nil
 SM_MPIN = 0
 array = {}
 
 function SM_OnLoad ()
 	xipdbg("Calling DisplayScreenFromRes")
-	DispScreen("sendMoneyMsisdnNumberEntryScreen")
+	
+   DisplayScreenFromRes("PhoneScreen", "")
+	--DispScreen("PhoneScreen")
 end
 
-function SM_OnMerNoNext (merNo)
-	SM_MerNo	= merNo
-	if( SM_MerNo == nil ) then 
-		DisplayScreenFromRes("sendMoneyFailureScreen", " ", " ", "#IMPRDATA" )
-	else
-		xipdbg("In Lua: mer no = " .. SM_MerNo )
-		DisplayScreenFromRes("sendMoneyAmountEntryScreen", SM_MerNo )
-	end 
-	
-	--maxAmt = GetPinlessEndAmount()
-	--DisplaySetMaxInputDataLen("99999")
+function SM_OnPhoneNext (phone)
+  xipdbg("In Lua: Phone = " .. phone)
+  if(phone ~= nil and string.find(phone, '0') == 1 and (string.len(phone) == 11 or string.len(phone) == 10)) then
+    SM_PHONE = phone
+    DisplayScreenFromRes("AmountEntryScreen")
+  else
+    xipdbg("phone error")
+    DisplayScreenFromRes("PhoneScreen", "#PHONE_E")
+  end
 end
 
 function SM_OnAmountNext (amount)
@@ -34,80 +34,86 @@ function SM_OnAmountNext (amount)
 	-- xipdbg("In Lua: Amouont = " .. amount)
 	SM_Amount	= amount
 	if( SM_Amount ~= nil and tonumber( SM_Amount ) > 0 ) then 
-		xipdbg("In Lua: Displaying sendMoneyMPinEntryScreen: amount = " .. SM_Amount .. "mer no = " .. SM_MerNo)
-		DisplayScreenFromRes("sendMoneyMPinEntryScreen", " ", GetCurrencySymbol().." "..SM_Amount, SM_MerNo )
+		xipdbg("In Lua: Displaying MoneyMPinEntryScreen: amount = " .. SM_Amount .. "phone = " .. SM_PHONE)
+		DisplayScreenFromRes("MoneyMPinEntryScreen", " ", "So tien: " .. comma_value(SM_Amount) .. "VND", "SDT: " .. SM_PHONE )
 	else
-		SM_goHome ()
+		--SM_goHome ()
+		DisplayScreenFromRes("AmountEntryScreen", "#AMT_E")
 	end
 end
 
 function SM_OnMPINNext (mPIN)
 --	xipdbg("Calling XMS Request For SM, Pin = " .. mPIN )
-	if( mPIN ~= nil and mPIN:len() == 4 )then
+	if( mPIN ~= nil and mPIN:len() == 6 )then
 		SM_MPIN=mPIN
 		XmsRequest_SM()
 	else
-		DisplayScreenFromRes("sendMoneyMPinEntryScreen", "#INCRCT", GetCurrencySymbol().." "..SM_Amount, SM_MerNo )
+		DisplayScreenFromRes("MoneyMPinEntryScreen", "#INCRCT", "So tien: " .. comma_value(SM_Amount) .. "VND", "SDT: " .. SM_PHONE )
 	end	
 end
 
 function XmsRequest_SM ()
-	xipdbg("In Lua: XmsRequest_SM")
-	DisplayScreenFromRes("sendMoneyProgressScreen", GetCurrencySymbol().." "..SM_Amount, SM_MerNo )
-	cntType = xal_xms_getcontentType()
-	if( cntType == -1 ) then txnType = "TEAM_TEST".."|".. "7/f"
-	else txnType = "TEAM_TEST".."|"..cntType end
-	SM_xmsConn=xal_xms_init("NULL", txnType, 0, "SM_CB")
-	xid = GetDeviceXID()
-	xal_xms_add_params( SM_xmsConn, "xid", xid )
-	mccMnc = GetMncMcc()
-	xal_xms_add_params( SM_xmsConn, "mcc", string.sub(mccMnc, 1, 3) )
-	xal_xms_add_params( SM_xmsConn, "mnc", string.sub(mccMnc, 4, -1) )
-	exid = GetDeviceExid()
-	xal_xms_add_params( SM_xmsConn, "exid", exid  )
-	xipdbg("Adding Param amount = " .. SM_Amount)		
-	xal_xms_add_params( SM_xmsConn, "amt", SM_Amount )
-	xipdbg("Adding Param merchant number = " .. SM_MerNo)		
-	xal_xms_add_params( SM_xmsConn, "rms", SM_MerNo )
-	xipdbg("Adding Param Mode of com= " .. "2")		
-	xal_xms_add_params( SM_xmsConn, "com", "2" )
-	-- xipdbg("Adding Param MPIN = " .. SM_MPIN)	
-	xal_xms_add_params( SM_xmsConn, "mp", SM_MPIN )
-	
-	  xal_xms_add_params( SM_xmsConn, "msgType", "SOAP_TRANSFER" )
-         msisdn = GetDeviceMSISDN()
-     xal_xms_add_params( SM_xmsConn, "fromUser",msisdn )
-   xal_xms_add_params( SM_xmsConn, "fromPass", "000000" )
-   xal_xms_add_params( SM_xmsConn, "toUser", "01696945542" )
+  -- Fix lai
+  xipdbg("In Lua: XmsRequest_SM")
+  DisplayScreenFromRes("MoneyProgressScreen", comma_value(SM_Amount) .. "VND", SM_PHONE)
+  cntType = xal_xms_getcontentType()
+  if( cntType == -1 ) then txnType = "TEAM_TEST".."|".. "7/f"
+  else txnType = "TEAM_TEST".."|"..cntType end
+  SM_xmsConn=xal_xms_init("NULL", txnType, 0, "SM_CB")
+  xid = GetDeviceXID()
+  xal_xms_add_params( SM_xmsConn, "xid", xid )
+  mccMnc = GetMncMcc()
+  xal_xms_add_params( SM_xmsConn, "mcc", string.sub(mccMnc, 1, 3) )
+  xal_xms_add_params( SM_xmsConn, "mnc", string.sub(mccMnc, 4, -1) )
+  exid = GetDeviceExid()
+  xal_xms_add_params( SM_xmsConn, "exid", exid  )
+  xipdbg("Adding Param amount = " .. SM_Amount)   
+  xal_xms_add_params( SM_xmsConn, "amt", SM_Amount )  
+  xal_xms_add_params( SM_xmsConn, "rms", SMM_MerNo )
+  xipdbg("Adding Param Mode of com= " .. "2")   
+  xal_xms_add_params( SM_xmsConn, "com", "2" )
+  xipdbg("Adding Param MPIN = " .. SM_MPIN)  
+  xal_xms_add_params( SM_xmsConn, "mp", SM_MPIN )
+  xal_xms_add_params( SM_xmsConn, "msgType", "SOAP_TRANSFER" )
+  
+   xal_xms_add_params( SM_xmsConn, "fromUser", "01696945543" )
+   xal_xms_add_params( SM_xmsConn, "fromPass", SM_MPIN )
+   xal_xms_add_params( SM_xmsConn, "toUser", SM_PHONE )
    xal_xms_add_params( SM_xmsConn, "amount", SM_Amount )
-   
-	ret = xal_xms_request(SM_xmsConn, 1)
+  ret = xal_xms_request(SM_xmsConn, 1)
 end
 
 function SM_CB ()
-	XMSSCData = xal_xms_get_params (SM_xmsConn, "sc")
-	SCDetails = mysplit (XMSSCData,"|")
-	xmsSC = SCDetails[1]
-	xipdbg("In Lua: perso Status" .. xmsSC)
-	
-	txnId = xal_xms_get_params (SM_xmsConn, "txnId")
-	
-	
-	xal_xms_deInit(SM_xmsConn)
-	SM_xmsConn = 0
-	if tonumber (xmsSC)  ==  0 or tonumber (xmsSC)  ==  0100 then
-		xipdbg("In Lua: Displaying sendMoneySuccessScreen: SC = " .. xmsSC .. "txnID  " .. txnId)
-		DisplayScreenFromRes("sendMoneySuccessScreen", GetCurrencySymbol().." "..SM_Amount, SM_MerNo, txnId)
-	elseif tonumber (xmsSC)  ==  8888 then
-		DisplayScreenFromRes("sendMoneyTimeout")
-	else
-		if string.len(SCDetails[2]) > 20 then
-			GetMultipleLines(SCDetails[2])
-			DisplayScreenFromRes("sendMoneyFailureScreen", xmsSC, array[1], array[2], array[3], array[4], array[5] )
-		else
-			DisplayScreenFromRes("sendMoneyFailureScreen", xmsSC, SCDetails[2] )
-		end
-	end
+  XMSSCData = xal_xms_get_params (SM_xmsConn, "sc")
+  xipdbg("In Lua: perso Status" .. XMSSCData)
+  SCDetails = mysplit (XMSSCData,"|")
+  xmsSC = SCDetails[1]
+  xipdbg("In Lua: perso Status" .. xmsSC)
+  
+  phoneSender = xal_xms_get_params (SM_xmsConn, "fromUser")
+  originalAmount = xal_xms_get_params (SM_xmsConn, "amount")
+  tranId = xal_xms_get_params (SM_xmsConn, "tranId")
+  errorDesc = xal_xms_get_params (SM_xmsConn, "errorDesc")
+  txnId = xal_xms_get_params (SM_xmsConn, "tranId")
+  xal_xms_deInit(SM_xmsConn)
+  SM_xmsConn = 0
+   xipdbg("In Lua: perso Status" .. errorDesc)
+  if tonumber (xmsSC)  ==  0 or tonumber (xmsSC)  ==  0100 then
+    if errorDesc ~= "THANH CONG" then
+        DisplayScreenFromRes("sendMoneyFailure", xmsSC,errorDesc )
+    else
+        DisplayScreenFromRes("MoneySuccessScreen", phoneSender, GetCurrencySymbol().." "..SM_Amount, SM_PHONE, txnId)
+    end
+  elseif tonumber (xmsSC)  ==  8888 then
+    DisplayScreenFromRes("sendMoneyTimeout")
+  else
+    if string.len(SCDetails[2]) > 20 then
+      GetMultipleLines(SCDetails[2])
+      DisplayScreenFromRes("MoneyFailureScreen", xmsSC, array[1], array[2], array[3], array[4], array[5] )
+    else
+      DisplayScreenFromRes("MoneyFailureScreen", xmsSC, SCDetails[2] )
+    end
+  end
 end
 
 function SM_goHome ()
@@ -166,4 +172,9 @@ function GetMultipleLines (buf)
 		array[count]=" "
 		count = count + 1
 	end
+end
+
+function comma_value(n) -- credit http://richard.warburton.it
+  local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
+  return left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right
 end

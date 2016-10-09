@@ -6,6 +6,7 @@
 --]]
 
 TU_Amount = 0
+TU_CMND = 0
 TU_MPIN = 0
 TU_nfcSess = 0
 TU_Xid = 0
@@ -24,52 +25,47 @@ array = {}
 TopupSucess = 0
 
 function TU_OnLoad ()
-	RecStoreAvl = xal_isStoreAvailable()
-	xipdbg("TU_OnLoad: RecStoreAvl----"..RecStoreAvl)
+  DisplayScreenFromRes("NFCProgress", "#NFCPRGS", "TU_OnCancel" )
+  TU_nfcSess = sysnfc_init("Topup_OnNFCReadDetectData") 
+  if( TU_nfcSess == -1 ) then 
+    DisplayScreenFromRes("topupFailedScreen", "#Global:STATUS", " ", " ", "#NFCFAIL", "#TRYAGAIN",            " ", " ", " ", "#Global:OK", " ", "TU_goHome", "TU_goHome" )
+  end
+    
+    
+	--RecStoreAvl = xal_isStoreAvailable()
+	--xipdbg("TU_OnLoad: RecStoreAvl----"..RecStoreAvl)
 
 	--check Record store available 
-	if( RecStoreAvl == 0 ) then
-		TU_goHome ()
-	else
-		DisplayScreenFromRes("topupInputEntryScreen", "#AMT", " ", " ", " ", "1", "16", "TU_OnAmountNext","TU_OnAmountNext" )
-		maxAmt = GetPinlessEndAmount()
-		DisplaySetMaxInputDataLen("99999")
-	end
-end
-
-function TU_OnAmountNext (amount)
-	DisplaySetMaxInputDataLen("0")
-	if( amount ~= nil and tonumber( amount ) > 0 ) then
-		TU_Amount	= amount
-		DisplayScreenFromRes("topupInputEntryScreen", "#CMPIN", " ", "#CMPIN_1", GetCurrencySymbol()..						TU_Amount, "0", "4", "TU_OnMPINOk", "TU_OnMPINOk" )
-	else
-		TU_goHome ()
-	end 
+	--if( RecStoreAvl == 0 ) then
+		--TU_goHome ()
+	--else
+		--DisplayScreenFromRes("topupInputEntryScreen", "#AMT", " ", " ", " ", "1", "16", "TU_OnAmountNext","TU_OnAmountNext" )
+		--maxAmt = GetPinlessEndAmount()
+		--DisplaySetMaxInputDataLen("99999")
+	--end
 end
 
 function TU_OnMPINOk (mPIN)
-	if( mPIN ~= nil and mPIN:len() == 4 )then  
+	if( mPIN ~= nil and mPIN:len() == 6 )then  
 		TU_MPIN = mPIN
-		DisplayScreenFromRes("NFCProgress", "#NFCPRGS", GetCurrencySymbol(),TU_Amount, "TU_OnCancel" )
-		TU_nfcSess = sysnfc_init("Topup_OnNFCReadDetectData")	
-		if( TU_nfcSess == -1 ) then 
-			DisplayScreenFromRes("topupFailedScreen", "#Global:STATUS", " ", " ", "#NFCFAIL", "#TRYAGAIN", 					 	" ", " ", " ", "#Global:OK", " ", "TU_goHome", "TU_goHome" )
-		end 
+		XmsRequest_TopUp()
 	else
-		DisplayScreenFromRes("topupInputEntryScreen", "#CMPIN", "#INCRCT", "#CMPIN_1", GetCurrencySymbol()..TU_Amount, "0", "4", "TU_OnMPINOk", "TU_OnMPINOk" )
-	end	
+	 TU_goHome()
+	end
 end
 
 function Topup_OnNFCReadDetectData (status, tagdata, tagdatalen)
 	TU_Xid = tagdata
 	xipdbg("Topup_OnNFCReadDetectData: TU_Xid "..TU_Xid .. " status " ..status .. " tagdata " .. tagdata .. "tagdatalen" .. tagdatalen)
-	sysnfc_svEpurseReadAmount(TU_nfcSess,"Topup_OnNFCReadAmountCB")
+	--sysnfc_svEpurseReadAmount(TU_nfcSess,"Topup_OnNFCReadAmountCB")
 	if (status == "true") then
-	  TU_epid = GetEpurse/ID()
-	  xipdbg("Topup_OnNFCReadDetectData: TU_Xid1 "..TU_Xid .. TU_epid)
+	  DisplayScreenFromRes("CMNDEntryScreen")
+	
+	 -- TU_epid = GetEpurse/ID()
+	--  xipdbg("Topup_OnNFCReadDetectData: TU_Xid1 "..TU_Xid .. TU_epid)
 		--TU_epid = 100000
 		--xipdbg("Topup_OnNFCReadDetectData: epid "..TU_epid)/
-		sysnfc_svEpurseSetId(TU_nfcSess, TU_epid)
+	--	sysnfc_svEpurseSetId(TU_nfcSess, TU_epid)
 		--xipdbg("Topup_OnNFCReadDetectData1: epid "..TU_epid)
 		
 		--xipdbg("Topup_OnNFCReadDetectData2: epid "..TU_epid .. "TU_nfcSess " ..TU_nfcSess)
@@ -111,7 +107,7 @@ function XmsRequest_TopUp()
 	cntType = xal_xms_getcontentType()
 	--xipdbg("In Lua: XmsRequest_TopUp content Type:".. cntType )
 	if( TU_TopUpErr == 0 ) then
-		DisplayScreenFromRes("topupProgressScreen",  "#TUPRGS", "#TU", GetCurrencySymbol().." "..TU_Amount, "#Global:TO", TU_Xid, "#Global:CNCL", "TopUpCancel" )
+		DisplayScreenFromRes("topupProgressScreen",  "#TUPRGS", "#TU", TU_Amount, "#Global:TO", TU_Xid, "#CNCL", "TopUpCancel" )
 		if( cntType == -1 ) then txnType = "TEAM_TEST".."|".. "7/f"
 		else txnType = "TEAM_TEST".."|"..cntType end
 		--xipdbg("In Lua: XmsRequest_TopUp txnType:".. txnType )
@@ -124,17 +120,34 @@ function XmsRequest_TopUp()
 		TU_XmsConn=xal_xms_init("NULL", txnType, 0, "TU_CB")
 	end
 	xal_xms_add_params( TU_XmsConn, "amt", TU_Amount )
-	xal_xms_add_params( TU_XmsConn, "xid", TU_Xid )		
+	--xal_xms_add_params( TU_XmsConn, "xid", TU_Xid )		
 	xal_xms_add_params( TU_XmsConn, "epid", TU_epid )
 	xal_xms_add_params( TU_XmsConn, "mp", TU_MPIN )
 	exid = GetDeviceExid()
-	xal_xms_add_params( TU_XmsConn, "exid", exid  )	
-	xal_xms_add_params( TU_XmsConn, "cbal", TU_CBal )	
-	xal_xms_add_params( TU_XmsConn, "txnId", TU_TxnId )
-	xal_xms_add_params( TU_XmsConn, "tt", "A" )	
-	xal_xms_add_params( TU_XmsConn, "ced", TU_TAGepoch )
-
-	ret = xal_xms_request(TU_XmsConn, 1)
+  
+  
+	
+  xid = GetDeviceXID()
+  xal_xms_add_params( TU_XmsConn, "xid", xid )
+  mccMnc = GetMncMcc()
+  xal_xms_add_params( TU_XmsConn, "mcc", string.sub(mccMnc, 1, 3) )
+  xal_xms_add_params( TU_XmsConn, "mnc", string.sub(mccMnc, 4, -1) )
+  exid = GetDeviceExid()
+  xal_xms_add_params( TU_XmsConn, "exid", exid  )
+  xipdbg("Adding Param amount = " .. TU_Amount)   
+  xal_xms_add_params( TU_XmsConn, "amt", TU_Amount )
+  xipdbg("Adding Param Mode of com= " .. "2")   
+  xal_xms_add_params( TU_XmsConn, "com", "2" )
+  -- xipdbg("Adding Param MPIN = " .. SM_MPIN)  
+  xal_xms_add_params( TU_XmsConn, "mp", TU_MPIN )
+  xal_xms_add_params( TU_XmsConn, "msgType", "CREATE_WALLET" )
+  xal_xms_add_params( TU_XmsConn, "pin", TU_MPIN )
+  xal_xms_add_params( TU_XmsConn, "cardId", TU_Xid )
+  xal_xms_add_params( TU_XmsConn, "cmnd", TU_CMND )
+  xal_xms_add_params( TU_XmsConn, "balance", TU_Amount )
+  xal_xms_add_params( TU_XmsConn, "createDate", "" )
+  xal_xms_add_params( TU_XmsConn, "lastUpade", "" )
+  ret = xal_xms_request(TU_XmsConn, 1)
 end
 
 function TopUpCancel()
@@ -150,51 +163,35 @@ end
 
 function TU_CB ()
 	XMSSCData = xal_xms_get_params (TU_XmsConn, "sc")
-	SCDetails = mysplit (XMSSCData,"|")
-	xmsSC = SCDetails[1]
-	uBalAmt = xal_xms_get_params (TU_XmsConn, "cbal")
-	--xipdbg("xal_xms_get_params: uBalAmt "..uBalAmt)
-	tempAmt = sysnfc_svEpurseConvAmtDec2Int(uBalAmt)
-	TU_TopupBal = sysnfc_svEpurseConvAmtInt2Dec( tostring(tempAmt) )
-	--xipdbg("xal_xms_get_params: TU_TopupBal "..TU_TopupBal)
-
-	txnId = xal_xms_get_params (TU_XmsConn, "txnId")
-	cedVal = xal_xms_get_params (TU_XmsConn, "ced")
-	TU_epoch = tonumber(cedVal)
-	--xipdbg("TU_CB: TU_epoch "..TU_epoch)
-	xal_xms_deInit(TU_XmsConn)
-	TU_XmsConn = 0
-	
-	if tonumber (xmsSC)  ==  0 or tonumber (xmsSC)  ==  0100 then
-		if( TU_TopUpErr == 0 ) then
-			DisplayScreenFromRes("NFCProgress", "#NFCPRGS1", GetCurrencySymbol(),TU_Amount, "TopUpCancel")
-			TU_nfcSess = sysnfc_init("Topup_OnNFCWriteDetectData")
-		else
-			if( TopupSucess == 0 ) then
-				 deleteRecord()
-				 DisplayScreenFromRes("topupSuccessScreen", "#TUFAIL", "#CANCL", "#TU", GetCurrencySymbol()..	TU_Amount , " ", " ", " ", " " )
-			 end
-		end
-	elseif tonumber (xmsSC)  ==  8888 then
-		if( TU_TopUpErr == 0 ) then 
-			TU_TopUpErr = 1
-			XmsRequest_TopUp()
-		else
-			if( TopupSucess == 0 ) then ErrorCancel() end	
-		end
-	else		
-		if( TU_TopUpErr == 0 ) then
-			deleteRecord()
-			if string.len(SCDetails[2]) > 20 then
-				GetMultipleLines(SCDetails[2])
-				DisplayScreenFromRes("topupFailedScreen", "#Global:STATUS", xmsSC, array[1], array[2], array[3], array[4], array[5], " ", "#Global:OK", " ", "TU_goHome", "TU_goHome" )
-			else
-				DisplayScreenFromRes("topupFailedScreen", "#Global:STATUS", xmsSC, SCDetails[2], " ", " ", 						 " ", " ", " ", "#Global:OK", " ", "TU_goHome", "TU_goHome" )
-			end
-		else
-			if( TopupSucess == 0 ) then ErrorCancel() end
-		end
-	end
+  SCDetails = mysplit (XMSSCData,"|")
+  xmsSC = SCDetails[1]
+  xipdbg("In Lua: perso Status" .. xmsSC)
+  
+  txnId = xal_xms_get_params (TU_XmsConn, "txnId")  
+  errorDesc = xal_xms_get_params (TU_XmsConn, "errorDesc")
+  xal_xms_deInit(SM_xmsConn)
+  SM_xmsConn = 0
+  
+  if tonumber (xmsSC)  ==  0 then
+    if errorDesc == "THANH CONG" then
+        xipdbg("In Lua: perso Status" .. errorDesc)
+        DisplayScreenFromRes("topupScreen", errorDesc, "")
+    else
+        DisplayScreenFromRes("topupScreen", "",errorDesc)
+    end
+  elseif tonumber (xmsSC)  ==  8888 then
+    DisplayScreenFromRes("balanceTimeout")
+  else
+    if string.len(SCDetails[2]) > 20 then
+      GetMultipleLines(SCDetails[2])
+      DisplayScreenFromRes("balanceFailureScreen", xmsSC, array[1], array[2], array[3], array[4], array[5] )
+    else
+      DisplayScreenFromRes("balanceFailureScreen", xmsSC, SCDetails[2] )
+    end
+  end
+  
+  DisplayScreenFromRes("sendMoneyFailure", xmsSC,errorDesc )
+ 
 end
 
 function Topup_OnNFCWriteDetectData (status, tagdata, tagdatalen)
@@ -348,5 +345,26 @@ function syncTxnCheck()
 	else
 		TU_goHome()
 	end
+end
+
+function TU_OnCMNDNext(cmnd)
+  if( cmnd ~= nil and cmnd:len() == 9 )then
+    TU_CMND = cmnd
+    DisplayScreenFromRes("topupInputEntryScreen")
+  else
+    DisplayScreenFromRes("CMNDEntryScreen", "#CMND_E")
+  end 
+end
+
+function TU_OnAmountNext (amount)
+  DisplaySetMaxInputDataLen("0")
+  -- xipdbg("In Lua: Amouont = " .. amount)
+  TU_Amount = amount
+  if( TU_Amount ~= nil and tonumber( TU_Amount ) > 0 ) then 
+    xipdbg("In Lua: Displaying sendMoneyMPinEntryScreen: amount = " .. TU_Amount)
+    DisplayScreenFromRes("topupInputEntryScreen", " ", "So tien:"..TU_Amount, "CMND:"..TU_CMND )
+  else
+    TU_goHome ()
+  end
 end
 

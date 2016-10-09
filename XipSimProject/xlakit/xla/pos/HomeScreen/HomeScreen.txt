@@ -4,7 +4,7 @@
 <EN>
 <str RCV="RECV ONL" />
 <str RCVOFF="RECV OFFL" />
-<str PERSO="REGISTER" />
+<str PERSO="DV HEO DAT" />
 <str BAL="BALANCE" />
 <str MENU="MENU" />
 <str LFT=" LFT" />

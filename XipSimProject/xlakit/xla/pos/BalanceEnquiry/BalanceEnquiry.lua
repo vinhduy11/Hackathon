@@ -65,11 +65,18 @@ function BE_CB ()
 	xipdbg("In Lua: perso Status" .. xmsSC)
 
 	uBalVal = xal_xms_get_params (BE_xmsConn, "cbal")
+	errorDesc = xal_xms_get_params (BE_xmsConn, "errorDesc")
+	
+  balance = xal_xms_get_params (BE_xmsConn, "balance")
 	xal_xms_deInit(BE_xmsConn)
-	xipdbg("In Lua: Displaying balanceSuccessScreen: SC = " .. xmsSC .. "Balance = " .. uBalVal)
+	--xipdbg("In Lua: Displaying balanceSuccessScreen: SC = " .. xmsSC .. "Balance = " .. uBalVal)
 
 	if tonumber (xmsSC)  ==  0 then
-		DisplayScreenFromRes("balanceSuccessScreen", GetSessionValue ("CURR").." "..uBalVal)
+	  if errorDesc ~= "THANH CONG" then
+        DisplayScreenFromRes("sendMoneyFailure", xmsSC,errorDesc )
+    else
+        DisplayScreenFromRes("balanceSuccessScreen", "So du tai khoan:",balance)
+    end
 	elseif tonumber (xmsSC)  ==  8888 then
 		DisplayScreenFromRes("balanceTimeout")
 	else

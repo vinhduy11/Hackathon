@@ -5,13 +5,13 @@ Buff=<properties><XLAmeta><package name="XLAKIT" XLA="BalanceEnquiry" ver="1.0.0
 <params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
 </properties>
 [strings]
-size=711
-Buff=<strings><language><EN><str GetPIN="To check balance"/><str BEPROG="Fetching balance.."/><str BAL0="Balance"/><str BAL1="The balance in your"/><str BAL2="account is"/><str BETAPTO="Tap timeout"/><str BEMPIN="Enter merchant mPIN"/><str BECPIN="Enter customer mPIN"/><str BEIMPRDATA="Improper data received"/><str BEINCRCT="Incorrect mPIN"/><str/></EN>
-<SP><str GetPIN="To check balance"/><str BEPROG="Fetching balance.."/><str BAL0="Balance"/><str BAL1="The balance in your"/><str BAL2="account is"/><str BETAPTO="Tap timeout"/><str BEMPIN="Enter merchant mPIN"/><str BECPIN="Enter customer mPIN"/><str BEIMPRDATA="Improper data received"/><str BEINCRCT="Incorrect mPIN"/><str/></SP>
+size=760
+Buff=<strings><language><EN><str NXT="Tiep theo"/><str CNCL="Huy"/><str GetPIN="Kiem tra so du"/><str BEPROG="Dang xu ly..."/><str BAL0="So du"/><str BAL1="The balance in your"/><str BAL2="account is"/><str BETAPTO="Tap timeout"/><str BEMPIN="Nhap ma PIN"/><str BECPIN="Enter customer mPIN"/><str BEIMPRDATA="Improper data received"/><str BEINCRCT="Incorrect mPIN"/><str/></EN>
+<SP><str NXT="Tiep theo"/><str CNCL="Huy"/><str GetPIN="Kiem tra so du"/><str BEPROG="Fetching balance.."/><str BAL0="So du"/><str BAL1="The balance in your"/><str BAL2="account is"/><str BETAPTO="Tap timeout"/><str BEMPIN="Nhap ma PIN"/><str BECPIN="Enter customer mPIN"/><str BEIMPRDATA="Improper data received"/><str BEINCRCT="Incorrect mPIN"/><str/></SP>
 </language>
 </strings>
 [LUAScript]
-size=2864
+size=2963
 Buff=BE_xmsConn=0
 BE_MPIN=0
 BE_nfcSess=0
@@ -29,8 +29,11 @@ DisplayScreenFromRes("balanceMPinEntryScreen","#BEMPIN","#BEINCRCT")end
 end
 function XmsRequest_BE()xipdbg("In Lua: XmsRequest_BE")DisplayScreenFromRes("balanceProgress")cntType=xal_xms_getcontentType()xipdbg("In Lua: XmsRequest_BE content Type:"..cntType)if(cntType==-1)then txnType="TEAM_TEST".."|".."7/f"else txnType="TEAM_TEST".."|"..cntType end
 BE_xmsConn=xal_xms_init("NULL",txnType,0,"BE_CB")mccMnc=GetMncMcc()xal_xms_add_params(BE_xmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(BE_xmsConn,"mnc",string.sub(mccMnc,4,-1))xid=GetDeviceXID()xal_xms_add_params(BE_xmsConn,"xid",xid)exid=GetDeviceExid()xal_xms_add_params(BE_xmsConn,"exid",exid)xal_xms_add_params(BE_xmsConn,"mp",BE_MPIN)xal_xms_add_params(BE_xmsConn,"msgType","MOMO_BALANCE")msisdn=GetDeviceMSISDN()xal_xms_add_params(BE_xmsConn,"user",msisdn)xal_xms_add_params(BE_xmsConn,"pass",BE_MPIN)ret=xal_xms_request(BE_xmsConn,1)end
-function BE_CB()XMSSCData=xal_xms_get_params(BE_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)uBalVal=xal_xms_get_params(BE_xmsConn,"cbal")xal_xms_deInit(BE_xmsConn)xipdbg("In Lua: Displaying balanceSuccessScreen: SC = "..xmsSC.."Balance = "..uBalVal)if tonumber(xmsSC)==0 then
-DisplayScreenFromRes("balanceSuccessScreen",GetSessionValue("CURR").." "..uBalVal)elseif tonumber(xmsSC)==8888 then
+function BE_CB()XMSSCData=xal_xms_get_params(BE_xmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)uBalVal=xal_xms_get_params(BE_xmsConn,"cbal")errorDesc=xal_xms_get_params(BE_xmsConn,"errorDesc")balance=xal_xms_get_params(BE_xmsConn,"balance")xal_xms_deInit(BE_xmsConn)if tonumber(xmsSC)==0 then
+if errorDesc~="THANH CONG"then
+DisplayScreenFromRes("sendMoneyFailure",xmsSC,errorDesc)else
+DisplayScreenFromRes("balanceSuccessScreen","So du tai khoan:",balance)end
+elseif tonumber(xmsSC)==8888 then
 DisplayScreenFromRes("balanceTimeout")else
 if string.len(SCDetails[2])>20 then
 GetMultipleLines(SCDetails[2])DisplayScreenFromRes("balanceFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
@@ -72,16 +75,16 @@ array[count]=" "count=count+1
 end
 end[balanceMPinEntryScreen]
 screenType=1
-size=538
-Buff=<screen><screenName name="balanceMPinEntryScreen"/><screenType id="1"/><widget name="title" text="@1"/><string x="35" y="40" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="30" y="50" text="GetPIN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="6"/><widget name="brsk" text="Global:NXT"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="BE_OnCancel" key_brsk="BE_OnMPINOk" key_ok="BE_OnMPINOk"/><ticker tickerenable="0"/></screen>
+size=524
+Buff=<screen><screenName name="balanceMPinEntryScreen"/><screenType id="1"/><widget name="title" text="@1"/><string x="35" y="40" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><string x="30" y="50" text="GetPIN" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><widget name="input" inputtype="0" maxinputlen="6"/><widget name="brsk" text="NXT"/><widget name="blsk" text="CNCL"/><actions key_blsk="BE_OnCancel" key_brsk="BE_OnMPINOk" key_ok="BE_OnMPINOk"/><ticker tickerenable="0"/></screen>
 [balanceProgress]
 screenType=0
-size=213
-Buff=<screen><screenName name="balanceProgress"/><screenType id="0"/><widget name="title" text="BEPROG"/><widget name="progress"/><widget name="blsk" text="Global:CNCL"/><actions key_blsk="BE_OnCancel"/></screen>
+size=206
+Buff=<screen><screenName name="balanceProgress"/><screenType id="0"/><widget name="title" text="BEPROG"/><widget name="progress"/><widget name="blsk" text="CNCL"/><actions key_blsk="BE_OnCancel"/></screen>
 [balanceSuccessScreen]
 screenType=0
-size=483
-Buff=<screen><screenName name="balanceSuccessScreen"/><screenType id="0"/><widget name="title" text="BAL0"/><string x="8" y="50" text="BAL1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="60" text="BAL2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="20" y="80" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="BE_goHome" key_ok="BE_goHome"/></screen>
+size=386
+Buff=<screen><screenName name="balanceSuccessScreen"/><screenType id="0"/><widget name="title" text="BAL0"/><string x="8" y="60" text="@1" font="1" fontcolorR="255" fontcolorG="255" fontcolorB="255"/><string x="8" y="80" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="BE_goHome" key_ok="BE_goHome"/></screen>
 [balanceFailureScreen]
 screenType=0
 size=744
@@ -90,6 +93,10 @@ Buff=<screen><screenName name="balanceFailureScreen"/><screenType id="0"/><widge
 screenType=0
 size=308
 Buff=<screen><screenName name="balanceTimeout"/><screenType id="0"/><widget name="title" text="Global:TXNTO"/><string x="8" y="60" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="BE_goHome" key_ok="BE_goHome"/></screen>
+[sendMoneyFailure]
+screenType=0
+size=288
+Buff=<screen><screenName name="sendMoneyFailure"/><screenType id="0"/><widget name="title" text="@1"/><string x="8" y="48" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/><widget name="brsk" text="Global:OK"/><actions key_brsk="SM_goHome" key_ok="SM_goHome"/></screen>
 [CRC]
 size=10
-Buff=TQ==
+Buff=CQ==

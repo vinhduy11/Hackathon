@@ -5,13 +5,13 @@ Buff=<properties><XLAmeta><package name="XLAKIT" XLA="HomeScreen" ver="1.0.0" de
 <params><param refreshGPRS="1"/><param showLastTxn="0"/><param Language="SP"/></params>
 </properties>
 [strings]
-size=691
-Buff=<strings><language><EN><str RCV="RECV ONL"/><str RCVOFF="RECV OFFL"/><str PERSO="REGISTER"/><str BAL="BALANCE"/><str MENU="MENU"/><str LFT=" LFT"/><str SOD=" TSOD"/><str CBAL="CUST BAL"/><str TOP="TOPUP"/><str NAP_TIEN_MLOAD="NAP TIEN MLOAD"/><str CHUYEN_TIEN_MLOAD="CHUYEN_TIEN_MLOAD"/><str KIEMTRA="KIEM TRA"/><str MLOAD="DV MLOAD"/></EN>
+size=693
+Buff=<strings><language><EN><str RCV="RECV ONL"/><str RCVOFF="RECV OFFL"/><str PERSO="DV HEO DAT"/><str BAL="BALANCE"/><str MENU="MENU"/><str LFT=" LFT"/><str SOD=" TSOD"/><str CBAL="CUST BAL"/><str TOP="TOPUP"/><str NAP_TIEN_MLOAD="NAP TIEN MLOAD"/><str CHUYEN_TIEN_MLOAD="CHUYEN_TIEN_MLOAD"/><str KIEMTRA="KIEM TRA"/><str MLOAD="DV MLOAD"/></EN>
 <SP><str RCV="RECV ONL"/><str RCVOFF="RECV OFFL"/><str PERSO="REGISTER"/><str BAL="BALANCE"/><str MENU="MENU"/><str LFT=" LFT"/><str SOD=" TSOD"/><str CBAL="CUST BAL"/><str TOP="TOPUP"/><str NAP_TIEN_MLOAD="NAP TIEN MLOAD"/><str CHUYEN_TIEN_MLOAD="CHUYEN_TIEN_MLOAD"/><str KIEMTRA="KIEM TRA"/><str MLOAD="DV MLOAD"/></SP>
 </language>
 </strings>
 [LUAScript]
-size=1944
+size=1949
 Buff=HS_Screen=nil
 function HS_OnLoad()HS_Screen=GetConfigValue("profType")xipdbg("In Lua: profile Type"..HS_Screen)DisplayScreenFromRes("HomeScreen1")if(HS_Screen==-1)then HS_Screen="0"end
 HS_Screen=2
@@ -24,7 +24,7 @@ function HS_OnlineRcv()SetSessionValue("rcvamount","-10")ChangeXla("ReceiveOnlin
 function HS_OnlineRcvFixed()SetSessionValue("rcvamount","10.00")ChangeXla("ReceiveOnline")end
 function HS_OfflineRcv()ChangeXla("ReceiveOffline")end
 function HS_OnTopup()ChangeXla("TopUp")end
-function HS_OnPerso()ChangeXla("Perso")end
+function HS_OnPerso()ChangeXla("MenuHeoDat")end
 function HS_OnCBAL()ChangeXla("CustBalance")end
 function HS_OnBal()ChangeXla("BalanceEnquiry")end
 function HS_ShowMLoad()ChangeXla("MenuMload")end
@@ -45,4 +45,4 @@ size=652
 Buff=<screen><screenName name="HomeScreen1"/><screenType id="0"/><widget name="hometl" imageid="Image:21S.gif" text="PERSO" textx="15"/><widget name="hometr" imageid="Image:handcoin.gif" text="BAL" textx="90"/><widget name="homebr" imageid="Image:3bar_ico.gif" text="MLOAD" textx="90"/><image X1="2" Y1="64" type="3" imageid="img_leftarrow"/><image X1="150" Y1="64" type="3" imageid="img_rightarrow"/><actions key_1="HS_OnLeft" key_3="HS_OnRight" key_tlsk="HS_OnPerso" key_trsk="HS_OnBal" key_blsk="HS_OnNAP_TIEN" key_brsk="HS_ShowMLoad" key_ok="HS_ShowMLoad" key_left="HS_OnLeft" key_right="HS_OnRight" key_xip=""/><ticker tickerenable="0"/></screen>
 [CRC]
 size=10
-Buff=Qw==
+Buff=Pw==

@@ -2,25 +2,43 @@
 <strings>
 <language>
 <EN>
-<str AMT="Enter amount to send" />
-<str MERNO="Enter merchant number" />
-<str GETPIN="Enter merchant mPIN" />
-<str GETPIN_1="Enter mPIN for sending" />
-<str SMPROG="Processing send money" />
-<str SMPROG_1="Transferring" />
-<str SMSUC="Send money success" />
+<str NXT="Tiep theo" />
+<str CNCL="Huy" />
+<str AMT="Chuyen tien MLOAD" />
+<str PHONE="Nhap so dien thoai:" />
+<str AMT_2="Nhap so tien" />
+<str GETPIN="Xac nhan ma PIN" />
+<str PHONE_E="So dien thoai chua dung" />
+<str AMT_E="Chua nhap so tien" />
+<str INCRCT="Ma PIN chua dung" />
+<str SMPROG="Dang thuc hien..." />
+<str SMPROG_1="Chuyen:" />
+<str TO="Den SDT:" />
+
+<str SMSUC="Chuyen tien thanh cong" />
 <str SM="Send money" />
 <str IMPRDATA="Improper data entered" />
-<str INCRCT="Incorrect mPIN" />
 </EN>
 <SP>
+<str NXT="Tiep theo" />
+<str CNCL="Huy" />
+<str AMT="Chuyen tien MLOAD" />
+<str PHONE="Nhap so dien thoai:" />
+<str AMT_2="Nhap so tien" />
+<str GETPIN="Xac nhan ma PIN" />
+<str PHONE_E="So dien thoai chua dung" />
+<str AMT_E="Chua nhap so tien" />
+<str INCRCT="Ma PIN chua dung" />
+<str SMPROG="Dang thuc hien..." />
+<str SMPROG_1="Chuyen:" />
+<str TO="Den SDT:" />
 <str AMT="Enter amount to send" />
 <str MERNO="Enter merchant number" />
 <str GETPIN="Enter merchant mPIN" />
 <str GETPIN_1="Enter mPIN for sending" />
 <str SMPROG="Processing send money" />
 <str SMPROG_1="Transferring" />
-<str SMSUC="Send money success" />
+<str SMSUC="Chuyen tien thanh cong" />
 <str SM="Send money" />
 <str IMPRDATA="Improper data entered" />
 <str INCRCT="Incorrect mPIN" />

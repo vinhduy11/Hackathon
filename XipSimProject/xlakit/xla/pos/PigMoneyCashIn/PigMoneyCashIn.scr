@@ -1,0 +1,122 @@
+<screen>
+	<screenName name="NFCProgress"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+	<widget name="nfcanim"/>
+	<widget name="blsk" text="CNCL" />
+	<actions  key_blsk="@2"/>
+</screen>
+
+<screen>
+	<screenName name="CMNDEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="CMND" />
+
+	<string x="10" y="37" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="50" text="CMND_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="60" text="CMND_2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	
+	<widget name="input" inputtype="3" maxinputlen="9" />
+	
+	<widget name="brsk" text="NXT" />
+	<widget name="blsk" text="CNCL" />
+	<actions  key_blsk="TU_OnCancel" key_brsk="TU_OnCMNDNext" key_ok="TU_OnCMNDNext" key_xip=""/>
+</screen>
+
+<screen>
+	<screenName name="MoneyScreenInputAmount"/>
+	<screenType id="1" />
+	<widget name="title" text="CMPIN" />
+
+	<widget name="input" inputtype="3" maxinputlen="9" />
+	
+	<widget name="brsk" text="NXT" />
+	<widget name="blsk" text="CNCL" />
+	<actions  key_blsk="TU_OnCancel" key_brsk="TU_OnAmountNext" key_ok="TU_OnAmountNext"/>
+</screen>
+
+<screen>
+	<screenName name="topupInputEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="CMPIN_1" />
+
+	<widget name="input" inputtype="0" maxinputlen="6" />
+	
+	<widget name="brsk" text="NXT" />
+	<widget name="blsk" text="CNCL" />
+	<actions  key_blsk="TU_OnCancel" key_brsk="TU_OnMPINOk" key_ok="TU_OnMPINOk"/>	
+</screen>
+
+
+<screen>
+	<screenName name="topupProgressScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+
+	<string x="8" y="40" text="@2" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="75" y="38" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="56" text="@4" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="30" y="54" text="@5" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+
+	<widget name="progress"/>
+
+	<widget name="blsk" text="@6" />
+	<actions  key_blsk="@7"/>
+	<ticker tickerenable="0"/>
+</screen>
+
+<screen>
+	<screenName name="topupSuccessScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+
+	<string x="8" y="45" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="67" text="@3" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="65" y="65" text="@4" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="82" text="@5" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="90" y="80" text="@6" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="96" text="@7" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="30" y="96" text="@8" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="syncTxnCheck" key_ok="syncTxnCheck"/>
+</screen>
+
+<screen>
+	<screenName name="topupFailedScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="@1" />
+	<string x="65" y="19" text="@2" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	
+	<string x="8" y="50" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="60" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="70" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="80" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="90" text="@7" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	
+	<widget name="blsk" text="@8" />
+	<widget name="brsk" text="@9" />
+	<actions key_blsk="@10" key_brsk="@11" key_ok="@12"/>
+</screen>
+
+<screen>
+	<screenName name="topupScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="SMSUC" />
+	<string x="8" y="50" text="@1" font="0" fontcolorR="" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<widget name="brsk" text="Global:OK" />
+	<actions key_brsk="TU_goHome" key_ok="TU_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="balanceTimeout"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:TXNTO" />	
+	
+	<string x="8" y="60" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="TU_goHome" key_ok="TU_goHome"/>
+</screen>
+

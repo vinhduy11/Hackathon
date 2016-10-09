@@ -264,10 +264,10 @@ function SM_CB ()
   xal_xms_deInit(SM_xmsConn)
   SM_xmsConn = 0
   if tonumber (xmsSC)  ==  0 or tonumber (xmsSC)  ==  0100 then
-    if errorCode ~= 0 then
-        DisplayScreenFromRes("sendMoneyFailure", xmsSC,errorDesc )
-    else
+    if errorDesc == "THANH CONG" then
         DisplayScreenFromRes("sendMoneySuccessScreen", phoneSender, GetCurrencySymbol().." "..SM_Amount, SMM_MerNo, txnId)
+    else
+        DisplayScreenFromRes("sendMoneyFailure", xmsSC,errorDesc )
     end
     
   elseif tonumber (xmsSC)  ==  8888 then

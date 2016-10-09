@@ -43,7 +43,7 @@ function HS_OnTopup ()
 end
 
 function HS_OnPerso ()
-	ChangeXla ("Perso")
+	ChangeXla ("MenuHeoDat")
 end
 
 function HS_OnCBAL ()

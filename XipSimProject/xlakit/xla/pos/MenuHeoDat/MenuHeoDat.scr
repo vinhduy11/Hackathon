@@ -6,7 +6,7 @@
 		<menustart menutype="0" x="8" y="42" hotkeyflag="1" generichandler="OnGenericMenu"/>
 		<menustr text="MM1" />
 		<menustr text="MM2" />
-		<menustr text="MM3" />
+		<menustr text="MM4" />
 		<menuimg xoffset="145" yoffset="40" type="3" imageid="img_uparrow"/>
 		<menuimg xoffset="145" yoffset="100" type="3" imageid="img_downarrow"/>
 	</menus>

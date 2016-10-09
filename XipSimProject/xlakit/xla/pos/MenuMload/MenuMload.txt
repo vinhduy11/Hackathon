@@ -3,13 +3,15 @@
 <language>
 <EN>
 <str MENUT="DICH VU MLOAD" />
-<str MM1="Nap tien MLoad" />
+<str MM1="Nap tien dien thoai" />
 <str MM2="Chuyen tien MLoad" />
+<str MM3="Kiem tra so du" />
 </EN>
 <SP>
 <str MENUT="DICH VU MLOAD" />
-<str MM1="Nap tien MLoad" />
+<str MM1="Nap tien dien thoai" />
 <str MM2="Chuyen tien MLoad" />
+<str MM3="Kiem tra so du" />
 </SP>
 </language>
 </strings>

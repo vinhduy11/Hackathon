@@ -1,4 +1,5 @@
 TU_Amount=0
+TU_CMND=0
 TU_MPIN=0
 TU_nfcSess=0
 TU_Xid=0
@@ -13,28 +14,20 @@ TU_PurseAction="A"TU_TopUpErr=0
 rec_id=0
 txnId=0
 array={}TopupSucess=0
-function TU_OnLoad()RecStoreAvl=xal_isStoreAvailable()xipdbg("TU_OnLoad: RecStoreAvl----"..RecStoreAvl)if(RecStoreAvl==0)then
-TU_goHome()else
-DisplayScreenFromRes("topupInputEntryScreen","#AMT"," "," "," ","1","16","TU_OnAmountNext","TU_OnAmountNext")maxAmt=GetPinlessEndAmount()DisplaySetMaxInputDataLen("99999")end
+function TU_OnLoad()DisplayScreenFromRes("NFCProgress","#NFCPRGS","TU_OnCancel")TU_nfcSess=sysnfc_init("Topup_OnNFCReadDetectData")if(TU_nfcSess==-1)then
+DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," ","#NFCFAIL","#TRYAGAIN"," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")end
 end
-function TU_OnAmountNext(e)DisplaySetMaxInputDataLen("0")if(e~=nil and tonumber(e)>0)then
-TU_Amount=e
-DisplayScreenFromRes("topupInputEntryScreen","#CMPIN"," ","#CMPIN_1",GetCurrencySymbol()..TU_Amount,"0","4","TU_OnMPINOk","TU_OnMPINOk")else
+function TU_OnMPINOk(e)if(e~=nil and e:len()==6)then
+TU_MPIN=e
+XmsRequest_TopUp()else
 TU_goHome()end
 end
-function TU_OnMPINOk(e)if(e~=nil and e:len()==4)then
-TU_MPIN=e
-DisplayScreenFromRes("NFCProgress","#NFCPRGS",GetCurrencySymbol(),TU_Amount,"TU_OnCancel")TU_nfcSess=sysnfc_init("Topup_OnNFCReadDetectData")if(TU_nfcSess==-1)then
-DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," ","#NFCFAIL","#TRYAGAIN"," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")end
-else
-DisplayScreenFromRes("topupInputEntryScreen","#CMPIN","#INCRCT","#CMPIN_1",GetCurrencySymbol()..TU_Amount,"0","4","TU_OnMPINOk","TU_OnMPINOk")end
-end
 function Topup_OnNFCReadDetectData(n,e,t)TU_Xid=e
-xipdbg("Topup_OnNFCReadDetectData: TU_Xid "..TU_Xid.." status "..n.." tagdata "..e.."tagdatalen"..t)sysnfc_svEpurseReadAmount(TU_nfcSess,"Topup_OnNFCReadAmountCB")if(n=="true")then
-TU_epid=GetEpurse/ID()xipdbg("Topup_OnNFCReadDetectData: TU_Xid1 "..TU_Xid..TU_epid)sysnfc_svEpurseSetId(TU_nfcSess,TU_epid)else
+xipdbg("Topup_OnNFCReadDetectData: TU_Xid "..TU_Xid.." status "..n.." tagdata "..e.."tagdatalen"..t)if(n=="true")then
+DisplayScreenFromRes("CMNDEntryScreen")else
 DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," "," ","#TAPTO"," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")end
 end
-function Topup_OnNFCReadAmountCB(e,t,n,o,o)xipdbg("In Lua: Topup_OnNFCReadAmountCB amount:"..t)xipdbg("In Lua: Topup_OnNFCReadAmountCB status:"..e)xipdbg("expiry "..n)TU_CBal=sysnfc_svEpurseConvAmtInt2Dec(t)xipdbg("In Lua: To/pup_OnNFCReadAmountCB Card Bal "..TU_CBal)if(e=="1")then
+function Topup_OnNFCReadAmountCB(e,t,n,a,a)xipdbg("In Lua: Topup_OnNFCReadAmountCB amount:"..t)xipdbg("In Lua: Topup_OnNFCReadAmountCB status:"..e)xipdbg("expiry "..n)TU_CBal=sysnfc_svEpurseConvAmtInt2Dec(t)xipdbg("In Lua: To/pup_OnNFCReadAmountCB Card Bal "..TU_CBal)if(e=="1")then
 DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," ","#URCRD","#TRYAGAIN"," "," ","#Global:CNCL","#Global:RETRY","TU_OnCancel","TU_retry","TU_retry")elseif(e=="7")then
 DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," ","#INVALID1","#INVALID2"," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")else
 TU_TxnId=generateUUID()TU_TAGepoch=n
@@ -44,37 +37,26 @@ function TU_retry()TU_deInit()DisplayScreenFromRes("NFCProgress","#NFCPRGS",GetC
 DisplayScreenFromRes("topupFailedScreen","#Global:STATUS"," "," ","#NFCFAIL","#TRYAGAIN"," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")end
 end
 function XmsRequest_TopUp()cntType=xal_xms_getcontentType()if(TU_TopUpErr==0)then
-DisplayScreenFromRes("topupProgressScreen","#TUPRGS","#TU",GetCurrencySymbol().." "..TU_Amount,"#Global:TO",TU_Xid,"#Global:CNCL","TopUpCancel")if(cntType==-1)then txnType="TEAM_TEST".."|".."7/f"else txnType="TEAM_TEST".."|"..cntType end
+DisplayScreenFromRes("topupProgressScreen","#TUPRGS","#TU",TU_Amount,"#Global:TO",TU_Xid,"#CNCL","TopUpCancel")if(cntType==-1)then txnType="TEAM_TEST".."|".."7/f"else txnType="TEAM_TEST".."|"..cntType end
 TU_XmsConn=xal_xms_init("NULL",txnType,0,"TU_CB")else
 DisplayScreenFromRes("topupProgressScreen","#CLPRGS"," "," "," "," "," "," ")if(cntType==-1)then txnType="TOPERR".."|".."7/f"else txnType="TOPERR".."|"..cntType end
 TU_XmsConn=xal_xms_init("NULL",txnType,0,"TU_CB")end
-xal_xms_add_params(TU_XmsConn,"amt",TU_Amount)xal_xms_add_params(TU_XmsConn,"xid",TU_Xid)xal_xms_add_params(TU_XmsConn,"epid",TU_epid)xal_xms_add_params(TU_XmsConn,"mp",TU_MPIN)exid=GetDeviceExid()xal_xms_add_params(TU_XmsConn,"exid",exid)xal_xms_add_params(TU_XmsConn,"cbal",TU_CBal)xal_xms_add_params(TU_XmsConn,"txnId",TU_TxnId)xal_xms_add_params(TU_XmsConn,"tt","A")xal_xms_add_params(TU_XmsConn,"ced",TU_TAGepoch)ret=xal_xms_request(TU_XmsConn,1)end
+xal_xms_add_params(TU_XmsConn,"amt",TU_Amount)xal_xms_add_params(TU_XmsConn,"epid",TU_epid)xal_xms_add_params(TU_XmsConn,"mp",TU_MPIN)exid=GetDeviceExid()xid=GetDeviceXID()xal_xms_add_params(TU_XmsConn,"xid",xid)mccMnc=GetMncMcc()xal_xms_add_params(TU_XmsConn,"mcc",string.sub(mccMnc,1,3))xal_xms_add_params(TU_XmsConn,"mnc",string.sub(mccMnc,4,-1))exid=GetDeviceExid()xal_xms_add_params(TU_XmsConn,"exid",exid)xipdbg("Adding Param amount = "..TU_Amount)xal_xms_add_params(TU_XmsConn,"amt",TU_Amount)xipdbg("Adding Param Mode of com= ".."2")xal_xms_add_params(TU_XmsConn,"com","2")xal_xms_add_params(TU_XmsConn,"mp",TU_MPIN)xal_xms_add_params(TU_XmsConn,"msgType","CREATE_WALLET")xal_xms_add_params(TU_XmsConn,"pin",TU_MPIN)xal_xms_add_params(TU_XmsConn,"cardId",TU_Xid)xal_xms_add_params(TU_XmsConn,"cmnd",TU_CMND)xal_xms_add_params(TU_XmsConn,"balance",TU_Amount)xal_xms_add_params(TU_XmsConn,"createDate","")xal_xms_add_params(TU_XmsConn,"lastUpade","")ret=xal_xms_request(TU_XmsConn,1)end
 function TopUpCancel()TU_deInit()TU_TopUpErr=1
 XmsRequest_TopUp()end
 function ErrorCancel()TU_deInit()DisplayScreenFromRes("topupSuccessScreen","#TUFAIL","#CANCL","#TU",GetCurrencySymbol()..TU_Amount," "," "," "," ")end
-function TU_CB()XMSSCData=xal_xms_get_params(TU_XmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]uBalAmt=xal_xms_get_params(TU_XmsConn,"cbal")tempAmt=sysnfc_svEpurseConvAmtDec2Int(uBalAmt)TU_TopupBal=sysnfc_svEpurseConvAmtInt2Dec(tostring(tempAmt))txnId=xal_xms_get_params(TU_XmsConn,"txnId")cedVal=xal_xms_get_params(TU_XmsConn,"ced")TU_epoch=tonumber(cedVal)xal_xms_deInit(TU_XmsConn)TU_XmsConn=0
-if tonumber(xmsSC)==0 or tonumber(xmsSC)==100 then
-if(TU_TopUpErr==0)then
-DisplayScreenFromRes("NFCProgress","#NFCPRGS1",GetCurrencySymbol(),TU_Amount,"TopUpCancel")TU_nfcSess=sysnfc_init("Topup_OnNFCWriteDetectData")else
-if(TopupSucess==0)then
-deleteRecord()DisplayScreenFromRes("topupSuccessScreen","#TUFAIL","#CANCL","#TU",GetCurrencySymbol()..TU_Amount," "," "," "," ")end
-end
+function TU_CB()XMSSCData=xal_xms_get_params(TU_XmsConn,"sc")SCDetails=mysplit(XMSSCData,"|")xmsSC=SCDetails[1]xipdbg("In Lua: perso Status"..xmsSC)txnId=xal_xms_get_params(TU_XmsConn,"txnId")errorDesc=xal_xms_get_params(TU_XmsConn,"errorDesc")xal_xms_deInit(SM_xmsConn)SM_xmsConn=0
+if tonumber(xmsSC)==0 then
+if errorDesc=="THANH CONG"then
+xipdbg("In Lua: perso Status"..errorDesc)DisplayScreenFromRes("topupScreen",errorDesc,"")else
+DisplayScreenFromRes("topupScreen","",errorDesc)end
 elseif tonumber(xmsSC)==8888 then
-if(TU_TopUpErr==0)then
-TU_TopUpErr=1
-XmsRequest_TopUp()else
-if(TopupSucess==0)then ErrorCancel()end
+DisplayScreenFromRes("balanceTimeout")else
+if string.len(SCDetails[2])>20 then
+GetMultipleLines(SCDetails[2])DisplayScreenFromRes("balanceFailureScreen",xmsSC,array[1],array[2],array[3],array[4],array[5])else
+DisplayScreenFromRes("balanceFailureScreen",xmsSC,SCDetails[2])end
 end
-else
-if(TU_TopUpErr==0)then
-deleteRecord()if string.len(SCDetails[2])>20 then
-GetMultipleLines(SCDetails[2])DisplayScreenFromRes("topupFailedScreen","#Global:STATUS",xmsSC,array[1],array[2],array[3],array[4],array[5]," ","#Global:OK"," ","TU_goHome","TU_goHome")else
-DisplayScreenFromRes("topupFailedScreen","#Global:STATUS",xmsSC,SCDetails[2]," "," "," "," "," ","#Global:OK"," ","TU_goHome","TU_goHome")end
-else
-if(TopupSucess==0)then ErrorCancel()end
-end
-end
-end
+DisplayScreenFromRes("sendMoneyFailure",xmsSC,errorDesc)end
 function Topup_OnNFCWriteDetectData(n,e,t)xid=e
 if(n=="true")then
 if(xid==TU_Xid)then
@@ -141,5 +123,15 @@ else
 timeInvl=currentTxnTime-tonumber(PrevTxnTime)end
 SyncInterval=GetConfigValue("sti")SyncMaxTxnNo=GetConfigValue("stc")txnCount=xal_getRecordCount()if((timeInvl>=tonumber(SyncInterval)and txnCount>=1)or txnCount>=tonumber(SyncMaxTxnNo))then
 SetConfigValue("SVST",tostring(currentTxnTime))ChangeXla("SyncSV")else
+TU_goHome()end
+end
+function TU_OnCMNDNext(e)if(e~=nil and e:len()==9)then
+TU_CMND=e
+DisplayScreenFromRes("topupInputEntryScreen")else
+DisplayScreenFromRes("CMNDEntryScreen","#CMND_E")end
+end
+function TU_OnAmountNext(e)DisplaySetMaxInputDataLen("0")TU_Amount=e
+if(TU_Amount~=nil and tonumber(TU_Amount)>0)then
+xipdbg("In Lua: Displaying sendMoneyMPinEntryScreen: amount = "..TU_Amount)DisplayScreenFromRes("topupInputEntryScreen"," ","So tien:"..TU_Amount,"CMND:"..TU_CMND)else
 TU_goHome()end
 end

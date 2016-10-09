@@ -14,13 +14,12 @@ function OnGenericMenu()
 	MenuText,MenuKeyIndex = GetMenuKeyIndex()
 	xipdbg("MenuKeyIndex".. MenuKeyIndex )
 	if (MenuKeyIndex == 1001 ) then
-    ChangeXla ("SendMoneyMLoad")
+    ChangeXla ("PigMoney")
 	elseif (MenuKeyIndex == 1002 ) then
-    ChangeXla ("TEST")
-	elseif (MenuKeyIndex == 1003 ) then
-    ChangeXla ("BalanceEnquiry")
+    ChangeXla ("PigMoneyCashIn")
+  elseif (MenuKeyIndex == 1002 ) then
+    ChangeXla ("PigMoneyCheck")
   end
-	
 end
 
 function MM_goHome()
