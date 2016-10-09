@@ -18,7 +18,7 @@ end
 
 function SM_OnPhoneNext (phone)
   xipdbg("In Lua: Phone = " .. phone)
-  if(string.find(phone, '0') == 1 and (string.len(phone) == 11 or string.len(phone) == 10)) then
+  if(phone ~= nil and string.find(phone, '0') == 1 and (string.len(phone) == 11 or string.len(phone) == 10)) then
     SM_PHONE = phone
     DisplayScreenFromRes("AmountEntryScreen")
   else

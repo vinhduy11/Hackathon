@@ -3,7 +3,7 @@ SM_Amount=nil
 SM_PHONE=nil
 SM_MPIN=0
 array={}function SM_OnLoad()xipdbg("Calling DisplayScreenFromRes")DispScreen("PhoneScreen")end
-function SM_OnPhoneNext(n)xipdbg("In Lua: Phone = "..n)if(string.find(n,'0')==1 and(string.len(n)==11 or string.len(n)==10))then
+function SM_OnPhoneNext(n)xipdbg("In Lua: Phone = "..n)if(n~=nil and string.find(n,'0')==1 and(string.len(n)==11 or string.len(n)==10))then
 SM_PHONE=n
 DisplayScreenFromRes("AmountEntryScreen")else
 xipdbg("phone error")DisplayScreenFromRes("PhoneScreen","#PHONE_E")end
