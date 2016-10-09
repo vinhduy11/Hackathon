@@ -53,7 +53,7 @@ end
 function XmsRequest_SM ()
   -- Fix lai
   xipdbg("In Lua: XmsRequest_SM")
-  DisplayScreenFromRes("MoneyProgressScreen", "#SMPROG_2", "#SMPROG_3")
+  DisplayScreenFromRes("MoneyProgressScreen", comma_value(SM_Amount) .. "VND", SM_PHONE)
   cntType = xal_xms_getcontentType()
   if( cntType == -1 ) then txnType = "TEAM_TEST".."|".. "7/f"
   else txnType = "TEAM_TEST".."|"..cntType end

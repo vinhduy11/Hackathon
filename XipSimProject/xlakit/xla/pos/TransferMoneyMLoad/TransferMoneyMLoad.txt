@@ -15,7 +15,7 @@
 <str SMPROG_1="Chuyen:" />
 <str TO="Den SDT:" />
 
-<str SMSUC="Send money success" />
+<str SMSUC="Chuyen tien thanh cong" />
 <str SM="Send money" />
 <str IMPRDATA="Improper data entered" />
 </EN>
@@ -38,7 +38,7 @@
 <str GETPIN_1="Enter mPIN for sending" />
 <str SMPROG="Processing send money" />
 <str SMPROG_1="Transferring" />
-<str SMSUC="Send money success" />
+<str SMSUC="Chuyen tien thanh cong" />
 <str SM="Send money" />
 <str IMPRDATA="Improper data entered" />
 <str INCRCT="Incorrect mPIN" />
