@@ -3,4 +3,101 @@
 	<screenType id="1" />
 	<widget name="title" text="AMT" />
 
+	<string x="10" y="37" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="50" text="PHONE" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+
+	<widget name="input" inputtype="3" maxinputlen="11" />
+	
+	<widget name="brsk" text="NXT" />
+	<widget name="blsk" text="CNCL" />
+	<actions  key_blsk="SM_OnCancel" key_brsk="SM_OnPhoneNext" key_ok="SM_OnPhoneNext"/>
 </screen>
+
+<screen>
+	<screenName name="AmountEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="AMT_2" />
+
+	<string x="15" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<widget name="input" inputtype="3" maxinputlen="9" />
+	
+	<widget name="brsk" text="NXT" />
+	<widget name="blsk" text="CNCL" />
+	<actions  key_blsk="SM_OnCancel" key_brsk="SM_OnAmountNext" key_ok="SM_OnAmountNext"/>
+</screen>
+
+<screen>
+	<screenName name="MoneyMPinEntryScreen"/>
+	<screenType id="1" />
+	<widget name="title" text="GETPIN" />
+	
+	<string x="15" y="35" text="@1" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="45" text="@2" font="1" fontcolorR="" fontcolorG="" fontcolorB="255"/>
+	<string x="8" y="60" text="@3" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+
+	<widget name="input" inputtype="0" maxinputlen="6" />
+	
+	<widget name="brsk" text="NXT" />
+	<widget name="blsk" text="CNCL" />
+	<actions  key_blsk="SM_OnCancel" key_brsk="SM_OnMPINNext" key_ok="SM_OnMPINNext"/>	
+</screen>
+
+<screen>
+	<screenName name="MoneyProgressScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="SMPROG" />
+	
+	<string x="8" y="40" text="SMPROG_1" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/> 
+	<string x="60" y="38" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/> 
+	<string x="8" y="55" text="TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/> 
+	<string x="60" y="55" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/> 
+	<widget name="progress" />
+	
+	<widget name="blsk" text="CNCL" />
+	<actions  key_blsk="SM_OnCancel"/>
+    <ticker tickerenable="0"/>	
+</screen>
+
+<screen>
+	<screenName name="MoneySuccessScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="SMSUC" />
+
+	<string x="8" y="50" text="SM" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="80" y="48" text="@1" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="64" text="Global:TO" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="8" y="78" text="@2" font="1" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+	<string x="8" y="96" text="Global:TID" font="0" fontcolorR="255" fontcolorG="255" fontcolorB="255"/>
+	<string x="30" y="96" text="@3" font="0" fontcolorR="0" fontcolorG="255" fontcolorB="0"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SM_goHome" key_ok="SM_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="MoneyFailureScreen"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:STATUS" />
+	<string x="65" y="19" text="@1" font="1" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	
+	<string x="8" y="50" text="@2" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="60" text="@3" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="70" text="@4" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="80" text="@5" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+	<string x="8" y="90" text="@6" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SM_goHome" key_ok="SM_goHome"/>
+</screen>
+
+<screen>
+	<screenName name="MoneyTimeout"/>
+	<screenType id="0" />
+	<widget name="title" text="Global:TXNTO" />	
+	
+	<string x="8" y="70" text="Global:TXNFAIL" font="0" fontcolorR="255" fontcolorG="0" fontcolorB="0"/>
+
+	<widget name="brsk" text="Global:OK" />
+	<actions  key_brsk="SM_goHome" key_ok="SM_goHome"/>
+</screen>
+
